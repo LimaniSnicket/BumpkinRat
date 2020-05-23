@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{8189B1EB-8EF8-466E-1D39-778C9C488F80}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Helper/Extensions.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Player/MovementController.cs" Line="25" Column="78" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/Collectable.cs" />
+      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="24" Column="8" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="fd0b7aab-859f-4e8a-8a96-b586a135e962" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
