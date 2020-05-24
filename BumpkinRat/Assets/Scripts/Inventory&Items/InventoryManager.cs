@@ -62,7 +62,7 @@ public class Inventory
                 itemsOwned[itemName] -= amountToRemove;
             } else if(itemsOwned[itemName] < amountToRemove)
             {
-                Debug.Log("Note enough in inventory");
+                Debug.Log("Not enough in inventory");
             } else
             {
                 itemsOwned.Remove(itemName);

@@ -1,14 +1,19 @@
 ﻿<Properties StartupConfiguration="{8189B1EB-8EF8-466E-1D39-778C9C488F80}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Helper/Extensions.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MouseManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Player/MovementController.cs" Line="25" Column="78" />
+      <File FileName="Assets/Scripts/Player/MovementController.cs" Line="51" Column="113" />
       <File FileName="Assets/Scripts/Inventory&amp;Items/Collectable.cs" />
-      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="24" Column="8" />
+      <File FileName="Assets/Scripts/Helper/Extensions.cs" />
+      <File FileName="Assets/Scripts/UI/UIManager.cs" />
+      <File FileName="Assets/Scripts/Helper/Enums.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/Crafting.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/InventoryManager.cs" />
+      <File FileName="Assets/Scripts/MouseManager.cs" Line="17" Column="80" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="fd0b7aab-859f-4e8a-8a96-b586a135e962" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="37d8b357-dbe7-4416-91ee-0c51cd1f9da7" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
