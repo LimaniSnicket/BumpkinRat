@@ -31,6 +31,11 @@ public class UiMenu
     {
         gameObject = g;
     }
+
+    public virtual void LoadMenu()
+    {
+
+    }
 }
 
 public class CraftingMenu : UiMenu
@@ -39,5 +44,10 @@ public class CraftingMenu : UiMenu
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
+    }
+
+    public override void LoadMenu()
+    {
+        base.LoadMenu();
     }
 }

@@ -9,3 +9,8 @@ public enum MovementInfluence
 {
     Keyboard, MousePosition
 }
+
+public enum ActionState
+{
+    Scurry, Jump, Climb
+}

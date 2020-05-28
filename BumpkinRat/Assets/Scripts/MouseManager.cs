@@ -6,7 +6,7 @@ using UnityEngine;
 public class MouseManager : MonoBehaviour
 {
     private static MouseManager staticMouse;
-    Vect2Derivative mousePosition;
+    Vect2Delta mousePosition;
     public Vector2 screenDimensions;
     public static Vector2 delta { get; private set; }
     public static Vector2 mousePosOffset => Input.mousePosition - staticMouse.offset;

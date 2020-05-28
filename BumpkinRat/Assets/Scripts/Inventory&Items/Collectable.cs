@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +7,7 @@ using UnityEngine;
 public class Collectable : MonoBehaviour
 {
     public string itemName;
-    public delegate void Collected(string s, int amt = 1);
-    public static event Collected OnCollected;
+    public static event EventHandler<CollectableEventArgs> Collected;
 
     private void FixedUpdate()
     {
@@ -16,15 +16,23 @@ public class Collectable : MonoBehaviour
         transform.position = curr;
     }
 
+    public virtual void OnCollected(int amnt = 1)
+    {
+        if(Collected != null) { Collected(this, new CollectableEventArgs() { CollectableName = itemName, CollectedAmount = amnt }) ; }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
-            if(OnCollected != null)
-            {
-                OnCollected(itemName);
-                Destroy(gameObject);
-            }
+            OnCollected();
+            Destroy(gameObject);
         }
     }
+}
+
+public class CollectableEventArgs : EventArgs
+{
+    public string CollectableName { get; set; }
+    public int CollectedAmount { get; set; }
 }

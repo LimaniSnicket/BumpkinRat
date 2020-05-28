@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,10 @@ public static class Extensions
         return true;
     }
 
-    public static void InitializeFromJSON<T>(this string p, T t)
+    public static T InitializeFromJSON<T>(this string path)
     {
-        try
-        {
-            t = JsonUtility.FromJson<T>(p);
-        } catch (NullReferenceException) { }
+        string json = File.ReadAllText(path);
+        return JsonUtility.FromJson<T>(json);
     }
 }
 
@@ -66,9 +65,10 @@ public static class MathfX
     }
 }
 
-public struct Vect2Derivative
+public struct Vect2Delta: IDelta<Vector2>
 {
-    public Vector2 current, previous;
+    public Vector2 current { get; set; }
+    public Vector2 previous { get; set; }
     public Vector2 GetDelta(Vector2 tracking)
     {
         current = tracking;
@@ -77,3 +77,13 @@ public struct Vect2Derivative
         return delta;
     }
 }
+
+public interface IDelta<T>
+{
+    T current { get; set; }
+    T previous { get; set; }
+    T GetDelta(T tracking);
+}
+
+
+

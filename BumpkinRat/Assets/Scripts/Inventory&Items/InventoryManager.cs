@@ -1,35 +1,35 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
+    public string itemDataPath;
     public Inventory activeInventory;
+
     private void OnEnable()
     {
-       if(activeInventory != null) { activeInventory.InitializeInventory(); }
-        Collectable.OnCollected += OnCollectedItem;
+        Collectable.Collected += OnCollectedItem;
     }
 
-    void OnCollectedItem(string itemName, int amnt = 1)
+    void OnCollectedItem(object source, CollectableEventArgs args)
     {
-        activeInventory.AdjustInventory(true, itemName, amnt);
-        Debug.Log(itemName + " Collected. Adding to Inventory");
+        activeInventory.AdjustInventory(true, args.CollectableName, args.CollectedAmount);
+        Debug.Log(args.CollectableName + " Collected. Adding to Inventory");
     }
 
     private void OnDisable()
     {
-        Collectable.OnCollected -= OnCollectedItem;
+        Collectable.Collected -= OnCollectedItem;
     }
 }
 
 [Serializable]
 public class Inventory
 {
-    public Dictionary<string, int> itemsOwned;
-    List<ItemListing> loadedItems;
-
+    public Dictionary<string, int> itemsOwned;   
     bool inventoryExists => itemsOwned != null;
 
     public void AdjustInventory(bool add, string itemName, int amount = 1)
@@ -70,22 +70,6 @@ public class Inventory
         }
     }
 
-    public void InitializeInventory()
-    {
-        InitializeInventory(loadedItems);
-    }
-
-    void InitializeInventory(List<ItemListing> items)
-    {
-        if(itemsOwned == null) { itemsOwned = new Dictionary<string, int>(); }
-        if (!items.ValidList<ItemListing>()) { return; }
-        foreach (ItemListing a in items)
-        {
-            if (!itemsOwned.ContainsKey(a.itemName)) { itemsOwned.Add(a.itemName, a.amount); }
-            else { itemsOwned[a.itemName] = a.amount; }
-        }
-    }
-
     bool ValidInventoryListing(string name)
     {
         if (!inventoryExists) { return false; }
@@ -96,6 +80,6 @@ public class Inventory
 [Serializable]
 public class ItemListing
 {
-    public string itemName;
-    public int amount;
-}
+   public Item item { get; set; }
+    public int amount { get; set; }
+ }

@@ -10,6 +10,7 @@ public class MovementController : MonoBehaviour
     [Range(10,20)]
     public float forceMultiplier;
     public float rotationSpeed = 1;
+    [Range(2,5)] public float forwardRayDistance = 2;
     public Vector3 movementVector
     {
         get
@@ -21,6 +22,17 @@ public class MovementController : MonoBehaviour
     }
     Rigidbody body => GetComponent<Rigidbody>();
     public MovementInfluence moveInfluence;
+    bool atRest => body.velocity == Vector3.zero;
+    bool inAir => body.velocity.y != 0;
+
+    public ActionState currentActionState;
+
+   public GameObject forwardObjectLook;
+
+    private void OnEnable()
+    {
+        currentActionState = ActionState.Scurry;
+    }
 
     private void FixedUpdate()
     {
@@ -29,8 +41,18 @@ public class MovementController : MonoBehaviour
             OverworldMovement();
         } else
         {
-            MouseOverworldMovement();
+            if (!climbing) { MouseOverworldMovement(); }
+            Climb();
         }
+
+        Ray r = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        if(Physics.Raycast(r, out hit, 2f))
+        {
+            forwardObjectLook = hit.transform.gameObject;
+        } else { forwardObjectLook = null; }
+        //Debug.DrawLine(transform.position, transform.position + transform.forward, Color.red);
+        Debug.DrawRay(r.origin, r.direction, Color.blue);
     }
 
     void OverworldMovement()
@@ -43,22 +65,39 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    bool atRest => body.velocity == Vector3.zero;
-
     void MouseOverworldMovement()
     {
         if (UIManager.menuActive) { return; }
-        if (Input.GetKey(KeyCode.LeftShift))
+        Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), Time.deltaTime * rotationSpeed);
+        if (Input.GetKey(KeyCode.W))
         {
             StopCoroutine("SlowDown");
-            Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY); 
             body.AddForce(look * forceMultiplier, ForceMode.Force);
-            body.AddForce(MouseManager.delta.Swizzle(GridLayout.CellSwizzle.XZY) * 0.01f, ForceMode.Impulse);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), Time.deltaTime * rotationSpeed);
+            body.AddTorque(MouseManager.delta.Swizzle(GridLayout.CellSwizzle.XZY) * 0.025f, ForceMode.Impulse);
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && !atRest)
+        if (Input.GetKeyUp(KeyCode.W) && !atRest && !inAir)
         {
             StartCoroutine(SlowDown(3));
+        }
+        if (Input.GetMouseButtonDown(0) && !inAir)
+        {
+            body.AddForce(Vector3.up * forceMultiplier / 2, ForceMode.Impulse);
+        }
+
+        if (forwardObjectLook == null) { return; }
+        if (!forwardObjectLook.CompareTag("ClimbingSurface")) { return; }
+        if (Input.GetKeyDown(KeyCode.A) && !climbing) { StartCoroutine(ClimbingPosition()); }
+    }
+
+    void Climb()
+    {
+        Ray below = new Ray(transform.position, transform.up * -1);
+        RaycastHit rh;
+        Transform hit = Physics.Raycast(below, out rh, 1f) ? rh.transform : null;
+        if(hit != null)
+        {
+            //print("Hit is Valid: " + hit.tag);
         }
     }
 
@@ -71,4 +110,12 @@ public class MovementController : MonoBehaviour
         }
         body.velocity = Vector3.zero;
     }
+    bool climbing;
+    IEnumerator ClimbingPosition()
+    {
+        transform.DORotate(new Vector3(-90, transform.eulerAngles.y, transform.eulerAngles.z), 3);
+        yield return new WaitForSeconds(3);
+        climbing = true;
+    }
 }
+
