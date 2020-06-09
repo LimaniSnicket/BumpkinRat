@@ -8,10 +8,22 @@ public class InventoryManager : MonoBehaviour
 {
     public string itemDataPath;
     public Inventory activeInventory;
+    ItemCrafter itemCrafter;
 
     private void OnEnable()
     {
         Collectable.Collected += OnCollectedItem;
+        ItemCrafter.CraftedItem += OnCraftedItem;
+        itemCrafter = new ItemCrafter();
+        activeInventory.InitializeInventory();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
+        }
     }
 
     void OnCollectedItem(object source, CollectableEventArgs args)
@@ -20,9 +32,18 @@ public class InventoryManager : MonoBehaviour
         Debug.Log(args.CollectableName + " Collected. Adding to Inventory");
     }
 
+    void OnCraftedItem(object source, CraftingEventArgs args)
+    {
+        if (!args.craftedRecipe.Craftable(activeInventory)) { Debug.Log("Insufficient materials for crafting, returning..."); return; }
+        activeInventory.AdjustInventory(args.craftedRecipe, args.craftedAmount);
+        Debug.LogFormat("Crated {0} {1}(s) and adding to Inventory", args.craftedAmount, args.craftedRecipe.identifier);
+
+    }
+
     private void OnDisable()
     {
         Collectable.Collected -= OnCollectedItem;
+        ItemCrafter.CraftedItem -= OnCraftedItem;
     }
 }
 
@@ -31,6 +52,42 @@ public class Inventory
 {
     public Dictionary<string, int> itemsOwned;   
     bool inventoryExists => itemsOwned != null;
+
+    public void InitializeInventory()
+    {
+        itemsOwned = new Dictionary<string, int>();
+    }
+
+    public bool CheckQuantity(string id, int amt = 1)
+    {
+        if (!Owned(id)) { return false; }
+        return itemsOwned[id] >= amt;
+    }
+
+    public bool CheckQuantity(Item i, int amt = 1)
+    {
+        return CheckQuantity(i.identifier, amt);
+    }
+
+    public List<Item> GetItems(params string[] ids)
+    {
+        List<Item> returnItems = new List<Item>();
+       foreach(string i in ids)
+        {
+            if (CheckQuantity(i)) { returnItems.Add(i.GetItem()); }
+        }
+        return returnItems;
+    }
+
+    public void AdjustInventory(Recipe crafted, int amt = 1)
+    {
+        AdjustInventory(true, crafted.identifier, amt);
+        foreach(RecipeIngredient ing in crafted.ingredients)
+        {
+            Debug.Log("Removing " + ing.ID);
+            AdjustInventory(false, ing.ID, ing.amount * amt);
+        }
+    }
 
     public void AdjustInventory(bool add, string itemName, int amount = 1)
     {
@@ -68,6 +125,16 @@ public class Inventory
                 itemsOwned.Remove(itemName);
             }
         }
+    }
+
+    bool Owned(Item i)
+    {
+        return itemsOwned.ContainsKey(i.identifier);
+    }
+
+    bool Owned(string id)
+    {
+        return itemsOwned.ContainsKey(id);
     }
 
     bool ValidInventoryListing(string name)

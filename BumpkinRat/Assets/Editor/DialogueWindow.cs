@@ -32,5 +32,4 @@ public class DialogueWindow : EditorWindow
         EditorGUILayout.PropertyField(propGeneratedLines, true);
         so.ApplyModifiedProperties();
     }
-
 }

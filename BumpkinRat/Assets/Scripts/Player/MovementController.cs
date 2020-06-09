@@ -41,8 +41,7 @@ public class MovementController : MonoBehaviour
             OverworldMovement();
         } else
         {
-            if (!climbing) { MouseOverworldMovement(); }
-            Climb();
+            MouseOverworldMovement();
         }
 
         Ray r = new Ray(transform.position, transform.forward);
@@ -51,7 +50,7 @@ public class MovementController : MonoBehaviour
         {
             forwardObjectLook = hit.transform.gameObject;
         } else { forwardObjectLook = null; }
-        //Debug.DrawLine(transform.position, transform.position + transform.forward, Color.red);
+
         Debug.DrawRay(r.origin, r.direction, Color.blue);
     }
 
@@ -90,17 +89,6 @@ public class MovementController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A) && !climbing) { StartCoroutine(ClimbingPosition()); }
     }
 
-    void Climb()
-    {
-        Ray below = new Ray(transform.position, transform.up * -1);
-        RaycastHit rh;
-        Transform hit = Physics.Raycast(below, out rh, 1f) ? rh.transform : null;
-        if(hit != null)
-        {
-            //print("Hit is Valid: " + hit.tag);
-        }
-    }
-
     IEnumerator SlowDown(float speed)
     {
         while (!body.velocity.Squeeze(Vector3.zero))
@@ -111,6 +99,7 @@ public class MovementController : MonoBehaviour
         body.velocity = Vector3.zero;
     }
     bool climbing;
+
     IEnumerator ClimbingPosition()
     {
         transform.DORotate(new Vector3(-90, transform.eulerAngles.y, transform.eulerAngles.z), 3);

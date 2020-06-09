@@ -3,8 +3,9 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
-public static class Extensions
+public static class GenericExtensions
 {
     public static bool ValidList<T>(this List<T> check)
     {
@@ -85,5 +86,46 @@ public interface IDelta<T>
     T GetDelta(T tracking);
 }
 
+public static class CraftX
+{
+    public static Item GetItem(this string id)
+    {
+        return DatabaseContainer.gameData.GetItem(id);
+    }
+
+    public static Item GetItem(this string id, Inventory i)
+    {
+        Item it = id.GetItem();
+        return i.CheckQuantity(it, 1) ? it : null;
+    }
+
+   public static string ToID(this string display)
+    {
+        StringBuilder sb = new StringBuilder(display.ToLowerInvariant());
+        sb.Replace(' ', '_');
+        return sb.ToString();
+    }
+
+    public static int CompareItem(this Item i, Item other, bool byID = true, bool byValue = false)
+    {
+        if(byID && !byValue) { return i.CompareItemID(other); }
+        if(!byID && byValue) { return i.CompareItemValue(other); }
+        if(byID && byValue) { return i.CompareItemID(other) + i.CompareItemValue(other); }
+        return 1;
+    }
+
+    public static int CompareItemID(this Item i, Item other)
+    {
+        if(other == null) { return 1; }
+        return string.Compare(i.ID, other.ID, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static int CompareItemValue(this Item i, Item other)
+    {
+        if(other == null) { return 1; }
+        return Mathf.Abs(i.value - other.value);
+    }
+
+}
 
 

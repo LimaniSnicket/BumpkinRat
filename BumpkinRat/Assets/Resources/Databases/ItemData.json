@@ -8,7 +8,8 @@
         {
             "ID": "crafted_item",
             "display": "Crafted Item",
-            "value": 10
+            "value": 10,
+            "craftable":  true
         }
     ],
     "RecipeData": [

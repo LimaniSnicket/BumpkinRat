@@ -97,15 +97,16 @@
     <Compile Include="Assets\Scripts\Dialogue\DialogueExtensions.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueRunner.cs" />
     <Compile Include="Assets\Scripts\God\DatabaseContainer.cs" />
+    <Compile Include="Assets\Scripts\God\MouseManager.cs" />
     <Compile Include="Assets\Scripts\Helper\Enums.cs" />
     <Compile Include="Assets\Scripts\Helper\Extensions.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Item.cs" />
-    <Compile Include="Assets\Scripts\MouseManager.cs" />
     <Compile Include="Assets\Scripts\Player\MovementController.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />
     <None Include="Assets\BayatGames\SaveGameFree\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
@@ -143,6 +144,18 @@
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

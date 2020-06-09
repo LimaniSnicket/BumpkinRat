@@ -7,20 +7,22 @@ using UnityEngine;
 public class ItemCrafter
 {
     public bool crafting;
-    public ItemCrafter()
-    {
+    public static event EventHandler<CraftingEventArgs> CraftedItem;
+    public ItemCrafter() { }
 
-    }
-
-    public bool CanCraft(Inventory i, ItemListing item)
+    public void CraftRecipe(Recipe r, int amt)
     {
-        return false;
+        if(CraftedItem != null)
+        {
+            CraftedItem(this, new CraftingEventArgs { craftedRecipe = r, craftedAmount = amt });
+        }
     }
 }
 
 public class CraftingEventArgs : EventArgs
 {
-
+    public Recipe craftedRecipe { get; set; }
+    public int craftedAmount { get; set; }
 }
 //    public string craftingPath;
 //    public CraftingData craftingData;

@@ -66,6 +66,8 @@
     <Compile Include="Assets\BayatGames\SaveGameFree\Editor\Tests\SaveGameTests.cs" />
     <Compile Include="Assets\Editor\DialogueRunnerEditor.cs" />
     <Compile Include="Assets\Editor\DialogueWindow.cs" />
+    <Compile Include="Assets\Editor\IdentifiableNode.cs" />
+    <Compile Include="Assets\Editor\InventoryDatabaseWindow.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -80,6 +82,18 @@
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>/Users/Vera/Desktop/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
