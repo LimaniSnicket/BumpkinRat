@@ -1,0 +1,54 @@
+{
+    "ItemData": [
+        {
+            "ID": "basic_item",
+            "display": "Basic Item",
+            "value": 0,
+            "craftable": false
+        },
+        {
+            "ID": "crafted_item",
+            "display": "Crafted Item",
+            "value": 10,
+            "craftable": true
+        },
+        {
+            "ID": "new_identifiable_node",
+            "display": "New Identifiable Node",
+            "value": 0,
+            "craftable": false
+        },
+        {
+            "ID": "test_item",
+            "display": "Test Item",
+            "value": 0,
+            "craftable": true
+        },
+        {
+            "ID": "item_2",
+            "display": "Item 2",
+            "value": 0,
+            "craftable": false
+        }
+    ],
+    "RecipeData": [
+        {
+            "outputID": "crafted_item",
+            "ingredients": [
+                {
+                    "ID": "basic_item",
+                    "amount": 1
+                }
+            ]
+        },
+        {
+            "outputID": "test_item",
+            "ingredients": [
+                {
+                    "ID": "Item 2",
+                    "amount": 0
+                }
+            ]
+        }
+    ]
+}

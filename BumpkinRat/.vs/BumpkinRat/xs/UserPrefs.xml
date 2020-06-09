@@ -1,14 +1,23 @@
 ﻿<Properties StartupConfiguration="{8189B1EB-8EF8-466E-1D39-778C9C488F80}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Helper/Extensions.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/World/ClimbingSurface.cs">
     <Files>
-      <File FileName="Assets/Scripts/Player/MovementController.cs" Line="25" Column="78" />
-      <File FileName="Assets/Scripts/Inventory&amp;Items/Collectable.cs" />
-      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="24" Column="8" />
+      <File FileName="Assets/Scripts/Player/MovementController.cs" Line="102" Column="1" />
+      <File FileName="Assets/Scripts/Helper/Extensions.cs" />
+      <File FileName="Assets/Scripts/Helper/Enums.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/Crafting.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/InventoryManager.cs" />
+      <File FileName="Assets/Scripts/MouseManager.cs" />
+      <File FileName="Assets/Resources/Databases/ItemData.json" />
+      <File FileName="Assets/Scripts/God/DatabaseContainer.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/Item.cs" />
+      <File FileName="Assets/Editor/InventoryDatabaseWindow.cs" />
+      <File FileName="Assets/Editor/IdentifiableNode.cs" />
+      <File FileName="Assets/Scripts/World/ClimbingSurface.cs" Line="5" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="fd0b7aab-859f-4e8a-8a96-b586a135e962" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="a30636ba-4ad5-4cca-82b5-7409839aa934" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

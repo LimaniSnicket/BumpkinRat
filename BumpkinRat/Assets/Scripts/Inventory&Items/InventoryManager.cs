@@ -1,36 +1,93 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
+    public string itemDataPath;
     public Inventory activeInventory;
+    ItemCrafter itemCrafter;
+
     private void OnEnable()
     {
-       if(activeInventory != null) { activeInventory.InitializeInventory(); }
-        Collectable.OnCollected += OnCollectedItem;
+        Collectable.Collected += OnCollectedItem;
+        ItemCrafter.CraftedItem += OnCraftedItem;
+        itemCrafter = new ItemCrafter();
+        activeInventory.InitializeInventory();
     }
 
-    void OnCollectedItem(string itemName, int amnt = 1)
+    private void Update()
     {
-        activeInventory.AdjustInventory(true, itemName, amnt);
-        Debug.Log(itemName + " Collected. Adding to Inventory");
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
+        }
+    }
+
+    void OnCollectedItem(object source, CollectableEventArgs args)
+    {
+        activeInventory.AdjustInventory(true, args.CollectableName, args.CollectedAmount);
+        Debug.Log(args.CollectableName + " Collected. Adding to Inventory");
+    }
+
+    void OnCraftedItem(object source, CraftingEventArgs args)
+    {
+        if (!args.craftedRecipe.Craftable(activeInventory)) { Debug.Log("Insufficient materials for crafting, returning..."); return; }
+        activeInventory.AdjustInventory(args.craftedRecipe, args.craftedAmount);
+        Debug.LogFormat("Crated {0} {1}(s) and adding to Inventory", args.craftedAmount, args.craftedRecipe.identifier);
+
     }
 
     private void OnDisable()
     {
-        Collectable.OnCollected -= OnCollectedItem;
+        Collectable.Collected -= OnCollectedItem;
+        ItemCrafter.CraftedItem -= OnCraftedItem;
     }
 }
 
 [Serializable]
 public class Inventory
 {
-    public Dictionary<string, int> itemsOwned;
-    List<ItemListing> loadedItems;
-
+    public Dictionary<string, int> itemsOwned;   
     bool inventoryExists => itemsOwned != null;
+
+    public void InitializeInventory()
+    {
+        itemsOwned = new Dictionary<string, int>();
+    }
+
+    public bool CheckQuantity(string id, int amt = 1)
+    {
+        if (!Owned(id)) { return false; }
+        return itemsOwned[id] >= amt;
+    }
+
+    public bool CheckQuantity(Item i, int amt = 1)
+    {
+        return CheckQuantity(i.identifier, amt);
+    }
+
+    public List<Item> GetItems(params string[] ids)
+    {
+        List<Item> returnItems = new List<Item>();
+       foreach(string i in ids)
+        {
+            if (CheckQuantity(i)) { returnItems.Add(i.GetItem()); }
+        }
+        return returnItems;
+    }
+
+    public void AdjustInventory(Recipe crafted, int amt = 1)
+    {
+        AdjustInventory(true, crafted.identifier, amt);
+        foreach(RecipeIngredient ing in crafted.ingredients)
+        {
+            Debug.Log("Removing " + ing.ID);
+            AdjustInventory(false, ing.ID, ing.amount * amt);
+        }
+    }
 
     public void AdjustInventory(bool add, string itemName, int amount = 1)
     {
@@ -62,7 +119,7 @@ public class Inventory
                 itemsOwned[itemName] -= amountToRemove;
             } else if(itemsOwned[itemName] < amountToRemove)
             {
-                Debug.Log("Note enough in inventory");
+                Debug.Log("Not enough in inventory");
             } else
             {
                 itemsOwned.Remove(itemName);
@@ -70,20 +127,14 @@ public class Inventory
         }
     }
 
-    public void InitializeInventory()
+    bool Owned(Item i)
     {
-        InitializeInventory(loadedItems);
+        return itemsOwned.ContainsKey(i.identifier);
     }
 
-    void InitializeInventory(List<ItemListing> items)
+    bool Owned(string id)
     {
-        if(itemsOwned == null) { itemsOwned = new Dictionary<string, int>(); }
-        if (!items.ValidList<ItemListing>()) { return; }
-        foreach (ItemListing a in items)
-        {
-            if (!itemsOwned.ContainsKey(a.itemName)) { itemsOwned.Add(a.itemName, a.amount); }
-            else { itemsOwned[a.itemName] = a.amount; }
-        }
+        return itemsOwned.ContainsKey(id);
     }
 
     bool ValidInventoryListing(string name)
@@ -96,6 +147,6 @@ public class Inventory
 [Serializable]
 public class ItemListing
 {
-    public string itemName;
-    public int amount;
-}
+   public Item item { get; set; }
+    public int amount { get; set; }
+ }

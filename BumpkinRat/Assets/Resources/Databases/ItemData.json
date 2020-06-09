@@ -1,0 +1,26 @@
+﻿{
+    "ItemData": [
+        {
+            "ID": "basic_item",
+            "display": "Basic Item",
+            "value": 0
+        },
+        {
+            "ID": "crafted_item",
+            "display": "Crafted Item",
+            "value": 10,
+            "craftable":  true
+        }
+    ],
+    "RecipeData": [
+        {
+            "outputID": "crafted_item",
+            "ingredients": [
+                {
+                    "ID": "basic_item",
+                    "amount":  1
+                }
+            ]
+        }
+    ]
+}

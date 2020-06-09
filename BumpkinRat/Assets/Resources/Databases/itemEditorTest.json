@@ -1,0 +1,43 @@
+{
+    "rowCapacity": 3,
+    "Rows": [
+        {
+            "nodesInRow": [
+                {
+                    "windowTitle": "basic_item",
+                    "identifier": "Basic Item",
+                    "value": 0,
+                    "row": 0,
+                    "col": 0,
+                    "recipeNode": [],
+                    "craftable": false
+                },
+                {
+                    "windowTitle": "crafted_item",
+                    "identifier": "Crafted Item",
+                    "value": 10,
+                    "row": 0,
+                    "col": 1,
+                    "recipeNode": [
+                        {
+                            "id": "basic_item",
+                            "amount": 1,
+                            "selectionIndex": 0
+                        }
+                    ],
+                    "craftable": true
+                },
+                {
+                    "windowTitle": "new_identifiable_node",
+                    "identifier": "Fuck",
+                    "value": 0,
+                    "row": 0,
+                    "col": 2,
+                    "recipeNode": [],
+                    "craftable": false
+                }
+            ],
+            "rowIndex": 0
+        }
+    ]
+}
