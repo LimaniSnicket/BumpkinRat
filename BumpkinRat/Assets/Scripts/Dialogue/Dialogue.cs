@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class Dialogue
 {
     public DialogueTree currentTree;
@@ -10,28 +12,59 @@ public class Dialogue
     public bool dialogueActive { get => activeNode != null; }
     public bool onLastDialogueNode => dialogueActive && activeNode != null && activeNode.pointer == -1;
 
-    public void RunDialogueTree(MonoBehaviour host)
+    public string dialogueLine { get; private set; } public bool writingLine { get; private set; }
+
+    public Dialogue() { }
+    public Dialogue(DialogueTree tree)
     {
-        
+        currentTree = tree;
+        activeNode = new DialogueNode();
     }
 
-    IEnumerator ReadDialogue(MonoBehaviour host, int node)
+    public IEnumerator RunDialogue(MonoBehaviour host, int nPointer)
     {
-        if(currentTree == null && !currentTree.validTree) { yield return null; }
-        activeNode = currentTree.GetNode(node); int l = activeNode.numberOfLines;
-        int t = 0; 
-        while (t < l)
+        Debug.Log(nPointer);
+        if (nPointer < 0) { Debug.Log("Dialogue Complete. Exiting..."); }
+        else
         {
-            yield return host.StartCoroutine(activeNode.RunDialogueLine(host, activeNode.lines, t));
-            t++;
+            if (currentTree == null || !currentTree.validTree) { yield return null; }
+            activeNode = currentTree.GetNode(nPointer);
+            yield return host.StartCoroutine(RunLine(host, activeNode.lines, 0));
+            while (writingLine)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            yield return host.StartCoroutine(RunDialogue(host, activeNode.pointer));
         }
-        if (onLastDialogueNode)
+    }
+
+    IEnumerator RunLine(MonoBehaviour host, string[] lines, int index)
+    {
+        dialogueLine = ""; writingLine = true;
+        if (index < 0 || lines == null || index >= lines.Length || lines.Length <= 0)
         {
-            Debug.Log("Exiting Dialogue");
-            activeNode = null;
-        } else
+            writingLine = false; yield return null;
+        }
+        else
         {
-            host.StartCoroutine(ReadDialogue(host, activeNode.pointer));
+
+            string line = lines[index];
+            while (line.Length > 0)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    dialogueLine = lines[index];
+                    break;
+                }
+
+                char c = line.First();
+                dialogueLine += c;
+                line.Remove(0);
+                yield return new WaitForSeconds(0.001f);
+            }
+            while (!Input.GetKeyDown(KeyCode.Space)) { yield return new WaitForEndOfFrame(); }
+            int increment = index++;
+            yield return host.StartCoroutine(RunLine(host, lines, increment));
         }
     }
 }
@@ -39,10 +72,20 @@ public class Dialogue
 [Serializable]
 public class DialogueTree
 {
-    public string treeTitle;
     public List<DialogueNode> nodesInTree;
-
     public bool validTree => nodesInTree != null && nodesInTree.Count > 0;
+
+    public DialogueTree() { }
+    public DialogueTree(string[] lines)
+    {
+        nodesInTree = new List<DialogueNode>();
+        nodesInTree.Add(new DialogueNode(lines));
+    }
+
+    public DialogueTree(DialogueNode[] nodes)
+    {
+        nodesInTree = new List<DialogueNode>(nodes);
+    }
 
     public DialogueNode GetNode(int i)
     {
@@ -50,17 +93,15 @@ public class DialogueTree
         return nodesInTree[i];
     }
 
-    public int NodePointer(int node)
-    {
-        if(nodesInTree == null || nodesInTree.Count <= 0) { return -1; }
-        if(node >= nodesInTree.Count) { return nodesInTree[nodesInTree.Count - 1].pointer; }
-        return nodesInTree[node].pointer;
-    }
-
     public bool ValidNode(int node)
     {
-        int next = NodePointer(node);
-        return next > -1;
+        if (!validTree) { return false; }
+        return node > -1 && nodesInTree.Count > node;
+    }
+
+    public bool HasNext(int node)
+    {
+        return GetNode(node).pointer > -1;
     }
 }
 
@@ -73,45 +114,17 @@ public class DialogueNode
             if(lines == null) { return -1; }
             return lines.Length;
         } }
-    public string displayLine { get; private set; }
     public DialogueNode() { }
+
     public DialogueNode(string[] l)
     {
-        lines = l;
+        lines = new string[l.Length];
+        Array.Copy(l, lines, lines.Length);
     }
     public DialogueNode(string[] l, int p)
     {
-        lines = l;
+        lines = new string[l.Length];
+        Array.Copy(l, lines, lines.Length);
         pointer = p;
-    }
-
-    public bool writingLine { get; private set; }
-    public IEnumerator RunDialogueLine(MonoBehaviour host, string[] arr, int index)
-    {
-        displayLine = ""; writingLine = true;
-        if(index < 0 || arr == null || index >= arr.Length || arr.Length <= 0)
-        {
-            writingLine = false;
-            yield return null;
-        }
-        while (writingLine)
-        {
-           for(int i = 0; i< arr[index].Length + 1; i++)
-            {
-                if(i >= arr.Length) { writingLine = false; break; } else
-                {
-                    displayLine.Insert(i, arr[i]);
-                    if (arr[i] != " ") { yield return new WaitForSeconds(0.005f); }
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                writingLine = false;
-                break;
-            }
-            yield return null;
-        }
-        int nIndex = index++;
-        yield return host.StartCoroutine(RunDialogueLine(host, arr, nIndex));
-    }
+    }    
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System.Linq;
 
 public static class GenericExtensions
 {
@@ -63,6 +64,53 @@ public static class MathfX
     public static bool Squeeze(this Vector3 c, Vector3 comp, float threshold = 0.001f)
     {
         return Mathf.Abs(Vector3.Distance(c, comp)) <= threshold;
+    }
+
+    public static bool Squeeze(this float f, float comp, float threshold = 0.001f)
+    {
+        return Mathf.Abs(f - comp) <= threshold;
+    }
+
+    public static bool SqueezeBetween(this float f, float lowerBound, float upperBound)
+    {
+        return f >= lowerBound && f <= upperBound;
+    }
+
+    public static bool SqueezeBetween(this int f, int lowerBound, int upperBound)
+    {
+        return f >= lowerBound && f <= upperBound;
+    }
+}
+
+public static class InputX
+{
+    public static Vector2 InputRawVect2 => new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+    public static Vector3 InputRawVect3 => new Vector3(InputRawVect2.x, 0, InputRawVect2.y);
+
+    public static bool interactionButton => Input.GetKeyDown(KeyCode.Space);
+}
+
+public static class VizX
+{
+    public static Color ColorByRange(this float col, Dictionary<float, Color> dict)
+    {
+        float f = Mathf.Floor(col);
+        if (f < dict.ElementAt(0).Key) { return dict.ElementAt(0).Value; }
+        if (f > dict.Last().Key) { return dict.Last().Value; }
+        if (dict.ContainsKey(f)) { return dict[f]; }
+        float a = 0; float b = 0; Color a_c = new Color(); Color b_c = new Color();
+        for (int i = 0; i < dict.Count - 1; i++)
+        {
+            if (f.SqueezeBetween(dict.ElementAt(i).Key, dict.ElementAt(i + 1).Key))
+            {
+                a = dict.ElementAt(i).Key; a_c = dict.ElementAt(i).Value;
+                b = dict.ElementAt(i + 1).Key; b_c = dict.ElementAt(i + 1).Value;
+            }
+        }
+
+        float RangeThreshold = Mathf.Abs(b - a);
+        float col_2_mult = f - a; float col_1_mult = b - f;
+        return (a_c * col_1_mult + b_c * col_2_mult) / RangeThreshold;
     }
 }
 
@@ -126,6 +174,25 @@ public static class CraftX
         return Mathf.Abs(i.value - other.value);
     }
 
+}
+
+public static class CustomGravity
+{
+    public static Vector3 GetGravity(Vector3 position)
+    {
+        return Physics.gravity;
+    }
+
+    public static Vector3 GetUpAxis(Vector3 position)
+    {
+        return -Physics.gravity.normalized;
+    }
+
+    public static Vector3 GetGravity(Vector3 position, out Vector3 upAxis)
+    {
+        upAxis = -Physics.gravity.normalized;
+        return Physics.gravity;
+    }
 }
 
 
