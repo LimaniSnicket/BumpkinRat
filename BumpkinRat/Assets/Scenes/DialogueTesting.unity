@@ -370,6 +370,7 @@ GameObject:
   - component: {fileID: 202548828}
   - component: {fileID: 202548822}
   - component: {fileID: 202548829}
+  - component: {fileID: 202548830}
   m_Layer: 0
   m_Name: Rat Man
   m_TagString: Player
@@ -627,6 +628,20 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &202548830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202548820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2ce979b5bf04db484ac63a6dee0860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    player_name: 
 --- !u!1 &485605623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,8 +1144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd338f0a8946144f591f543d47046a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 0
-  columns: 0
+  tileDimension: 0.25
+  planterTileList: []
 --- !u!1 &1169003576
 GameObject:
   m_ObjectHideFlags: 0

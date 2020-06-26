@@ -110,6 +110,7 @@
     <Compile Include="Assets\Scripts\Player\ClimbingBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\MovementController.cs" />
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />

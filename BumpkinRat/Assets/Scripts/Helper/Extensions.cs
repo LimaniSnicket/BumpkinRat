@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
@@ -23,6 +24,28 @@ public static class GenericExtensions
     public static void DebugTuple<T, U>(this (T, U) tuple)
     {
         Debug.LogFormat("{0}, {1}", tuple.Item1.ToString(), tuple.Item2.ToString());
+    }
+
+    public static void SetValue<T>(this T t, string toChange, string setValue)
+    {
+        bool isProperty = t.GetType().GetProperty(toChange) != null;
+        bool isField = t.GetType().GetField(toChange) != null;
+
+        if (isProperty) {
+            PropertyInfo propInfo = t.GetType().GetProperty(toChange);
+            Type targetType = propInfo.PropertyType;
+            var set = Convert.ChangeType(setValue, targetType);
+            propInfo.SetValue(t, set);
+        } else if (isField)
+        {
+            FieldInfo fieldInfo = t.GetType().GetField(toChange);
+            Type targetType = fieldInfo.FieldType;
+            var set = Convert.ChangeType(setValue, targetType);
+            fieldInfo.SetValue(t, set);
+        } else
+        {
+            Debug.LogWarningFormat("Couldn't set value, {0} isn't a valid Property or Field.", toChange);
+        }
     }
 }
 
