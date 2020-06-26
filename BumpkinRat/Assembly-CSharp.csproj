@@ -105,6 +105,8 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Item.cs" />
     <Compile Include="Assets\Scripts\Npc\NpcBehavior.cs" />
+    <Compile Include="Assets\Scripts\Planting\PlantingManager.cs" />
+    <Compile Include="Assets\Scripts\Planting\PlantingSpace.cs" />
     <Compile Include="Assets\Scripts\Player\ClimbingBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\MovementController.cs" />
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />

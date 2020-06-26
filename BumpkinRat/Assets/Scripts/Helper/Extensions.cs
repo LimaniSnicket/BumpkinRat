@@ -19,6 +19,11 @@ public static class GenericExtensions
         string json = File.ReadAllText(path);
         return JsonUtility.FromJson<T>(json);
     }
+
+    public static void DebugTuple<T, U>(this (T, U) tuple)
+    {
+        Debug.LogFormat("{0}, {1}", tuple.Item1.ToString(), tuple.Item2.ToString());
+    }
 }
 
 public static class MathfX

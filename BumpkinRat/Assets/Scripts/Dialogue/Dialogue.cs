@@ -2,70 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 [Serializable]
 public class Dialogue
 {
     public DialogueTree currentTree;
-    [SerializeField] DialogueNode activeNode;
-    public bool dialogueActive { get => activeNode != null; }
-    public bool onLastDialogueNode => dialogueActive && activeNode != null && activeNode.pointer == -1;
 
-    public string dialogueLine { get; private set; } public bool writingLine { get; private set; }
-
-    public Dialogue() { }
+    public Dialogue() {
+        SubscribeToEvents();
+    }
     public Dialogue(DialogueTree tree)
     {
-        currentTree = tree;
-        activeNode = new DialogueNode();
+        currentTree = tree; 
     }
 
-    public IEnumerator RunDialogue(MonoBehaviour host, int nPointer)
+    public void SubscribeToEvents()
     {
-        Debug.Log(nPointer);
-        if (nPointer < 0) { Debug.Log("Dialogue Complete. Exiting..."); }
-        else
-        {
-            if (currentTree == null || !currentTree.validTree) { yield return null; }
-            activeNode = currentTree.GetNode(nPointer);
-            yield return host.StartCoroutine(RunLine(host, activeNode.lines, 0));
-            while (writingLine)
-            {
-                yield return new WaitForEndOfFrame();
-            }
-            yield return host.StartCoroutine(RunDialogue(host, activeNode.pointer));
-        }
+        
     }
 
-    IEnumerator RunLine(MonoBehaviour host, string[] lines, int index)
+    public void UnsubscribeToEvents()
     {
-        dialogueLine = ""; writingLine = true;
-        if (index < 0 || lines == null || index >= lines.Length || lines.Length <= 0)
-        {
-            writingLine = false; yield return null;
-        }
-        else
-        {
-
-            string line = lines[index];
-            while (line.Length > 0)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    dialogueLine = lines[index];
-                    break;
-                }
-
-                char c = line.First();
-                dialogueLine += c;
-                line.Remove(0);
-                yield return new WaitForSeconds(0.001f);
-            }
-            while (!Input.GetKeyDown(KeyCode.Space)) { yield return new WaitForEndOfFrame(); }
-            int increment = index++;
-            yield return host.StartCoroutine(RunLine(host, lines, increment));
-        }
+        
     }
 }
 
@@ -114,17 +74,64 @@ public class DialogueNode
             if(lines == null) { return -1; }
             return lines.Length;
         } }
+
+    public NodeSpecs specs;
+    public bool validChoices {
+        get
+        {
+            if (specs == null) { specs = new NodeSpecs(); }
+            return specs.waitForPlayerInput && specs.dialogueChoices.ValidList();
+        }
+    }
+
     public DialogueNode() { }
 
     public DialogueNode(string[] l)
     {
         lines = new string[l.Length];
         Array.Copy(l, lines, lines.Length);
+        specs = new NodeSpecs();
     }
     public DialogueNode(string[] l, int p)
     {
         lines = new string[l.Length];
         Array.Copy(l, lines, lines.Length);
         pointer = p;
-    }    
+        specs = new NodeSpecs();
+    }
+
+    public DialogueNode(string[] l, int p, NodeSpecs s)
+    { 
+        lines = new string[l.Length];
+        Array.Copy(l, lines, lines.Length);
+        pointer = p;
+        specs = s;
+    }
+
+    public void ChangePointer(int np)
+    {
+        pointer = np;
+    }
+}
+
+
+/// <summary>
+/// <para> NodeSpecs class has different options to tailor each dialogue node to specific uses. Not everything needs to be filled in. </para>
+/// </summary>
+
+[Serializable]
+public class NodeSpecs
+{
+    public string nodeType;
+    public bool waitForPlayerInput;
+    public List<DialogueChoice> dialogueChoices;
+    public NodeSpecs() { }
+    public NodeSpecs(bool wait) { waitForPlayerInput = wait; }
+}
+
+[Serializable]
+public class DialogueChoice
+{
+    public string choiceSnippet;
+    public int pointer = -1; //default end dialogue
 }

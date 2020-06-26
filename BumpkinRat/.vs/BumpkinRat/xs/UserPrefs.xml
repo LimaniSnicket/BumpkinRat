@@ -1,19 +1,22 @@
 ﻿<Properties StartupConfiguration="{8189B1EB-8EF8-466E-1D39-778C9C488F80}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Dialogue/DialogueRunner.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Planting/PlantingManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="21" Column="6" />
+      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="40" Column="1" />
       <File FileName="Assets/Scripts/Helper/Enums.cs" />
       <File FileName="Assets/Scripts/World/ClimbingSurface.cs" />
       <File FileName="Assets/Scripts/Npc/NpcBehavior.cs" />
       <File FileName="Assets/Scripts/Dialogue/Dialogue.cs" />
-      <File FileName="Assets/Scripts/Dialogue/DialogueRunner.cs" Line="52" Column="49" />
+      <File FileName="Assets/Scripts/Dialogue/DialogueRunner.cs" />
       <File FileName="Assets/Scripts/Inventory&amp;Items/Collectable.cs" />
       <File FileName="Assets/Editor/IdentifiableNode.cs" />
+      <File FileName="Assets/Scripts/Dialogue/DialogueExtensions.cs" />
+      <File FileName="Assets/Scripts/Planting/PlantingSpace.cs" Line="17" Column="48" />
+      <File FileName="Assets/Scripts/Planting/PlantingManager.cs" Line="17" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="88a6c469-f559-461f-864c-a6d9aa0a2f6d" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="22c5a47a-205e-4529-bd1a-b03b60e7428f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
