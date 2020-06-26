@@ -923,8 +923,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.57, z: -10}
+  m_LocalRotation: {x: 0.35450438, y: 0.26522422, z: -0.10559534, w: 0.8904114}
+  m_LocalPosition: {x: -7.2168503, y: 13.1815405, z: -10.280485}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1050,6 +1050,7 @@ GameObject:
   - component: {fileID: 614876170}
   - component: {fileID: 614876169}
   - component: {fileID: 614876173}
+  - component: {fileID: 614876174}
   m_Layer: 0
   m_Name: PlantingSpace
   m_TagString: Untagged
@@ -1126,7 +1127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 614876168}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.22, z: 0}
+  m_LocalPosition: {x: 2.43, y: 1.22, z: -4.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1144,8 +1145,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd338f0a8946144f591f543d47046a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileDimension: 0.25
+  tileDimension: 0.4
   planterTileList: []
+--- !u!135 &614876174
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614876168}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1169003576
 GameObject:
   m_ObjectHideFlags: 0
