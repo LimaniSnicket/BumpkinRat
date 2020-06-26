@@ -36,6 +36,7 @@ public class DialogueTree
     public bool validTree => nodesInTree != null && nodesInTree.Count > 0;
 
     public DialogueTree() { }
+
     public DialogueTree(string[] lines)
     {
         nodesInTree = new List<DialogueNode>();
@@ -113,7 +114,6 @@ public class DialogueNode
         pointer = np;
     }
 }
-
 
 /// <summary>
 /// <para> NodeSpecs class has different options to tailor each dialogue node to specific uses. Not everything needs to be filled in. </para>

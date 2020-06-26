@@ -8,6 +8,8 @@ public class PlayerBehavior : MonoBehaviour
     private static PlayerBehavior player;
     public PlayerData playerData;
 
+    public static Vector3 playerPosition => player.transform.position;
+
     void OnEnable()
     {
         if (player == null) { player = this; } else { Destroy(this); }
@@ -19,6 +21,11 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             playerData.SetValue("playerName", "Billy-Bob");
+            if (PlantingManager.NearestPlantingSpace != null)
+            {
+                PlantingSpace space = PlantingManager.NearestPlantingSpace;
+                space.Plant("Flower!");
+            }
         }
     }
 

@@ -15,6 +15,19 @@ public static class GenericExtensions
         return true;
     }
 
+    public static void HandleInstanceObjectInList<T>(this List<T> list, T instance, bool add)
+    {
+        if(list != null) {
+            if (add)
+            {
+                if (!list.Contains(instance)) { list.Add(instance); }
+            } else
+            {
+                if (list.Contains(instance)) { list.Remove(instance); }
+            }
+        }
+    }
+
     public static T InitializeFromJSON<T>(this string path)
     {
         string json = File.ReadAllText(path);
@@ -26,17 +39,29 @@ public static class GenericExtensions
         Debug.LogFormat("{0}, {1}", tuple.Item1.ToString(), tuple.Item2.ToString());
     }
 
+    public static bool EvaluateValue<T>(this T t, string evaluate, string desired)
+    {
+        if (t.isField(evaluate))
+        {
+            FieldInfo fieldInfo = t.GetType().GetField(evaluate);
+            return fieldInfo.GetValue(t).ToString() == desired; 
+        }
+        if (t.isProperty(evaluate))
+        {
+            PropertyInfo property = t.GetType().GetProperty(evaluate);
+            return property.GetValue(t).ToString() == desired;
+        }
+        return false;
+    }
+
     public static void SetValue<T>(this T t, string toChange, string setValue)
     {
-        bool isProperty = t.GetType().GetProperty(toChange) != null;
-        bool isField = t.GetType().GetField(toChange) != null;
-
-        if (isProperty) {
+        if (t.isProperty(toChange)) {
             PropertyInfo propInfo = t.GetType().GetProperty(toChange);
             Type targetType = propInfo.PropertyType;
             var set = Convert.ChangeType(setValue, targetType);
             propInfo.SetValue(t, set);
-        } else if (isField)
+        } else if (t.isField(toChange))
         {
             FieldInfo fieldInfo = t.GetType().GetField(toChange);
             Type targetType = fieldInfo.FieldType;
@@ -47,6 +72,11 @@ public static class GenericExtensions
             Debug.LogWarningFormat("Couldn't set value, {0} isn't a valid Property or Field.", toChange);
         }
     }
+
+    public static bool isProperty<T>(this T t, string p) => t.GetType().GetProperty(p) != null;
+
+    public static bool isField<T>(this T t, string f) => t.GetType().GetField(f) != null;
+
 }
 
 public static class MathfX

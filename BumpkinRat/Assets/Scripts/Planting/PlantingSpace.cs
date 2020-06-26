@@ -80,6 +80,22 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerBehavior>())
+        {
+            PlantingManager.RegisterNearbyPlantingSpace(this, true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<PlayerBehavior>())
+        {
+            PlantingManager.RegisterNearbyPlantingSpace(this, false);
+        }
+    }
+
     private void OnDisable()
     {
         PlantingManager.RegisterPlantingSpace(this, false);
@@ -98,10 +114,15 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
         if (x == null && y == null) { return 0; }
         if (x == null && y != null) { return 1; }
         if (x != null && y == null) { return -1; }
-        if (Mathf.Abs(Vector3.Distance(x.tileBounds.center, transform.position))
-            <= Mathf.Abs(Vector3.Distance(y.tileBounds.center, transform.position)))
-        { return -1; }
-        return 1;
+        if(x.occupied == false && y.occupied == true) { return -1; }
+        if (x.occupied == true && y.occupied == false) { return 1; }
+        return 0;
+    }
+
+    public void Plant(string name)
+    {
+        SortPlanterTiles();
+        planterTileList[0].Plant(name);
     }
 }
 
@@ -116,7 +137,6 @@ public class PlanterTile
     public (int, int) rowColumnIndex => (row, column);
 
     public Bounds tileBounds { get; private set; }
-    [SerializeField] Vector3 center;
 
     public PlanterTile() { }
     public PlanterTile(int r, int c)
@@ -159,7 +179,7 @@ public class PlanterTile
 [Serializable]
 public class Plant
 {
-    string name;
+    public string name;
     public Plant() { }
     public Plant(string s)
     {
