@@ -8,6 +8,7 @@ public class NpcBehavior : MonoBehaviour
 {
     public NpcMood npcMood;
     public NpcDialogue npcDialogue;
+    public Dialogue dialogueStorage;
     MaterialPropertyBlock propBlock;
     public MaterialPropertyBlock getPropBlock
     {
@@ -27,6 +28,8 @@ public class NpcBehavior : MonoBehaviour
     {
         npcMood = new NpcMood();
         npcDialogue = new NpcDialogue();
+        dialogueStorage = new Dialogue();
+        DialogueRunner.DialogueEventIndicated += OnDialogueIndicatorEvent;
     }
 
     private void Update()
@@ -47,12 +50,23 @@ public class NpcBehavior : MonoBehaviour
         }
     }
 
+    void OnDialogueIndicatorEvent(object source, IndicatorArgs args)
+    {
+        Debug.Log(args.seperatedInfo.Length);
+    }
+
     void BroadcastNpcDialogue()
     {
         if (NpcDialogueTriggered != null)
         {
             NpcDialogueTriggered(this, new DialogueTriggerEventArgs { sampleDialogue = npcDialogue.defaultLine, activatedNPC = this});
         }
+    }
+
+    private void OnDisable()
+    {
+        DialogueRunner.DialogueEventIndicated -= OnDialogueIndicatorEvent;
+        dialogueStorage.UnsubscribeToEvents();
     }
 }
 
