@@ -6,12 +6,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
+using System.CodeDom.Compiler;
+using System.Runtime.InteropServices;
 
 public static class GenericExtensions
 {
     public static bool ValidList<T>(this List<T> check)
     {
         if(check == null || check.Count <= 0) { return false; }
+        return true;
+    }
+
+    public static bool ValidArray<T>(this T[] check)
+    {
+        if (check == null || check.Length <= 0) { return false; }
         return true;
     }
 
@@ -39,7 +47,7 @@ public static class GenericExtensions
         Debug.LogFormat("{0}, {1}", tuple.Item1.ToString(), tuple.Item2.ToString());
     }
 
-    public static bool EvaluateValue<T>(this T t, string evaluate, string desired)
+    static bool EvaluatePropertyOrField(this object t, string evaluate, string desired)
     {
         if (t.isField(evaluate))
         {
@@ -54,7 +62,32 @@ public static class GenericExtensions
         return false;
     }
 
-    public static void SetValue<T>(this T t, string toChange, string setValue)
+    public static bool EvaluateValue(this object t, string evaluate, string desired, bool property = true)
+    {
+        bool nested = evaluate.IndexOf('.') > 0;
+        if (!nested) { return t.EvaluatePropertyOrField(evaluate, desired); }
+
+        if (property)
+        {
+            object temp = t;
+            foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetProperty(s)))
+            {
+                temp = eval.GetValue(temp, null);
+            }
+            return temp.ToString() == desired;
+        }
+        else
+        {
+            object temp = t;
+            foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetField(s)))
+            {
+                temp = eval.GetValue(temp);
+            }
+            return temp.ToString() == desired;
+        }
+    }
+
+    public static void SetPropertyOrField(this object t, string toChange, string setValue)
     {
         if (t.isProperty(toChange)) {
             PropertyInfo propInfo = t.GetType().GetProperty(toChange);
@@ -71,6 +104,35 @@ public static class GenericExtensions
         {
             Debug.LogWarningFormat("Couldn't set value, {0} isn't a valid Property or Field.", toChange);
         }
+    }
+
+    public static void SetValue(this object t, string toChange, string set, bool property = true)
+    {
+        bool nested = toChange.IndexOf('.') > 0;
+        if (!nested) { t.SetPropertyOrField(toChange, set); return; }
+        string[] bits = toChange.Split('.');
+        if (property)
+        {
+            for (int i = 0; i < bits.Length - 1; i++)
+            {
+                PropertyInfo propertyToGet = t.GetType().GetProperty(bits[i]);
+                t = propertyToGet.GetValue(t, null);
+            }
+            PropertyInfo propertyToSet = t.GetType().GetProperty(bits.Last());
+            propertyToSet.SetValue(t, set, null);
+
+        }
+        else
+        {
+            for (int i = 0; i < bits.Length-1; i++)
+            {
+                FieldInfo fieldToGet = t.GetType().GetField(bits[i]);
+                t = fieldToGet.GetValue(t);
+            }
+            FieldInfo fieldToSet = t.GetType().GetField(bits.Last());
+            fieldToSet.SetValue(t, set);
+        }
+
     }
 
     public static bool isProperty<T>(this T t, string p) => t.GetType().GetProperty(p) != null;

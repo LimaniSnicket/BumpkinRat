@@ -14,6 +14,8 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
         } }
     public static List<PlantingSpace> NearbyPlantingSpaces;
 
+    public static List<string> plantNames;
+
     private void Awake()
     {
         Debug.Log("Initialize Plant Manager. Bow down to your plant god, peasant");
@@ -54,5 +56,15 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
     {
         if(NearbyPlantingSpaces == null) { NearbyPlantingSpaces = new List<PlantingSpace>(); }
         NearbyPlantingSpaces.HandleInstanceObjectInList(space, add);
+    }
+
+    public static string GetRandomPlant()
+    {
+        if (plantNames.ValidList())
+        {
+            int r = UnityEngine.Random.Range(0, plantNames.Count);
+            return plantNames[r];
+        }
+        return "";
     }
 }

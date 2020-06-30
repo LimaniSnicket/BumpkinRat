@@ -8,7 +8,7 @@ public class NpcBehavior : MonoBehaviour
 {
     public NpcMood npcMood;
     public NpcDialogue npcDialogue;
-    public Dialogue dialogueStorage;
+    public Dialogue dialogueStorage { get; set; }
     MaterialPropertyBlock propBlock;
     public MaterialPropertyBlock getPropBlock
     {
@@ -24,11 +24,12 @@ public class NpcBehavior : MonoBehaviour
 
     public static event EventHandler<DialogueTriggerEventArgs> NpcDialogueTriggered;
 
-    private void OnEnable()
+    private void Start()
     {
         npcMood = new NpcMood();
         npcDialogue = new NpcDialogue();
         dialogueStorage = new Dialogue();
+        Debug.Log("NPC Start");
         DialogueRunner.DialogueEventIndicated += OnDialogueIndicatorEvent;
     }
 
@@ -59,7 +60,9 @@ public class NpcBehavior : MonoBehaviour
     {
         if (NpcDialogueTriggered != null)
         {
-            NpcDialogueTriggered(this, new DialogueTriggerEventArgs { sampleDialogue = npcDialogue.defaultLine, activatedNPC = this});
+            NpcDialogueTriggered(this, new DialogueTriggerEventArgs { sampleDialogue = npcDialogue.defaultLine,
+                triggeredTree = npcDialogue.nextTree,
+                activatedNPC = this});
         }
     }
 
@@ -75,6 +78,7 @@ public class NpcDialogue
 {
     public bool readyForDialogue;
     public string defaultLine = "Hey, do you need something?";
+    public string annoyedLine = "Hey, watch where you're going!";
     public DialogueTree nextTree;
 
     public NpcDialogue()
@@ -84,7 +88,10 @@ public class NpcDialogue
 
     public void InstantiateInitialDialogue()
     {
-        nextTree = new DialogueTree(new string[] { defaultLine });
+        DialogueNode[] nodes = { new DialogueNode(new string[] { defaultLine }),
+            new DialogueNode(new string[]{ annoyedLine }) };
+        nextTree = new DialogueTree(nodes);
+        nextTree.SetSpecification(new TreeSpecs { treeConditions = new string[] { "<set>startIndex:1</set>" } });
     }
 }
 
