@@ -233,6 +233,7 @@ MonoBehaviour:
   npcDialogue:
     readyForDialogue: 0
     defaultLine: Hey, do you need something?
+    annoyedLine: Hey, watch where you're going!
     nextTree:
       nodesInTree:
       - lines:
@@ -242,9 +243,14 @@ MonoBehaviour:
           nodeType: 
           waitForPlayerInput: 0
           dialogueChoices: []
+      treeSpecs:
+        treeConditions:
+        - <set>startIndex:1</set>
   dialogueStorage:
     currentTree:
       nodesInTree: []
+      treeSpecs:
+        treeConditions: []
 --- !u!54 &162465355
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -640,8 +646,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af2ce979b5bf04db484ac63a6dee0860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData:
-    player_name: 
 --- !u!1 &485605623
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,14 +713,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -747,7 +751,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -0.8209276, z: 0, w: 3.5310106}
   m_textInfo:
     textComponent: {fileID: 485605624}
     characterCount: 11
@@ -1483,7 +1487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1647759104}
   - component: {fileID: 1647759105}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DialogueRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1520,6 +1524,8 @@ MonoBehaviour:
   activeDialogue:
     currentTree:
       nodesInTree: []
+      treeSpecs:
+        treeConditions: []
 --- !u!1 &1764622449
 GameObject:
   m_ObjectHideFlags: 0

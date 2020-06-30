@@ -30,15 +30,23 @@ public class DialogueRunner : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            string toSlice = "<tone>Tone|Pointer</tone> blah blah blah";
+            string toSlice = "<set>PLAYER_NAME:Billy</set> Hey Billy.";
             (string, string) sliced = toSlice.SliceIndicator();
+            //sliced = ("<set>Rat Man (PlayerBehavior):playerData:playerName:Billy</set>", "Hey Billy.")
+
             (string, Indication) info = sliced.Item1.GetIndicationInfo();
-            info.DebugTuple();
+            //info = ("Rat Man (PlayerBehavior):playerData:playerName:Billy", Indication.Setter)
+
+            BroadcastDialogueIndicatorEvent(info);
+
+            string ch = "Npc+NPC_TREE+PLAYER_NAME:2";
+            string[] charr = ch.FormatMacros(':', '+');
+            Debug.Log(charr.Length);
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            DialogueNode[] nodes = { new DialogueNode(new string[] { "<tone>Tone|Pointer</tone>fuck line 1", "fuck Line 2" }, 1),
+            DialogueNode[] nodes = { new DialogueNode(new string[] { "<set>Rat Man (PlayerBehavior):playerData.playerName:Billy</set> Hey Billy.", "fuck Line 2" }, 1),
                 new DialogueNode(new string[] { "<b>Entering dialogue node 2.</b>", "This one has an option pointer!" }, 2, new NodeSpecs{ waitForPlayerInput = true}),
                 new DialogueNode(new string[]{ "Final Node."})};
             DialogueTree testTree = new DialogueTree(nodes);
@@ -50,11 +58,9 @@ public class DialogueRunner : MonoBehaviour
     {
         if (textmeshDisplay != null)
         {
-            DialogueNode[] nodes = { new DialogueNode(new string[] { "fuck line 1", "fuck Line 2" }, 1),
-                new DialogueNode(new string[] { "<b>Entering dialogue node 2.</b>" }) };
-            DialogueTree testTree = new DialogueTree(nodes);
-            StartCoroutine(RunTree(testTree, testTree.GetNode(0)));
+            StartCoroutine(RunTree(args.triggeredTree, args.triggeredTree.startNode));
             textmeshDisplay.transform.position = args.activatedNPC.transform.position + Vector3.up;
+            textmeshDisplay.transform.rotation = Camera.main.transform.rotation;
         }
     }
 
@@ -141,7 +147,11 @@ public class DialogueRunner : MonoBehaviour
                 if (l.isIndicator())
                 {
                     indications = l.SliceIndicator();
-                    BroadcastDialogueIndicatorEvent(indications.Item1);
+                    (string, Indication) stripped = indications.Item1.GetIndicationInfo();
+                    if (stripped.Item2.BroadcastableIndicator())
+                    {
+                        BroadcastDialogueIndicatorEvent(stripped);
+                    }
                     l = indications.Item2;
                 }
                 else
@@ -163,7 +173,6 @@ public class DialogueRunner : MonoBehaviour
         writingLine = false;
     }
 
-
     void BroadcastDialogueIndicatorEvent(string slicedIndicator)
     {
         (string, Indication) relevantInfo = slicedIndicator.GetIndicationInfo();
@@ -171,6 +180,15 @@ public class DialogueRunner : MonoBehaviour
         if (DialogueEventIndicated != null)
         {
             DialogueEventIndicated(this, new IndicatorArgs { indicatorType = relevantInfo.Item2, infoToParse = relevantInfo.Item1 }) ;
+        }
+    }
+
+    void BroadcastDialogueIndicatorEvent((string, Indication) tuple)
+    {
+        if (DialogueEventIndicated != null)
+        {
+            DialogueEventIndicated(this, new IndicatorArgs { indicatorType = tuple.Item2,
+                infoToParse = tuple.Item1 });
         }
     }
 
@@ -188,5 +206,6 @@ public class DialogueRunner : MonoBehaviour
 public class DialogueTriggerEventArgs : EventArgs
 {
     public string sampleDialogue;
+    public DialogueTree triggeredTree;
     public NpcBehavior activatedNPC;
 }

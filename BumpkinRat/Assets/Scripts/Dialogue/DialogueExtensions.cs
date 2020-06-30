@@ -5,13 +5,24 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.CompilerServices;
 
 public static class DialogueExtensions 
 {
     static Dictionary<string, Indication> indicatorLookup => new Dictionary<string, Indication> {
         { "", Indication.None}, { "<ch>", Indication.Character},
-        { "<tone>", Indication.Tone}, { "<audio>", Indication.Audio} };
+        { "<tone>", Indication.Tone}, { "<audio>", Indication.Audio},
+        { "<cond>", Indication.Condition }, { "<set>", Indication.Setter },
+        { "<call>", Indication.Call }
+    };
+    static List<Indication> broadcastable => new List<Indication> { Indication.Audio, Indication.Setter, Indication.Tone };
+    static List<Indication> consumable => new List<Indication> { };
 
+    static Dictionary<string, string> methodSetterLookup => new Dictionary<string, string>
+    {
+        {"PLAYER_NAME", "Rat Man (PlayerBehavior):playerData.playerName" },
+        { "NPC_TREE", " (NpcBehavior):dialogueStorage:currentTree:startIndex"}
+    };
 
     public static string[] GetStringArray(this TextAsset txt)
     {
@@ -57,25 +68,39 @@ public static class DialogueExtensions
         return (inf, i);
     }
 
+    public static string[] FormatMacros(this string line, char seperator, char joiner)
+    {
+        int s = line.IndexOf(joiner) + 1;
+        if (s <= 0) { return line.Split(seperator); }
+
+        StringBuilder build = new StringBuilder(line);
+        char[] indexOfAny = { seperator, joiner };
+
+        int e = (line.IndexOfAny(indexOfAny, s)) - s;
+        string j = line.Substring(s, e);
+        if (methodSetterLookup.ContainsKey(j))
+        {
+            build.Replace(j, methodSetterLookup[j]);
+        }
+        build.Remove(line.IndexOf(joiner), 1);
+        Debug.Log(build.ToString());
+        return build.ToString().FormatMacros(seperator, joiner);
+    }
+
+    public static bool BroadcastableIndicator(this Indication ind)
+    {
+        return broadcastable.Contains(ind);
+    }
+
+    public static bool ConsumableIndicator(this Indication ind)
+    {
+        return consumable.Contains(ind);
+    }
+
     public static string GetIndicator(this string feed, bool inclusive = false)
     {
         string extracted = feed.SubstringBetweenChars('<', '>', inclusive);
         return extracted;
-    }
-
-    public static string GetIndicatorEnd(this string feed, int start, string indicator)
-    {
-        if (feed.Length < start || start + indicator.Length > feed.Length) { return feed; }
-        int cIndex = feed.IndexOf('<', start);
-        if (cIndex < 0) { return feed; }
-        string end = feed.Substring(start, indicator.Length + 1);
-        return MatchingIndicators(indicator, end) ? end : feed;
-    }
-
-    static bool MatchingIndicators(string begin, string end)
-    {
-        string b = begin.Insert(1, "/");
-        return string.Compare(b, end) == 0;
     }
 
     static bool ValidIndicator(this string feed) => indicatorLookup.ContainsKey(feed);
@@ -94,13 +119,17 @@ public static class DialogueExtensions
         if (indexOfEndPointer < 0) { return s; } //return the base string if it doesn't have and end pointer
         int sub = inclusive ? indexOfEndPointer : indexOfEndPointer + 1;
         return sub > s.Length ? "" : s.Substring(sub);
+    }
 
+    public static bool CheckForIndication(this string line, Indication i)
+    {
+        return line.IndicationType() == i;
     }
 }
 
 public enum Indication
 {
-    None, Character, Tone, Audio
+    None, Character, Tone, Audio, Condition, Setter, Call
 }
 
 public enum NodeType
@@ -112,14 +141,22 @@ public class IndicatorArgs: EventArgs
 {
     public Indication indicatorType;
     public string infoToParse;
-    public char seperator = '|';
+    public char seperator = ':';
+    public char joiner = '+';
 
     public string[] seperatedInfo
     {
         get
         {
-            if (infoToParse.IndexOf(seperator) < 0) { return new string[] { }; }
-            return infoToParse.Split(seperator);
+            if (infoToParse.IndexOf(seperator) < 0) { return new string[] {infoToParse }; }
+            return infoToParse.FormatMacros(seperator, joiner);
         }
+    }
+
+    public bool TargetObject(object o)
+    {
+        Debug.Log(o.ToString());
+        if (!seperatedInfo.ValidArray()) { return false; }
+        return o.ToString() == seperatedInfo[0];
     }
 }

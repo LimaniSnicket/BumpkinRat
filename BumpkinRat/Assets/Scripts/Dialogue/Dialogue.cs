@@ -8,7 +8,7 @@ using UnityEngine;
 [Serializable]
 public class Dialogue
 {
-    public DialogueTree currentTree;
+    public DialogueTree currentTree { get; set; }
 
     public Dialogue() {
         SubscribeToEvents();
@@ -34,6 +34,9 @@ public class DialogueTree
 {
     public List<DialogueNode> nodesInTree;
     public bool validTree => nodesInTree != null && nodesInTree.Count > 0;
+    public int startIndex { get; set; }
+    bool initialized;
+    public TreeSpecs treeSpecs;
 
     public DialogueTree() { }
 
@@ -46,6 +49,32 @@ public class DialogueTree
     public DialogueTree(DialogueNode[] nodes)
     {
         nodesInTree = new List<DialogueNode>(nodes);
+    }
+
+    public void SetSpecification(TreeSpecs specs)
+    {
+        initialized = false;
+        treeSpecs = specs;
+        InitializeDialogueTree();
+    }
+
+    public void InitializeDialogueTree()
+    {
+        if (treeSpecs.treeConditions.ValidArray() && !initialized)
+        {
+            initialized = true;
+            for(int i = 0; i < treeSpecs.treeConditions.Length; i++)
+            {
+                string sep = treeSpecs.treeConditions[i].GetIndicationInfo().Item1;
+                string[] arr = sep.Split(':');
+                this.SetValue(arr[0], arr[1]);
+            }
+        }
+    }
+
+    public DialogueNode startNode
+    {
+        get => GetNode(startIndex);
     }
 
     public DialogueNode GetNode(int i)
@@ -113,6 +142,12 @@ public class DialogueNode
     {
         pointer = np;
     }
+}
+
+[Serializable]
+public struct TreeSpecs
+{
+    public string[] treeConditions;
 }
 
 /// <summary>

@@ -11,7 +11,6 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
     Bounds bounds;
 
     public float tileDimension = 0.25f;
-    public PlanterTile[,] planterTiles;
     [SerializeField] List<PlanterTile> planterTileList;
 
     private void OnEnable()
@@ -22,7 +21,7 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
         planterTileList = new List<PlanterTile>();
         GeneratePlanterTiles();
     }
-
+    
     (int, int) planterDimensions
     {
         get
@@ -30,7 +29,6 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
             tileDimension = Mathf.Max(tileDimension, 0.1f);
             int tileRows = (int)((bounds.extents.y * 2) / tileDimension);
             int tileColumns = (int)((bounds.extents.x * 2) / tileDimension);
-            planterTiles = new PlanterTile[tileRows, tileColumns];
             return (tileRows, tileColumns);
         }
     }
@@ -55,7 +53,6 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
                 t.SetBounds(sp);
                 GameObject who_is_she = new GameObject("Who Is She");
                 who_is_she.transform.position = sp;
-                planterTiles[i, j] = t;
                 planterTileList.Add(t);
             }
         }
@@ -70,7 +67,6 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
             if (tile.ValidTile(planterDimensions))
             {
                 tile.SetBounds(dimensions.Item3, true);
-                planterTiles[tile.rowColumnIndex.Item1, tile.rowColumnIndex.Item2] = tile;
                 planterTileList.Add(tile);
             }
             else
@@ -176,13 +172,3 @@ public class PlanterTile
     }
 }
 
-[Serializable]
-public class Plant
-{
-    public string name;
-    public Plant() { }
-    public Plant(string s)
-    {
-        name = s;
-    }
-}

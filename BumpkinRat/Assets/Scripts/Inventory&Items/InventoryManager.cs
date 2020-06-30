@@ -50,18 +50,18 @@ public class InventoryManager : MonoBehaviour
 [Serializable]
 public class Inventory
 {
-    public Dictionary<string, int> itemsOwned;   
-    bool inventoryExists => itemsOwned != null;
+    public Dictionary<string, int> inventoryListings;   
+    bool inventoryExists => inventoryListings != null;
 
     public void InitializeInventory()
     {
-        itemsOwned = new Dictionary<string, int>();
+        inventoryListings = new Dictionary<string, int>();
     }
 
     public bool CheckQuantity(string id, int amt = 1)
     {
         if (!Owned(id)) { return false; }
-        return itemsOwned[id] >= amt;
+        return inventoryListings[id] >= amt;
     }
 
     public bool CheckQuantity(Item i, int amt = 1)
@@ -103,10 +103,10 @@ public class Inventory
     void AddToInventory(string itemName, int amount = 1)
     {
         if (ValidInventoryListing(itemName)) {
-            itemsOwned[itemName] += amount;
+            inventoryListings[itemName] += amount;
         } else
         {
-            itemsOwned.Add(itemName, amount);
+            inventoryListings.Add(itemName, amount);
         }
     }
 
@@ -114,33 +114,33 @@ public class Inventory
     {
         if (ValidInventoryListing(itemName))
         {
-            if(itemsOwned[itemName] > amountToRemove)
+            if(inventoryListings[itemName] > amountToRemove)
             {
-                itemsOwned[itemName] -= amountToRemove;
-            } else if(itemsOwned[itemName] < amountToRemove)
+                inventoryListings[itemName] -= amountToRemove;
+            } else if(inventoryListings[itemName] < amountToRemove)
             {
                 Debug.Log("Not enough in inventory");
             } else
             {
-                itemsOwned.Remove(itemName);
+                inventoryListings.Remove(itemName);
             }
         }
     }
 
     bool Owned(Item i)
     {
-        return itemsOwned.ContainsKey(i.identifier);
+        return inventoryListings.ContainsKey(i.identifier);
     }
 
     bool Owned(string id)
     {
-        return itemsOwned.ContainsKey(id);
+        return inventoryListings.ContainsKey(id);
     }
 
     bool ValidInventoryListing(string name)
     {
         if (!inventoryExists) { return false; }
-        return itemsOwned.ContainsKey(name);
+        return inventoryListings.ContainsKey(name);
     }
 }
 

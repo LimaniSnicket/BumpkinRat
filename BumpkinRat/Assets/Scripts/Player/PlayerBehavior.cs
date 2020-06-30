@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour
 {
     private static PlayerBehavior player;
-    public PlayerData playerData;
+    public PlayerData playerData { get; set; }
 
     public static Vector3 playerPosition => player.transform.position;
 
@@ -14,24 +14,35 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (player == null) { player = this; } else { Destroy(this); }
         if (playerData == null) { playerData = new PlayerData(); }
+        DialogueRunner.DialogueEventIndicated += OnDialogueEvent;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            playerData.SetValue("playerName", "Billy-Bob");
+        //    this.SetValue("playerData.playerName", "Billy-Bob");
+            bool nestedEval = this.EvaluateValue("playerData.playerName", "Billy", true);
+            Debug.Log(playerData.playerName + ": " + nestedEval);
+            
             if (PlantingManager.NearestPlantingSpace != null)
             {
                 PlantingSpace space = PlantingManager.NearestPlantingSpace;
-                space.Plant("Flower!");
+                space.Plant(PlantingManager.GetRandomPlant());
             }
+        }
+    }
+
+    void OnDialogueEvent(object source, IndicatorArgs args)
+    {
+        if (args.TargetObject(this)){
+            Debug.Log("Valid Indicator Event");
         }
     }
 
     void OnDisable()
     {
-
+        DialogueRunner.DialogueEventIndicated -= OnDialogueEvent;
     }
 }
 
