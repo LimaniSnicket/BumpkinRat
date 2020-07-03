@@ -69,7 +69,9 @@ public class MovementController : MonoBehaviour
         if (Physics.Raycast(r, out hit, 2f))
         {
             forwardObjectLook = hit.transform.gameObject;
-            if (Input.GetKeyDown(KeyCode.W) && !climbing) { BeginClimbing(forwardObjectLook.GetComponent<ClimbingSurface>(), hit.point, hit.triangleIndex); }
+            if (Input.GetKeyDown(KeyCode.W) && !climbing && forwardObjectLook.GetComponent<ClimbingSurface>() != null) {
+                BeginClimbing(forwardObjectLook.GetComponent<ClimbingSurface>(), hit.point, hit.triangleIndex);
+            }
         }
         else { forwardObjectLook = null; }
 

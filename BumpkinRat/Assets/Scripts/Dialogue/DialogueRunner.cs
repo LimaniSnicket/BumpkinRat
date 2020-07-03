@@ -10,23 +10,29 @@ using TMPro;
 public class DialogueRunner : MonoBehaviour
 {
     private static DialogueRunner dr;
-    public TextMeshPro textmeshDisplay;
     public Dialogue activeDialogue;
+
+    public GameObject dialogueMenuObject;
+    static DialogueMenu dialogueMenu;
 
     string displayLine;
 
     public static event EventHandler<IndicatorArgs> DialogueEventIndicated;
 
-    private void OnEnable()
+    private void Awake()
     {
         if(dr == null) { dr = this; } else { Destroy(gameObject); }
+        if (dialogueMenuObject != null) { dialogueMenu = new DialogueMenu(dialogueMenuObject); }
         NpcBehavior.NpcDialogueTriggered += OnNpcDialogueTriggered;
         
     }
 
     private void Update()
     {
-        textmeshDisplay.text = reading ? displayLine : "";
+        if (reading)
+        {
+            dialogueMenu.UpdateDialogueDisplay(displayLine);
+        }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -46,21 +52,24 @@ public class DialogueRunner : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            DialogueNode[] nodes = { new DialogueNode(new string[] { "<set>Rat Man (PlayerBehavior):playerData.playerName:Billy</set> Hey Billy.", "fuck Line 2" }, 1),
-                new DialogueNode(new string[] { "<b>Entering dialogue node 2.</b>", "This one has an option pointer!" }, 2, new NodeSpecs{ waitForPlayerInput = true}),
+            DialogueNode[] nodes = { new DialogueNode(new string[] {
+                "<set>Rat Man (PlayerBehavior):playerData.playerName:Billy</set> Hey Billly.",
+                "" }, 1),
+                new DialogueNode(new string[] { "<b>Entering dialogue node 2.</b>",
+                    "This one has an option pointer!" }, 2, new NodeSpecs{ waitForPlayerInput = true}),
                 new DialogueNode(new string[]{ "Final Node."})};
             DialogueTree testTree = new DialogueTree(nodes);
+            dialogueMenu.LoadMenu();
             StartCoroutine(RunTree(testTree, testTree.GetNode(0)));
         }
     }
 
     void OnNpcDialogueTriggered(object source, DialogueTriggerEventArgs args)
     {
-        if (textmeshDisplay != null)
+        if (dialogueMenu != null)
         {
+            dialogueMenu.LoadMenu();
             StartCoroutine(RunTree(args.triggeredTree, args.triggeredTree.startNode));
-            textmeshDisplay.transform.position = args.activatedNPC.transform.position + Vector3.up;
-            textmeshDisplay.transform.rotation = Camera.main.transform.rotation;
         }
     }
 
@@ -99,6 +108,7 @@ public class DialogueRunner : MonoBehaviour
         } else
         {
             Debug.Log("Exit Dialogue Tree");
+            dialogueMenu.CloseMenu();
             reading = false;
         }
     }
@@ -152,6 +162,9 @@ public class DialogueRunner : MonoBehaviour
                     {
                         BroadcastDialogueIndicatorEvent(stripped);
                     }
+
+                    stripped.DebugTuple();
+
                     l = indications.Item2;
                 }
                 else

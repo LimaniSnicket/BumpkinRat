@@ -2,10 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.CompilerServices;
 
 public static class DialogueExtensions 
 {
@@ -15,13 +13,22 @@ public static class DialogueExtensions
         { "<cond>", Indication.Condition }, { "<set>", Indication.Setter },
         { "<call>", Indication.Call }
     };
-    static List<Indication> broadcastable => new List<Indication> { Indication.Audio, Indication.Setter, Indication.Tone };
-    static List<Indication> consumable => new List<Indication> { };
+    static List<Indication> broadcastable => new List<Indication> {
+        Indication.Audio,
+        Indication.Setter,
+        Indication.Tone,
+        Indication.Call,
+        Indication.Condition
+    };
+    static List<Indication> consumable => new List<Indication> {
+        
+    };
 
-    static Dictionary<string, string> methodSetterLookup => new Dictionary<string, string>
+    static Dictionary<string, string> stringReplacementLookup => new Dictionary<string, string>
     {
         {"PLAYER_NAME", "Rat Man (PlayerBehavior):playerData.playerName" },
-        { "NPC_TREE", " (NpcBehavior):dialogueStorage:currentTree:startIndex"}
+        { "NPC_TREE", " (NpcBehavior):dialogueStorage:currentTree:startIndex"},
+        { "INV_ADJUST", "Rat Man (InventoryManager):activeInventory:"}
     };
 
     public static string[] GetStringArray(this TextAsset txt)
@@ -78,9 +85,9 @@ public static class DialogueExtensions
 
         int e = (line.IndexOfAny(indexOfAny, s)) - s;
         string j = line.Substring(s, e);
-        if (methodSetterLookup.ContainsKey(j))
+        if (stringReplacementLookup.ContainsKey(j))
         {
-            build.Replace(j, methodSetterLookup[j]);
+            build.Replace(j, stringReplacementLookup[j]);
         }
         build.Remove(line.IndexOf(joiner), 1);
         Debug.Log(build.ToString());
@@ -123,7 +130,7 @@ public static class DialogueExtensions
 
     public static bool CheckForIndication(this string line, Indication i)
     {
-        return line.IndicationType() == i;
+        return line.IndicationType().Equals(i);
     }
 }
 
