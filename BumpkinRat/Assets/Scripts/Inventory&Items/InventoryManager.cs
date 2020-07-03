@@ -7,8 +7,10 @@ using System.Collections.Generic;
 public class InventoryManager : MonoBehaviour
 {
     public string itemDataPath;
-    public Inventory activeInventory;
+    public Inventory activeInventory { get; set; }
     ItemCrafter itemCrafter;
+    public GameObject inventoryMenuObject;
+    public InventoryMenu inventoryMenu;
 
     private void OnEnable()
     {
@@ -16,13 +18,15 @@ public class InventoryManager : MonoBehaviour
         ItemCrafter.CraftedItem += OnCraftedItem;
         itemCrafter = new ItemCrafter();
         activeInventory.InitializeInventory();
+        inventoryMenu = new InventoryMenu(inventoryMenuObject != null ? inventoryMenuObject : new GameObject());
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
+            inventoryMenu.LoadMenu(activeInventory);
+            //itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
         }
     }
 

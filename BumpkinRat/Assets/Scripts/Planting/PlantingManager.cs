@@ -14,7 +14,7 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
         } }
     public static List<PlantingSpace> NearbyPlantingSpaces;
 
-    public static List<string> plantNames;
+    public static List<string> plantNames => new List<string> { "Plant 1", "Plant 2", "Plant 3" };
 
     private void Awake()
     {
@@ -65,6 +65,6 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
             int r = UnityEngine.Random.Range(0, plantNames.Count);
             return plantNames[r];
         }
-        return "";
+        return "Default Plant";
     }
 }

@@ -1,28 +1,27 @@
 ﻿<Properties StartupConfiguration="{8189B1EB-8EF8-466E-1D39-778C9C488F80}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Planting/Plant.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Dialogue/DialogueRunner.cs">
     <Files>
-      <File FileName="Assets/Scripts/Helper/Extensions.cs" Line="47" Column="1" />
+      <File FileName="Assets/Scripts/Planting/PlantingSpace.cs" Line="156" Column="1" IsPinned="True" />
+      <File FileName="Assets/Scripts/Helper/Extensions.cs" />
       <File FileName="Assets/Scripts/Helper/Enums.cs" />
       <File FileName="Assets/Scripts/World/ClimbingSurface.cs" />
       <File FileName="Assets/Scripts/Npc/NpcBehavior.cs" />
       <File FileName="Assets/Scripts/Dialogue/Dialogue.cs" />
-      <File FileName="Assets/Scripts/Dialogue/DialogueRunner.cs" />
+      <File FileName="Assets/Scripts/Dialogue/DialogueRunner.cs" Line="216" Column="37" />
       <File FileName="Assets/Scripts/Inventory&amp;Items/Collectable.cs" />
-      <File FileName="Assets/Scripts/Dialogue/DialogueExtensions.cs" Line="159" Column="1" />
-      <File FileName="Assets/Scripts/Planting/PlantingSpace.cs" Line="175" Column="1" />
+      <File FileName="Assets/Scripts/Dialogue/DialogueExtensions.cs" Line="20" Column="25" />
       <File FileName="Assets/Scripts/Planting/PlantingManager.cs" />
       <File FileName="Assets/Scripts/Player/PlayerBehavior.cs" />
       <File FileName="Assets/Resources/Databases/PlantData.json" />
       <File FileName="Assets/Resources/Databases/PlantData.csv" />
-      <File FileName="Assets/Editor/DialogueWindow.cs" />
-      <File FileName="Assets/Scripts/Inventory&amp;Items/Item.cs" Line="54" Column="2" />
-      <File FileName="Assets/Scripts/Inventory&amp;Items/InventoryManager.cs" Line="18" Column="47" />
-      <File FileName="Assets/Scripts/Planting/Plant.cs" Line="2" Column="1" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/Item.cs" />
+      <File FileName="Assets/Scripts/Inventory&amp;Items/InventoryManager.cs" />
+      <File FileName="Assets/Scripts/Planting/Plant.cs" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="23362c70-9e9f-497e-81e2-7ccff94d2f56" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="bbaff54a-c76e-4a0f-8ac2-90d94b54313a" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

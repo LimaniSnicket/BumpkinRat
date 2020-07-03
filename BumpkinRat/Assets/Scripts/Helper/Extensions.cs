@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections;
 using System.Reflection;
@@ -66,24 +66,32 @@ public static class GenericExtensions
     {
         bool nested = evaluate.IndexOf('.') > 0;
         if (!nested) { return t.EvaluatePropertyOrField(evaluate, desired); }
+        try
+        {
 
-        if (property)
-        {
-            object temp = t;
-            foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetProperty(s)))
+            if (property)
             {
-                temp = eval.GetValue(temp, null);
+                object temp = t;
+                foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetProperty(s)))
+                {
+                    temp = eval.GetValue(temp, null);
+                }
+                return temp.ToString() == desired;
             }
-            return temp.ToString() == desired;
+            else
+            {
+                object temp = t;
+                foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetField(s)))
+                {
+                    temp = eval.GetValue(temp);
+                }
+                return temp.ToString() == desired;
+            }
         }
-        else
+        catch (NullReferenceException)
         {
-            object temp = t;
-            foreach (var eval in evaluate.Split('.').Select(s => temp.GetType().GetField(s)))
-            {
-                temp = eval.GetValue(temp);
-            }
-            return temp.ToString() == desired;
+            Debug.LogWarningFormat("Warning! Trying to evaluate {0} as {1} resulted in a Null Reference Exception!", evaluate, desired);
+            return false;
         }
     }
 

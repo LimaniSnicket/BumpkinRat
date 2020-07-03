@@ -23,7 +23,7 @@ public class PlayerBehavior : MonoBehaviour
         {
         //    this.SetValue("playerData.playerName", "Billy-Bob");
             bool nestedEval = this.EvaluateValue("playerData.playerName", "Billy", true);
-            Debug.Log(playerData.playerName + ": " + nestedEval);
+            if (nestedEval) { Debug.Log(playerData.playerName + ": " + nestedEval); }
             
             if (PlantingManager.NearestPlantingSpace != null)
             {
