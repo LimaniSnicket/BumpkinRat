@@ -7,7 +7,7 @@ using System.Linq;
 
 public class DatabaseContainer : MonoBehaviour
 {
-    public string itemDataPath;
+    public string itemDataPath, plantDataPath;
     private static DatabaseContainer database;
     public static GameData gameData { get; private set; }
 
@@ -19,6 +19,7 @@ public class DatabaseContainer : MonoBehaviour
      void InitializeData()
     {
         gameData = itemDataPath.InitializeFromJSON<GameData>();
+        gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
         gameData.InitializeLookupTables();
     }
 }
@@ -28,6 +29,7 @@ public class GameData
 {
     [SerializeField] List<Item> ItemData;
     [SerializeField] List<Recipe> RecipeData;
+    public PlantDataStorage plantData;
 
     private Dictionary<string, Item> item_map = new Dictionary<string, Item>();
     private Dictionary<string, Recipe> item_recipe_lookup = new Dictionary<string, Recipe>();
@@ -109,4 +111,10 @@ public class GameData
             item_recipe_lookup.Add(r.outputID, r);
         }
     }
+}
+
+[Serializable]
+public struct PlantDataStorage
+{
+    public List<string> plantNames;
 }

@@ -17,3 +17,9 @@ public enum ActionState
 {
     Scurry, Jump, Climb
 }
+
+public enum StorageType
+{
+    Default = 0,
+    Plantable = 1
+}

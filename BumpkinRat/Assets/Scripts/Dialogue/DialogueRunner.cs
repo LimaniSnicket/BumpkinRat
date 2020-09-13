@@ -16,6 +16,11 @@ public class DialogueRunner : MonoBehaviour
     static DialogueMenu dialogueMenu;
 
     string displayLine;
+    public static bool validCondition { get; set; }
+    public static int validationTally { get; private set; }
+
+    public static Dictionary<string, object> validation_lookup;
+
 
     public static event EventHandler<IndicatorArgs> DialogueEventIndicated;
 
@@ -23,6 +28,12 @@ public class DialogueRunner : MonoBehaviour
     {
         if(dr == null) { dr = this; } else { Destroy(gameObject); }
         if (dialogueMenuObject != null) { dialogueMenu = new DialogueMenu(dialogueMenuObject); }
+        if (validation_lookup == null)
+        {
+            validation_lookup = FindObjectsOfType<GameObject>().Where(g => g is IValidateable).
+                ToDictionary(p => ((object)p).ToString(), p => (object)p);
+        }
+
         NpcBehavior.NpcDialogueTriggered += OnNpcDialogueTriggered;
         
     }
@@ -54,7 +65,7 @@ public class DialogueRunner : MonoBehaviour
         {
             DialogueNode[] nodes = { new DialogueNode(new string[] {
                 "<set>Rat Man (PlayerBehavior):playerData.playerName:Billy</set> Hey Billly.",
-                "" }, 1),
+                "<cond>Rat Man (PlayerBehavior):playerData.playerName:Billy</cond>Conditional Statement" }, 1),
                 new DialogueNode(new string[] { "<b>Entering dialogue node 2.</b>",
                     "This one has an option pointer!" }, 2, new NodeSpecs{ waitForPlayerInput = true}),
                 new DialogueNode(new string[]{ "Final Node."})};
@@ -162,6 +173,12 @@ public class DialogueRunner : MonoBehaviour
                     {
                         BroadcastDialogueIndicatorEvent(stripped);
                     }
+                    if (stripped.Item2.Equals(Indication.Condition))
+                    {
+                        Debug.Log("Validating Condition");
+                        string[] parse = stripped.Item1.FormatMacros(':', '+');
+                        
+                    }
 
                     stripped.DebugTuple();
 
@@ -210,6 +227,11 @@ public class DialogueRunner : MonoBehaviour
         dr.activeDialogue = new Dialogue();
     }
 
+    public static void RegisterObjectsForEvaluation(Action<object, IndicatorArgs> callback)
+    {
+
+    }
+
     private void OnDisable()
     {
         NpcBehavior.NpcDialogueTriggered -= OnNpcDialogueTriggered;
@@ -221,4 +243,9 @@ public class DialogueTriggerEventArgs : EventArgs
     public string sampleDialogue;
     public DialogueTree triggeredTree;
     public NpcBehavior activatedNPC;
+}
+
+public interface IValidateable
+{
+    bool Validate(string thisObj, string[] compare);
 }

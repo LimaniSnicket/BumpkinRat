@@ -1,21 +1,54 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 [Serializable]
 public class Dialogue
 {
-    public DialogueTree currentTree { get; set; }
-
-    public Dialogue() {
-        SubscribeToEvents();
-    }
-    public Dialogue(DialogueTree tree)
+    [SerializeField] string active_tree_id;
+    public string ActiveTreeID
     {
-        currentTree = tree; 
+        get => active_tree_id;
+        set => active_tree_id = value;
+    }
+
+    Dictionary<string, DialogueTree> dialogue_lookup;
+    bool validId => dialogue_lookup.ContainsKey(active_tree_id);
+
+    public DialogueTree activeTree => validId ? dialogue_lookup[active_tree_id] : null;
+    
+    public Dialogue() { }
+
+    public Dialogue(string path) {
+        SubscribeToEvents();
+        TreeLoader trees = path.InitializeFromJSON<TreeLoader>();
+        dialogue_lookup = trees.Trees.ToDictionary(k => k.treeID);
+        Debug.LogFormat("Created Dialogue Lookup with {0} entries", dialogue_lookup.Count);
+    }
+
+    public DialogueTree GetDialogueTree(string id)
+    {
+        try
+        {
+            return dialogue_lookup[id];
+        }
+        catch (KeyNotFoundException){
+            Debug.LogWarning("Error getting dialogue tree by ID");
+            return new DialogueTree();
+        }
+    }
+
+    public DialogueTree GetDialogueTree(int index)
+    {
+        try
+        {
+            return dialogue_lookup.ElementAt(index).Value;
+        }catch (ArgumentOutOfRangeException)
+        {
+            Debug.LogWarning("Error getting dialogue tree by index");
+            return new DialogueTree();
+        }
     }
 
     public void SubscribeToEvents()
@@ -32,6 +65,7 @@ public class Dialogue
 [Serializable]
 public class DialogueTree
 {
+    public string treeID;
     public List<DialogueNode> nodesInTree;
     public bool validTree => nodesInTree != null && nodesInTree.Count > 0;
     public int startIndex { get; set; }
@@ -169,4 +203,10 @@ public class DialogueChoice
 {
     public string choiceSnippet;
     public int pointer = -1; //default end dialogue
+}
+
+[Serializable]
+public struct TreeLoader
+{
+    public List<DialogueTree> Trees;
 }

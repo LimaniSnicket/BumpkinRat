@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class DialogueExtensions 
+public static class DialogueX
 {
     static Dictionary<string, Indication> indicatorLookup => new Dictionary<string, Indication> {
         { "", Indication.None}, { "<ch>", Indication.Character},
@@ -30,6 +30,8 @@ public static class DialogueExtensions
         { "NPC_TREE", " (NpcBehavior):dialogueStorage:currentTree:startIndex"},
         { "INV_ADJUST", "Rat Man (InventoryManager):activeInventory:"}
     };
+
+    public static string nullTree => "NONE";
 
     public static string[] GetStringArray(this TextAsset txt)
     {

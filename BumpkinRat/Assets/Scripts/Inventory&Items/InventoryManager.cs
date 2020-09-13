@@ -152,5 +152,5 @@ public class Inventory
 public class ItemListing
 {
    public Item item { get; set; }
-    public int amount { get; set; }
- }
+   public int amount { get; set; }
+}
