@@ -235,6 +235,7 @@ MonoBehaviour:
     defaultLine: Hey, do you need something?
     annoyedLine: Hey, watch where you're going!
     nextTree:
+      treeID: 
       nodesInTree:
       - lines:
         - Hey, do you need something?
@@ -246,6 +247,7 @@ MonoBehaviour:
       treeSpecs:
         treeConditions:
         - <set>startIndex:1</set>
+  dialoguePath: Assets/Resources/NpcDialogueStorage.json
 --- !u!54 &162465355
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1753,6 +1755,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c7af2d83dfe4923b27c9f0dfe41206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeDialogue:
+    active_tree_id: 
   dialogueMenuObject: {fileID: 241227297}
 --- !u!1 &1716791024
 GameObject:
@@ -2076,6 +2080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDataPath: Assets/Resources/Databases/ItemData.json
+  plantDataPath: Assets/Resources/Databases/PlantData.json
 --- !u!114 &1787936043
 MonoBehaviour:
   m_ObjectHideFlags: 0

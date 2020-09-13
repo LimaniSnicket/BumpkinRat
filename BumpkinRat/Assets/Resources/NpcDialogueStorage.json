@@ -1,0 +1,38 @@
+﻿{
+  "Trees": [
+    {
+      "treeID": "tree_1",
+      "nodesInTree": [
+        {
+          "lines": [
+            "Line 1",
+            "Line 2",
+            "Line 3"
+          ],
+          "pointer": 1
+        },
+
+        {
+          "lines": [
+            "Node 2 Line 1",
+            "<set>PLAYER_NAME:Billy</set> Hey Billy."
+          ],
+          "pointer": -1
+        }
+      ]
+    },
+
+    {
+      "treeID": "tree_2",
+      "nodesInTree": [
+        {
+          "lines": [
+            "please work ty"
+          ],
+          "pointer": -1
+        }
+      ]
+    }
+
+  ]
+}

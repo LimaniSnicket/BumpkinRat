@@ -8,6 +8,7 @@ public class NpcBehavior : MonoBehaviour
 {
     public NpcMood npcMood;
     public NpcDialogue npcDialogue;
+    public string dialoguePath;
     public Dialogue dialogueStorage { get; set; }
     MaterialPropertyBlock propBlock;
     public MaterialPropertyBlock getPropBlock
@@ -28,8 +29,9 @@ public class NpcBehavior : MonoBehaviour
     {
         npcMood = new NpcMood();
         npcDialogue = new NpcDialogue();
-        dialogueStorage = new Dialogue();
-        Debug.Log("NPC Start");
+        dialogueStorage = new Dialogue(dialoguePath);
+        dialogueStorage.ActiveTreeID = "tree_1";
+        dialogueStorage.activeTree.InitializeDialogueTree();
         DialogueRunner.DialogueEventIndicated += OnDialogueIndicatorEvent;
     }
 

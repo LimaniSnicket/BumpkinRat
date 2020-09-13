@@ -10,9 +10,9 @@ public class Item: Identifiable
     public string display;
     public int value;
     public bool craftable;
-
     public string identifier => ID;
-    public bool CraftableItem(GameData data)
+
+    public virtual bool CraftableItem(GameData data)
     {
         return data.HasRecipe(this);
     }
@@ -52,3 +52,5 @@ public interface Identifiable
 {
     string identifier { get; }
 }
+
+

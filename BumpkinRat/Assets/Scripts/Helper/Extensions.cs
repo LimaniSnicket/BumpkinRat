@@ -1,15 +1,13 @@
 using System;
 using System.IO;
-using System.Collections;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-using System.CodeDom.Compiler;
-using System.Runtime.InteropServices;
 
-public static class GenericExtensions
+
+public static class GenericX
 {
     public static bool ValidList<T>(this List<T> check)
     {
@@ -147,6 +145,19 @@ public static class GenericExtensions
 
     public static bool isField<T>(this T t, string f) => t.GetType().GetField(f) != null;
 
+    public static List<int> IndicesOf(this string s, char search)
+    {
+        List<int> indices = new List<int>();
+        int start = 0;
+        while(start >= 0)
+        {
+            start = s.IndexOf(search, start);
+            indices.Add(start);
+            start += 1;
+        }
+        return indices;
+    }
+
 }
 
 public static class MathfX
@@ -280,6 +291,11 @@ public static class CraftX
         StringBuilder sb = new StringBuilder(display.ToLowerInvariant());
         sb.Replace(' ', '_');
         return sb.ToString();
+    }
+
+    public static bool Plantable(this Identifiable i)
+    {
+        return i.identifier.Contains("_seed");
     }
 
     public static int CompareItem(this Item i, Item other, bool byID = true, bool byValue = false)
