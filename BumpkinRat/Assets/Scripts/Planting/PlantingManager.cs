@@ -14,6 +14,8 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
         } }
     public static List<PlantingSpace> NearbyPlantingSpaces;
 
+    public static List<string> plantNames = new List<string> { "plant a", "plant b" };
+
     private void Awake()
     {
         Debug.Log("Initialize Plant Manager. Bow down to your plant god, peasant");
