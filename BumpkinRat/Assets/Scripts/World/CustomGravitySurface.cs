@@ -13,5 +13,7 @@ public class CustomGravitySurface : MonoBehaviour
         t.GetComponent<Rigidbody>().AddForce(upGrav * gravity);
         Quaternion targetROtation = Quaternion.FromToRotation(bodyUp, upGrav) * t.rotation;
         t.rotation = Quaternion.Slerp(t.rotation, targetROtation, Time.deltaTime * 5);
+
+        
     }
 }
