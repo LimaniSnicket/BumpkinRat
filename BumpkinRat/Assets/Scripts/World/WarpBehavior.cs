@@ -11,6 +11,7 @@ public class WarpBehavior : MonoBehaviour
 
     public static bool WarpingActive { get; private set; }
     private static string tagOfWarping;
+    public static string warpedTo;
 
     [Serializable]
     public struct WarpTo
@@ -31,9 +32,15 @@ public class WarpBehavior : MonoBehaviour
         return WarpingActive && tagOfWarping.Equals(checking);
     }
 
-    void SetWarpingStatus(string warping = "")
+    public static bool IsWarpingTarget(WarpBehavior warpBehavior, string targ)
+    {
+        return targ.Equals(warpBehavior.warpTag); 
+    }
+
+    void SetWarpingStatus(string warpTo, string warping = "")
     {
         tagOfWarping = warping.Equals("") ? "null" : warping;
+        warpedTo = warpTo;
         WarpingActive = tagOfWarping.Equals("null") ? false : true;
     }
 
@@ -47,9 +54,9 @@ public class WarpBehavior : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.CompareTag(tagOfWarping) && WarpingActive)
+        if (collider.CompareTag(tagOfWarping) && WarpingActive && IsWarpingTarget(this, warpedTo))
         {
-            SetWarpingStatus();
+            SetWarpingStatus("null");
         }
     }
 
@@ -61,7 +68,7 @@ public class WarpBehavior : MonoBehaviour
     IEnumerator WarpToPosition(GameObject toWarp, string warpingTo)
     {
         Debug.Log("Warping to new Warp Location...");
-        SetWarpingStatus(toWarp.tag);
+        SetWarpingStatus(warpingTo, toWarp.tag);
         yield return new WaitForSeconds(1);
         if (WarpingLocations.ContainsKey(warpingTo))
         {
