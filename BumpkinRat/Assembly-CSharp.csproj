@@ -114,6 +114,7 @@
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\UI\PrologueHUD.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />
     <Compile Include="Assets\Scripts\World\CustomGravitySurface.cs" />
