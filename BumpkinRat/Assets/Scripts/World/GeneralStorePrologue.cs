@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GeneralStorePrologue : MonoBehaviour
@@ -9,6 +8,24 @@ public class GeneralStorePrologue : MonoBehaviour
 
     TimeSpan startTime;
     TimeSpan addOneSecond;
+
+    bool timer;
+    public bool OnBreak
+    {
+        get
+        {
+            if(timer != prologueCounter.TimerComplete)
+            {
+                OnBreakChange(!timer);
+            }
+
+            timer = prologueCounter.TimerComplete;
+            return !timer;
+        }
+    }
+    public bool atWork;
+
+    string breakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
 
     private void Start()
     {
@@ -21,7 +38,7 @@ public class GeneralStorePrologue : MonoBehaviour
     private void Update()
     {
         prologueCounter.DecrementTimerOverTime();
-        PrologueHUD.SetTimerDisplayMessage(startTime.ToString());
+        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{breakMessage}");
     }
 
     IEnumerator AddToTimeSpan()
@@ -31,5 +48,11 @@ public class GeneralStorePrologue : MonoBehaviour
             yield return new WaitForSeconds(1);
             startTime = startTime.Add(addOneSecond);
         }
+    }
+
+    void OnBreakChange(bool value)
+    {
+        atWork = value;
+        PlayerBehavior.SetFreezePlayerMovementController(value);
     }
 }

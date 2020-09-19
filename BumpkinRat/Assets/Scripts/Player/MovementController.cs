@@ -202,5 +202,10 @@ public class MovementController : MonoBehaviour
         onSurface = false;
         contactNormal = Vector3.zero;
     }
+
+    public void SetFreezePlayerMovement(bool yielding)
+    {
+        yieldPlayerControl = yielding;
+    }
 }
 

@@ -7,6 +7,7 @@ public class PlayerBehavior : MonoBehaviour
 {
     private static PlayerBehavior player;
     public PlayerData playerData { get; set; }
+    static MovementController PlayerMovementController { get; set; }
 
     public static Vector3 playerPosition => player.transform.position;
 
@@ -14,6 +15,9 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (player == null) { player = this; } else { Destroy(this); }
         if (playerData == null) { playerData = new PlayerData(); }
+
+        GetOrAddMovementController();
+
         DialogueRunner.DialogueEventIndicated += OnDialogueEvent;
     }
 
@@ -43,6 +47,27 @@ public class PlayerBehavior : MonoBehaviour
     void OnDisable()
     {
         DialogueRunner.DialogueEventIndicated -= OnDialogueEvent;
+    }
+
+    public static void SetFreezePlayerMovementController(bool freeze)
+    {
+        PlayerMovementController.SetFreezePlayerMovement(freeze);
+    }
+
+    void GetOrAddMovementController()
+    {
+        if (PlayerMovementController != null)
+        {
+            return;
+        }
+        try
+        {
+            PlayerMovementController = GetComponent<MovementController>();
+        }
+        catch (NullReferenceException)
+        {
+            PlayerMovementController = gameObject.AddComponent<MovementController>();
+        }
     }
 }
 
