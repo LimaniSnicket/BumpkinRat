@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-
+using System.Runtime.Remoting.Messaging;
 
 public static class GenericX
 {
@@ -158,6 +158,18 @@ public static class GenericX
         return indices;
     }
 
+    public static string GetCapitalizedString(this string toCap)
+    {
+        StringBuilder builder = new StringBuilder(toCap);
+
+        string startingChar = toCap.Substring(0, 1);
+        string replacing = startingChar.ToUpper();
+
+        builder.Replace(startingChar, replacing, 0, 1);
+
+        return builder.ToString();
+    }
+
 }
 
 public static class MathfX
@@ -293,6 +305,28 @@ public static class CraftX
         return sb.ToString();
     }
 
+    public static string ToDisplay(this string Id)
+    {
+        if(Id.Length <= 0) { return Id; }
+
+        if (Id.Contains("_"))
+        {
+            StringBuilder builder = new StringBuilder(Id.Length);
+            string[] segments = Id.Split('_').Select(s => s.GetCapitalizedString()).ToArray();
+            
+            foreach(string s in segments)
+            {
+                builder.Append($"{s} ");
+            }
+
+            return builder.ToString();
+
+        } else {
+            return Id.GetCapitalizedString();
+        }
+
+    }
+
     public static bool Plantable(this Identifiable i)
     {
         return i.identifier.Contains("_seed");
@@ -318,6 +352,21 @@ public static class CraftX
         return Mathf.Abs(i.value - other.value);
     }
 
+}
+
+public static class PhysicsX
+{
+    public static void CancelRigidBodyVelocity(this GameObject g)
+    {
+        try
+        {
+            g.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+        catch (NullReferenceException)
+        {
+
+        }
+    }
 }
 
 public static class CustomGravity

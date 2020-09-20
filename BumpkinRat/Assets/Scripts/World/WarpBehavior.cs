@@ -22,6 +22,8 @@ public class WarpBehavior : MonoBehaviour
 
     public WarpTo warpToInfo;
 
+    bool WarpToValid => warpToInfo.tag != null && warpToInfo.destination != null;
+
     void Awake()
     {
         AddToWarpingLocations();
@@ -46,6 +48,11 @@ public class WarpBehavior : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        if (!WarpToValid)
+        {
+            return;
+        }
+
         if (collider.CompareTag(warpToInfo.tag) && !WarpingActive)
         {
             Warp(collider.gameObject, warpToInfo.destination);
@@ -60,6 +67,31 @@ public class WarpBehavior : MonoBehaviour
         }
     }
 
+    public static WarpBehavior GetWarpingLocation(string location)
+    {
+        if (!WarpingLocations.ContainsKey(location))
+        {
+            throw new WarpingLocationException(location);
+        } else
+        {
+            return WarpingLocations[location];
+        }
+    }
+
+    public static void ForceWarpToLocation(GameObject toWarp, string destination)
+    {
+        try
+        {
+            WarpBehavior warpingTo = GetWarpingLocation(destination);
+
+            warpingTo.Warp(toWarp, destination);
+
+        } catch (WarpingLocationException warpError)
+        {
+            Debug.Log(warpError.Message);
+        }
+    }
+
     public void Warp(GameObject toWarp, string warpingTo)
     {
         StartCoroutine(WarpToPosition(toWarp, warpingTo));
@@ -69,6 +101,7 @@ public class WarpBehavior : MonoBehaviour
     {
         Debug.Log("Warping to new Warp Location...");
         SetWarpingStatus(warpingTo, toWarp.tag);
+        toWarp.CancelRigidBodyVelocity();
         yield return new WaitForSeconds(1);
         if (WarpingLocations.ContainsKey(warpingTo))
         {
@@ -95,4 +128,21 @@ public class WarpBehavior : MonoBehaviour
         }
     }
     
+}
+
+public interface IWarpTo
+{
+    void OnWarpBegin();
+    void OnWarpEnd();
+}
+
+public class WarpingLocationException: Exception
+{
+    public WarpingLocationException() { }
+
+    public WarpingLocationException(string location) : 
+        base($"Location Tag {location} does not exist in Warping Location Lookup.")
+    {
+
+    } 
 }

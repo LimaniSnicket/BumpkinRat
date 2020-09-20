@@ -19,7 +19,7 @@ public class DatabaseContainer : MonoBehaviour
      void InitializeData()
     {
         gameData = itemDataPath.InitializeFromJSON<GameData>();
-        gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
+        //gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
         gameData.InitializeLookupTables();
     }
 }
@@ -66,7 +66,7 @@ public class GameData
             return item_map[itemID];
         } catch (KeyNotFoundException)
         {
-            return new Item { ID = "invalid_item", display = "Invalid Item", value = -1 };
+            return new Item { ID = "invalid_item", value = -1 };
         }
     }
 

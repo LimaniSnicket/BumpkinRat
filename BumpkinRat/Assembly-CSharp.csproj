@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Item.cs" />
+    <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemDropper.cs" />
     <Compile Include="Assets\Scripts\Npc\NpcBehavior.cs" />
     <Compile Include="Assets\Scripts\Planting\Plant.cs" />
     <Compile Include="Assets\Scripts\Planting\PlantingManager.cs" />

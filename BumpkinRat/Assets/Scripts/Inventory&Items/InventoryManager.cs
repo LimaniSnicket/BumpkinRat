@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
         Collectable.Collected += OnCollectedItem;
         ItemCrafter.CraftedItem += OnCraftedItem;
         itemCrafter = new ItemCrafter();
+        activeInventory = new Inventory();
         activeInventory.InitializeInventory();
         inventoryMenu = new InventoryMenu(inventoryMenuObject != null ? inventoryMenuObject : new GameObject());
     }
