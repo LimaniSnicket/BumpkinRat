@@ -66,7 +66,7 @@ public class GameData
             return item_map[itemID];
         } catch (KeyNotFoundException)
         {
-            return new Item { ID = "invalid_item", value = -1 };
+            return new Item { ID = $"{itemID}_invalid", value = -1 };
         }
     }
 

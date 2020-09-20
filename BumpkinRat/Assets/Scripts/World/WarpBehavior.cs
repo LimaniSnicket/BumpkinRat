@@ -18,11 +18,11 @@ public class WarpBehavior : MonoBehaviour
     {
         public string tag;
         public string destination;
+
+        public bool Valid => tag != null && destination != null;
     }
 
     public WarpTo warpToInfo;
-
-    bool WarpToValid => warpToInfo.tag != null && warpToInfo.destination != null;
 
     void Awake()
     {
@@ -48,14 +48,12 @@ public class WarpBehavior : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (!WarpToValid)
+        if (warpToInfo.Valid)
         {
-            return;
-        }
-
-        if (collider.CompareTag(warpToInfo.tag) && !WarpingActive)
-        {
-            Warp(collider.gameObject, warpToInfo.destination);
+            if (collider.CompareTag(warpToInfo.tag) && !WarpingActive)
+            {
+                Warp(collider.gameObject, warpToInfo.destination);
+            }
         }
     }
 

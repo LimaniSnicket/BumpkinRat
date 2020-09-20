@@ -16,6 +16,9 @@ public class InventoryManager : MonoBehaviour
     {
         Collectable.Collected += OnCollectedItem;
         ItemCrafter.CraftedItem += OnCraftedItem;
+
+        ItemProvisioner.ItemProvisioning += OnCollectedItem;
+
         itemCrafter = new ItemCrafter();
         activeInventory = new Inventory();
         activeInventory.InitializeInventory();
@@ -49,6 +52,7 @@ public class InventoryManager : MonoBehaviour
     {
         Collectable.Collected -= OnCollectedItem;
         ItemCrafter.CraftedItem -= OnCraftedItem;
+        ItemProvisioner.ItemProvisioning -= OnCollectedItem;
     }
 }
 
