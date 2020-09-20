@@ -27,6 +27,8 @@ public class GeneralStorePrologue : MonoBehaviour
 
     string breakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
 
+    public ItemDropper itemDropper;
+
     private void Start()
     {
         prologueCounter = new RealTimeCounter(0.5f, TimeUnitToTrack.Minute);
@@ -54,5 +56,6 @@ public class GeneralStorePrologue : MonoBehaviour
     {
         atWork = value;
         PlayerBehavior.SetFreezePlayerMovementController(value);
+        WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
     }
 }

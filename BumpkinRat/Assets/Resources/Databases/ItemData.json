@@ -3,14 +3,24 @@
         {
             "ID": "basic_item",
             "display": "Basic Item",
-            "value": 0
+            "value": 0,
+            "intId": 0 
         },
         {
             "ID": "crafted_item",
             "display": "Crafted Item",
             "value": 10,
-            "craftable":  true
+            "craftable":  true,
+            "intId" : 1
+        },
+        {
+            "ID": "prologue_item_a",
+            "display": "Crafted Item",
+            "value": 10,
+            "craftable":  true,
+            "intId" : 1
         }
+
     ],
     "RecipeData": [
         {

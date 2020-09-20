@@ -7,9 +7,11 @@ using System.Collections.Generic;
 public class Item: Identifiable
 {
     public string ID;
-    public string display;
+    public string display => ID.ToDisplay();
     public int value;
     public bool craftable;
+
+    public int intId;
     public string identifier => ID;
 
     public virtual bool CraftableItem(GameData data)

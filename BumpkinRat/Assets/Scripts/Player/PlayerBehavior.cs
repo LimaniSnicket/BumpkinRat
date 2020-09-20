@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBehavior : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour, IWarpTo
 {
     private static PlayerBehavior player;
     public PlayerData playerData { get; set; }
     static MovementController PlayerMovementController { get; set; }
 
     public static Vector3 playerPosition => player.transform.position;
+
+    public static GameObject PlayerGameObject => player.gameObject;
 
     void OnEnable()
     {
@@ -68,6 +70,16 @@ public class PlayerBehavior : MonoBehaviour
         {
             PlayerMovementController = gameObject.AddComponent<MovementController>();
         }
+    }
+
+    public void OnWarpBegin()
+    {
+        SetFreezePlayerMovementController(true);
+    }
+
+    public void OnWarpEnd()
+    {
+        SetFreezePlayerMovementController(false);
     }
 }
 
