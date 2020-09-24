@@ -11,6 +11,8 @@ public class DatabaseContainer : MonoBehaviour
     private static DatabaseContainer database;
     public static GameData gameData { get; private set; }
 
+    public GameObject basicItemPrefab;
+
     private void OnEnable()
     {
         if (database == null) { database = this; } else { Destroy(this); }
@@ -21,6 +23,13 @@ public class DatabaseContainer : MonoBehaviour
         gameData = itemDataPath.InitializeFromJSON<GameData>();
         //gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
         gameData.InitializeLookupTables();
+    }
+
+    public static GameObject InstantiateItem(Vector3 position)
+    {
+        GameObject createItem = Instantiate(database.basicItemPrefab);
+        createItem.transform.position = position;
+        return createItem;
     }
 }
 

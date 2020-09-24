@@ -49,10 +49,6 @@ public class GlobalFader : MonoBehaviour
         SetFaderImageReference();
     }
 
-    public void Update()
-    {
-        Debug.Log(Fading);
-    }
 
     void SetFaderImageReference()
     {

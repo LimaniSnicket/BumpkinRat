@@ -9,7 +9,7 @@ using UnityEngine;
 public class ItemDropper : ItemDistributor
 {
     IDistributeItems<ItemDropper> Dropper { get; set; }
-
+    Transform DropTransform { get; set; }
     public ItemDropper(IDistributeItems<ItemDropper> dropper)
     {
         Dropper = dropper;
@@ -35,8 +35,24 @@ public class ItemDropper : ItemDistributor
 
         foreach (ItemDrop drop in ItemsToDrop)
         {
+            Vector3 randomPos = UnityEngine.Random.insideUnitSphere * 3;
             UnityEngine.Debug.Log($"Dropping {drop.AmountToDrop} of item: {drop.ItemToDropName}");
+            ValidateDropTransform();
+            drop.ItemToDropName.InstantiateItemInWorld(new Vector3(randomPos.x, 0, randomPos.z) + DropTransform.position);
         }
+    }
+
+    void ValidateDropTransform()
+    {
+        if(DropTransform == null)
+        {
+            DropTransform = PlayerBehavior.PlayerGameObject.transform;
+        }
+    }
+
+    public void SetDropTransform(Transform tran)
+    {
+        DropTransform = tran;
     }
 }
 [Serializable]

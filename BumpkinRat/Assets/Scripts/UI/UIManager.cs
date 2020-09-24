@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +13,8 @@ public class UIManager : MonoBehaviour
     public static bool menuActive { get; private set; }
     public static MenuType activeMenu { get; private set; }
 
+    private KeyCode exitCurrentMenuKeyCode;
+
     private void Awake()
     {
         if (uiManager == null) { uiManager = this; } else { Destroy(this); }
@@ -19,12 +23,15 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) { menuActive = !menuActive; }
+        if (Input.GetKeyDown(KeyCode.E)) { 
+            menuActive = !menuActive; 
+        }
     }
 
     void OnUiEvent(object source, UiEventArgs args)
     {
         menuActive = args.load;
+        Debug.Log("Menu Status: " + args.load);
     }
 
     private void OnDisable()
@@ -38,6 +45,8 @@ public abstract class UiMenu
 {
     public MenuType menuType { get; protected set; }
     protected GameObject gameObject;
+
+    public abstract KeyCode ActivateKeyCode { get; }
     public abstract void LoadMenu();
     public abstract void CloseMenu();
 
@@ -56,6 +65,7 @@ public abstract class UiMenu
 [Serializable]
 public class CraftingMenu : UiMenu
 {
+    public override KeyCode ActivateKeyCode => throw new NotImplementedException();
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
@@ -76,15 +86,22 @@ public class CraftingMenu : UiMenu
 [Serializable]
 public class InventoryMenu : UiMenu
 {
+    TextMeshProUGUI displayInventory;
+    public override KeyCode ActivateKeyCode => KeyCode.Y;
+
     public InventoryMenu(GameObject g)
     {
         gameObject = g;
         menuType = MenuType.Inventory;
+        displayInventory = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+        displayInventory.gameObject.SetActive(false);
+
     }
 
     public override void CloseMenu()
     {
         BroadcastUiEvent(false);
+        displayInventory.gameObject.SetActive(false);
     }
 
     public override void LoadMenu()
@@ -95,7 +112,25 @@ public class InventoryMenu : UiMenu
     public void LoadMenu(Inventory i)
     {
         LoadMenu();
-        Debug.Log(i.inventoryListings.Count);
+
+        displayInventory.gameObject.SetActive(true);
+
+        StringBuilder builder = new StringBuilder();
+
+        foreach(KeyValuePair<string, int> pair in i.inventoryListings)
+        {
+            builder.AppendLine($"{pair.Key}: {pair.Value}");
+        }
+
+        SetDisplayText(builder.ToString());
+    }
+
+    void SetDisplayText(string message)
+    {
+        if(displayInventory != null)
+        {
+            displayInventory.text = message;
+        }
     }
 }
 
@@ -104,6 +139,8 @@ public class DialogueMenu : UiMenu
 {
     public TextMeshProUGUI dialogueDisplay { get; protected set; }
     bool acceptInputFromRunner;
+
+    public override KeyCode ActivateKeyCode => KeyCode.None;
 
     public DialogueMenu(GameObject g)
     {
@@ -139,4 +176,6 @@ public class UiEventArgs : EventArgs
 {
     public bool load { get; set; }
     public MenuType menuLoaded { get; set; }
+
+    public KeyCode EscapeKey { get; set; }
 }

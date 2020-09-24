@@ -287,6 +287,11 @@ public interface IDelta<T>
 
 public static class CraftX
 {
+    public static void InstantiateItemInWorld(this string itemName, Vector3 spawnPosition)
+    {
+        Collectable collect = DatabaseContainer.InstantiateItem(spawnPosition).GetComponent<Collectable>();
+        collect.SetItemName(itemName);
+    }
     public static Item GetItem(this string id)
     {
         return DatabaseContainer.gameData.GetItem(id);

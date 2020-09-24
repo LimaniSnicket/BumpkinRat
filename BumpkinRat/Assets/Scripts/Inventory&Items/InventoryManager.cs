@@ -32,6 +32,11 @@ public class InventoryManager : MonoBehaviour
             inventoryMenu.LoadMenu(activeInventory);
             //itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            inventoryMenu.CloseMenu();
+        }
     }
 
     void OnCollectedItem(object source, CollectableEventArgs args)

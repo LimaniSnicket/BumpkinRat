@@ -29,6 +29,11 @@ public class Collectable : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void SetItemName(string item)
+    {
+        itemName = item;
+    }
 }
 
 public class CollectableEventArgs : EventArgs

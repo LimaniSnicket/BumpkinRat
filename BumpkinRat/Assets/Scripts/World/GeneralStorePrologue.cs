@@ -26,7 +26,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     }
     public bool atWork;
 
-    string breakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
+    string BreakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
 
     public ItemProvisioner ItemDistributor { get; set; }
 
@@ -34,19 +34,21 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
 
     private void Start()
     {
-        prologueCounter = new RealTimeCounter(0.1f, TimeUnitToTrack.Minute);
+        prologueCounter = new RealTimeCounter(1f, TimeUnitToTrack.Minute);
         startTime = new TimeSpan(12, 14, 27);
         addOneSecond = new TimeSpan(0, 0, 1);
         StartCoroutine(AddToTimeSpan());
 
         ItemDistributor = new ItemProvisioner(this);
         ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
+
+        ItemDistributor.Distribute();
     }
 
     private void Update()
     {
         prologueCounter.DecrementTimerOverTime();
-        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{breakMessage}");
+        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{BreakMessage}");
     }
 
     IEnumerator AddToTimeSpan()
