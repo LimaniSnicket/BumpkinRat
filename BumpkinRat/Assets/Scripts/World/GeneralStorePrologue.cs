@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralStorePrologue : MonoBehaviour
+public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisioner>
 {
     RealTimeCounter prologueCounter;
 
@@ -25,22 +26,29 @@ public class GeneralStorePrologue : MonoBehaviour
     }
     public bool atWork;
 
-    string breakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
+    string BreakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
 
-    public ItemDropper itemDropper;
+    public ItemProvisioner ItemDistributor { get; set; }
+
+    public List<ItemDrop> ItemDropData { get; set; }
 
     private void Start()
     {
-        prologueCounter = new RealTimeCounter(0.5f, TimeUnitToTrack.Minute);
+        prologueCounter = new RealTimeCounter(1f, TimeUnitToTrack.Minute);
         startTime = new TimeSpan(12, 14, 27);
         addOneSecond = new TimeSpan(0, 0, 1);
         StartCoroutine(AddToTimeSpan());
+
+        ItemDistributor = new ItemProvisioner(this);
+        ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
+
+        ItemDistributor.Distribute();
     }
 
     private void Update()
     {
         prologueCounter.DecrementTimerOverTime();
-        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{breakMessage}");
+        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{BreakMessage}");
     }
 
     IEnumerator AddToTimeSpan()
@@ -56,6 +64,13 @@ public class GeneralStorePrologue : MonoBehaviour
     {
         atWork = value;
         PlayerBehavior.SetFreezePlayerMovementController(value);
+        GlobalFader.TransitionBetweenFade(this, RunOnBreakChange(), 2, 0.5f, 2.2f);
+    }
+
+    public IEnumerator RunOnBreakChange()
+    {
+        yield return new WaitForSeconds(1);
         WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
+        ItemDistributor.Distribute();
     }
 }

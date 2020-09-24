@@ -106,6 +106,7 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Item.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemDropper.cs" />
+    <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemProvisioner.cs" />
     <Compile Include="Assets\Scripts\Npc\NpcBehavior.cs" />
     <Compile Include="Assets\Scripts\Planting\Plant.cs" />
     <Compile Include="Assets\Scripts\Planting\PlantingManager.cs" />
@@ -115,12 +116,14 @@
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\UI\GlobalFader.cs" />
     <Compile Include="Assets\Scripts\UI\PrologueHUD.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />
     <Compile Include="Assets\Scripts\World\CustomGravitySurface.cs" />
     <Compile Include="Assets\Scripts\World\FollowBehaviorBasic.cs" />
     <Compile Include="Assets\Scripts\World\GeneralStorePrologue.cs" />
+    <Compile Include="Assets\Scripts\World\Interactable.cs" />
     <Compile Include="Assets\Scripts\World\WarpBehavior.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />

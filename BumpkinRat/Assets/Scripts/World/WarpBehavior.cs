@@ -18,15 +18,30 @@ public class WarpBehavior : MonoBehaviour
     {
         public string tag;
         public string destination;
+
+        bool Invalid(string s) => s == "null" || s == string.Empty || s == null;
+        public bool Valid => !Invalid(tag) && !Invalid(destination);
+
+        public void FillEmptyValues()
+        {
+            if(tag == null || tag == string.Empty)
+            {
+                tag = "null";
+            }
+
+            if (destination == null || destination == string.Empty)
+            {
+                destination = "null";
+            }
+        }
     }
 
     public WarpTo warpToInfo;
 
-    bool WarpToValid => warpToInfo.tag != null && warpToInfo.destination != null;
-
     void Awake()
     {
         AddToWarpingLocations();
+        warpToInfo.FillEmptyValues();
     }
 
     public static bool IsWarping(string checking)
@@ -43,24 +58,27 @@ public class WarpBehavior : MonoBehaviour
     {
         tagOfWarping = warping.Equals("") ? "null" : warping;
         warpedTo = warpTo;
-        WarpingActive = tagOfWarping.Equals("null") ? false : true;
+        WarpingActive = !tagOfWarping.Equals("null");
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        if (!WarpToValid)
+        if (warpToInfo.Valid)
         {
-            return;
-        }
-
-        if (collider.CompareTag(warpToInfo.tag) && !WarpingActive)
-        {
-            Warp(collider.gameObject, warpToInfo.destination);
+            if (collider.CompareTag(warpToInfo.tag) && !WarpingActive)
+            {
+                Warp(collider.gameObject, warpToInfo.destination);
+            }
         }
     }
 
     void OnTriggerExit(Collider collider)
     {
+        if (!warpToInfo.Valid)
+        {
+            return;
+        }
+
         if (collider.CompareTag(tagOfWarping) && WarpingActive && IsWarpingTarget(this, warpedTo))
         {
             SetWarpingStatus("null");

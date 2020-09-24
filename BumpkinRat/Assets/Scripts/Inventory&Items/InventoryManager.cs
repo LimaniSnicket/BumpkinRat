@@ -16,6 +16,9 @@ public class InventoryManager : MonoBehaviour
     {
         Collectable.Collected += OnCollectedItem;
         ItemCrafter.CraftedItem += OnCraftedItem;
+
+        ItemProvisioner.ItemProvisioning += OnCollectedItem;
+
         itemCrafter = new ItemCrafter();
         activeInventory = new Inventory();
         activeInventory.InitializeInventory();
@@ -28,6 +31,11 @@ public class InventoryManager : MonoBehaviour
         {
             inventoryMenu.LoadMenu(activeInventory);
             //itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            inventoryMenu.CloseMenu();
         }
     }
 
@@ -49,6 +57,7 @@ public class InventoryManager : MonoBehaviour
     {
         Collectable.Collected -= OnCollectedItem;
         ItemCrafter.CraftedItem -= OnCraftedItem;
+        ItemProvisioner.ItemProvisioning -= OnCollectedItem;
     }
 }
 

@@ -1,35 +1,109 @@
 ﻿using FullSerializer;
 using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 [Serializable]
-public class ItemDropper
+public class ItemDropper : ItemDistributor
 {
-    public ItemDrop[] dropping;
-
-    void Drop()
+    IDistributeItems<ItemDropper> Dropper { get; set; }
+    Transform DropTransform { get; set; }
+    public ItemDropper(IDistributeItems<ItemDropper> dropper)
     {
-        foreach(ItemDrop i in dropping)
+        Dropper = dropper;
+    }
+    public override void Distribute()
+    {
+        if (Dropper == null)
         {
-            Debug.Log(i.toDrop.display);
+            return;
         }
+
+        SetItemsToDrop(Dropper.ItemDropData);
+
+        InstantiateItemsToDrop();
+    }
+
+    void InstantiateItemsToDrop()
+    {
+        if (!ItemsToDrop.ValidList())
+        {
+            return;
+        }
+
+        foreach (ItemDrop drop in ItemsToDrop)
+        {
+            Vector3 randomPos = UnityEngine.Random.insideUnitSphere * 3;
+            UnityEngine.Debug.Log($"Dropping {drop.AmountToDrop} of item: {drop.ItemToDropName}");
+            ValidateDropTransform();
+            drop.ItemToDropName.InstantiateItemInWorld(new Vector3(randomPos.x, 0, randomPos.z) + DropTransform.position);
+        }
+    }
+
+    void ValidateDropTransform()
+    {
+        if(DropTransform == null)
+        {
+            DropTransform = PlayerBehavior.PlayerGameObject.transform;
+        }
+    }
+
+    public void SetDropTransform(Transform tran)
+    {
+        DropTransform = tran;
     }
 }
 [Serializable]
 public class ItemDrop {
 
-    public Item ToDrop { get; set; }
-    public int AmountToDrop { get; set; }
+    public string itemName;
+    public int amountToDrop;
+    public string ItemToDropName => itemName;
+    public int AmountToDrop => Math.Max(0, amountToDrop);
 
-    public Item toDrop;
-    public int amount;
+    public Item ToDrop
+    {
+        get
+        {
+            return DatabaseContainer.gameData.GetItem(ItemToDropName);
+        }
+    }
+
+    public static List<ItemDrop> GetListOfItemsToDrop(params (string, int)[] drops)
+    {
+        return drops.Select(d => new ItemDrop { itemName = d.Item1, amountToDrop = d.Item2 }).ToList();
+    }
 
 }
 
-public interface IDropItem
+public interface IDistributeItems<T> where T: ItemDistributor
 {
-    ItemDropper ItemDropper { get; set; }
-    string[] DropData { get; }
+    T ItemDistributor { get; set; }
+
+    List<ItemDrop> ItemDropData { get; set; }
+}
+
+public abstract class ItemDistributor
+{
+    public List<ItemDrop> ItemsToDrop { get; set; }
+
+    public void SetItemsToDrop((string, int)[] dropData)
+    {
+        ItemsToDrop = ItemDrop.GetListOfItemsToDrop(dropData);
+    }
+
+    public void SetItemsToDrop(List<ItemDrop> dropData)
+    {
+        ItemsToDrop = new List<ItemDrop>(dropData);
+    }
+
+    public List<Item> GetItemsToDropFromGameData()
+    {
+        return ItemsToDrop.Select(i => i.ToDrop).ToList();
+    }
+
+    public abstract void Distribute();
+
 }
