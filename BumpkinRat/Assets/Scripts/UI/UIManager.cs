@@ -65,11 +65,13 @@ public abstract class UiMenu
 [Serializable]
 public class CraftingMenu : UiMenu
 {
+    public ItemCrafter itemCrafter;
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
         menuType = MenuType.Crafting;
+        itemCrafter = new ItemCrafter();
     }
 
     public override void CloseMenu()
@@ -178,4 +180,10 @@ public class UiEventArgs : EventArgs
     public MenuType menuLoaded { get; set; }
 
     public KeyCode EscapeKey { get; set; }
+}
+
+public struct CraftingActionButton
+{
+    public Button button;
+    public CraftingAction craftingAction;
 }

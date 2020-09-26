@@ -8,6 +8,8 @@ public class ItemCrafter
 {
     public bool crafting;
     public static event EventHandler<CraftingEventArgs> CraftedItem;
+
+    public static bool TakingCraftingAction { get; private set; }
     public ItemCrafter() { }
 
     public void CraftRecipe(Recipe r, int amt)
@@ -17,6 +19,27 @@ public class ItemCrafter
             CraftedItem(this, new CraftingEventArgs { craftedRecipe = r, craftedAmount = amt });
         }
     }
+
+    public void TakeCraftingAction(MonoBehaviour host, int craftingAction)
+    {
+        host.StartCoroutine(CraftingAction(craftingAction, 0.25f));
+    }
+
+    IEnumerator CraftingAction(int craftingAction, float waitTime)
+    {
+        TakingCraftingAction = true;
+        Debug.Log("Taking a crafting action: " + ((CraftingAction)craftingAction).ToString());
+        yield return new WaitForSeconds(waitTime);
+        TakingCraftingAction = false;
+    }
+}
+
+[Serializable]
+public class CraftingInstruction
+{
+    public int interactingId;
+    public int targetId;
+
 }
 
 public class CraftingEventArgs : EventArgs
@@ -24,30 +47,11 @@ public class CraftingEventArgs : EventArgs
     public Recipe craftedRecipe { get; set; }
     public int craftedAmount { get; set; }
 }
-//    public string craftingPath;
-//    public CraftingData craftingData;
-//    private void OnEnable()
-//    {
-//        if(static_crafting == null) { static_crafting = this; } else { Destroy(this); }
-//        craftingData = craftingPath.InitializeFromJSON<CraftingData>();
-//    }
-//}
 
-//[Serializable]
-//public class CraftingData
-//{
-//    public IEnumerable<CraftingRecipeData> recipeData;
-//    public List<CraftingRecipeData> craftable;
-//}
-
-//[Serializable]
-//public class CraftingRecipeData
-//{
-//    public string recipeName;
-//    public List<ItemListing> itemsNeeded;
-//}
-
-//public class CraftedEventArgs : EventArgs
-//{
-//    public string recipeName;
-//}
+public enum CraftingAction
+{
+    PLACE = 0,
+    ATTACH = 1,
+    HAMMER = 2,
+    THREAD = 3
+}

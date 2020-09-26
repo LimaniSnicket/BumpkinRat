@@ -40,21 +40,26 @@ public class GameData
     [SerializeField] List<Recipe> RecipeData;
     public PlantDataStorage plantData;
 
-    private Dictionary<string, Item> item_map = new Dictionary<string, Item>();
+    private Dictionary<string, Item> ItemMap => ItemData.ToDictionary(i => i.itemName);
     private Dictionary<string, Recipe> item_recipe_lookup = new Dictionary<string, Recipe>();
 
-    public List<Item> getItemData { get => ItemData; }
+    public Dictionary<int, Item> ItemIdLookup => ItemData.ToDictionary(i => i.itemId);
+
+
+    public List<Item> GetItemData() { 
+        return ItemData; 
+    }
 
     public void InitializeLookupTables()
     {
-        InitializeDataLookupsByID(ItemData, item_map);
+        //InitializeDataLookupsByID(ItemData, item_map);
         InitializeDataLookupsByID(RecipeData, item_recipe_lookup);
     }
 
     public bool HasRecipe(Item i)
     {
         if(item_recipe_lookup == null) { return false; }
-        return item_recipe_lookup.ContainsKey(i.ID);
+        return item_recipe_lookup.ContainsKey(i.itemName);
     }
 
   public Recipe GetRecipe(int index)
@@ -72,16 +77,26 @@ public class GameData
     {
         try
         {
-            return item_map[itemID];
+            return ItemMap[itemID];
         } catch (KeyNotFoundException)
         {
-            return new Item { ID = $"{itemID}_invalid", value = -1 };
+            return new Item { itemName = $"{itemID}_invalid", value = -1 };
         }
+    }
+
+    public Item GetItem(int id)
+    {
+        if (ItemIdLookup == null || !ItemIdLookup.ContainsKey(id))
+        {
+            return new Item { itemId = id, itemName = $"invalid_item_{id}", value = -1 };
+        }
+
+        return ItemIdLookup[id];
     }
 
     public bool ValidItem(string itemID)
     {
-        return item_map.ContainsKey(itemID);
+        return ItemMap.ContainsKey(itemID);
     }
 
     void InitializeDataLookupsByID<T>(List<T> l, Dictionary<string, T> d) where T : Identifiable
@@ -105,19 +120,19 @@ public class GameData
 
     public void AddToGameData(Item i)
     {
-        if (Application.isEditor && !ValidItem(i.ID))
+        if (Application.isEditor && !ValidItem(i.itemName))
         {
             ItemData.Add(i);
-            item_map.Add(i.ID, i);
+            ItemMap.Add(i.itemName, i);
         }
     }
 
     public void AddToGameData(Recipe r)
     {
-        if (Application.isEditor && !item_recipe_lookup.ContainsKey(r.outputID))
+        if (Application.isEditor && !item_recipe_lookup.ContainsKey(r.outputName))
         {
             RecipeData.Add(r);
-            item_recipe_lookup.Add(r.outputID, r);
+            item_recipe_lookup.Add(r.outputName, r);
         }
     }
 }

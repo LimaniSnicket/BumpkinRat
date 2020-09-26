@@ -27,14 +27,14 @@ public class IdentifiableNode
 
     public IdentifiableNode(Item i, GameData data)
     {
-        identifier = i.display;
-        windowTitle = i.ID;
+        identifier = i.DisplayName;
+        windowTitle = i.itemName;
         value = i.value;
         craftable = data.HasRecipe(i);
         recipeNode = new List<RecipeNode>();
         if (craftable)
         {
-            foreach(var r in data.GetRecipe(i.ID).ingredients)
+            foreach(var r in data.GetRecipe(i.itemId).ingredients)
             {
                 recipeNode.Add(new RecipeNode(r));
             }
@@ -137,13 +137,13 @@ public class IdentifiableNode
 
     public Item ConvertToItem()
     {
-        return new Item { ID = identifier.ToID(), craftable = this.craftable };
+        return new Item { itemName = identifier.ToID(), craftable = this.craftable };
     }
 
     public Recipe ConvertToRecipe()
     {
         List<RecipeIngredient> ings = recipeNode.Select(r => new RecipeIngredient(r.nodeData.Item1, r.nodeData.Item2)).ToList();
-        return new Recipe { outputID = identifier.ToID(), ingredients = ings };
+        return new Recipe { outputName = identifier.ToID(), ingredients = ings };
     }
 
     void SubscribeToEvents()

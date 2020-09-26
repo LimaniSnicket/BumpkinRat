@@ -25,7 +25,6 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         }
     }
     public bool atWork;
-
     string BreakMessage => OnBreak ? "Lunch Break!" : "Back to Work!";
 
     public ItemProvisioner ItemDistributor { get; set; }

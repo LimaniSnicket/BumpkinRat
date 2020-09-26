@@ -1,32 +1,38 @@
 ﻿using System;
-using System.Collections;
-using System.Reflection;
 using System.Collections.Generic;
 
 [Serializable]
-public class Item: Identifiable
-{
-    public string ID;
-    public string display => ID.ToDisplay();
+public class Item: Identifiable, IComparable<Item>
+{    
+    public int itemId;
+    public string itemName;
+    public string DisplayName => itemName.ToDisplay();
     public int value;
     public bool craftable;
 
-    public int intId;
-    public string identifier => ID;
+    public string meshPath;
+    public string texturePath;
+
+    public string identifier => itemName;
 
     public virtual bool CraftableItem(GameData data)
     {
         return data.HasRecipe(this);
+    }
+
+    public int CompareTo(Item other)
+    {
+        return itemId.CompareTo(other.itemId);
     }
 }
 
 [Serializable]
 public class Recipe: Identifiable
 {
-    public string outputID;
+    public int outputId;
+    public string outputName;
     public List<RecipeIngredient> ingredients;
-
-    public string identifier => outputID;
+    public string identifier => outputName;
 
     public bool Craftable(Inventory inventory)
     {
@@ -44,9 +50,12 @@ public struct RecipeIngredient
 {
     public string ID;
     public int amount;
+
+    public string[] tags;
     public RecipeIngredient(string id, int amnt) {
         ID = id;
         amount = amnt;
+        tags = Array.Empty<string>();
     }
 }
 
