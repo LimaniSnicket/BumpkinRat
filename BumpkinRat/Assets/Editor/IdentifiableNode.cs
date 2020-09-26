@@ -137,7 +137,7 @@ public class IdentifiableNode
 
     public Item ConvertToItem()
     {
-        return new Item { itemName = identifier.ToID(), craftable = this.craftable };
+        return new Item { itemName = identifier.ToID() };
     }
 
     public Recipe ConvertToRecipe()

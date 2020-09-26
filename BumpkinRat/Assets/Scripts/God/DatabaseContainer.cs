@@ -20,9 +20,9 @@ public class DatabaseContainer : MonoBehaviour
     }
      void InitializeData()
     {
-        gameData = itemDataPath.InitializeFromJSON<GameData>();
+        //gameData = itemDataPath.InitializeFromJSON<GameData>();
         //gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
-        gameData.InitializeLookupTables();
+        //gameData.InitializeLookupTables();
     }
 
     public static GameObject InstantiateItem(Vector3 position)
@@ -53,7 +53,7 @@ public class GameData
     public void InitializeLookupTables()
     {
         //InitializeDataLookupsByID(ItemData, item_map);
-        InitializeDataLookupsByID(RecipeData, item_recipe_lookup);
+        //InitializeDataLookupsByID(RecipeData, item_recipe_lookup);
     }
 
     public bool HasRecipe(Item i)

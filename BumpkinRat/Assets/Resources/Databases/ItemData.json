@@ -1,26 +1,10 @@
 ﻿{
     "ItemData": [
         {
-            "ID": "basic_item",
-            "display": "Basic Item",
+            "itemId": 1,
+            "itemName": "action_figure_torso",
             "value": 0,
-            "intId": 0 
-        },
-        {
-            "ID": "crafted_item",
-            "display": "Crafted Item",
-            "value": 10,
-            "craftable":  true,
-            "intId" : 1
-        },
-        {
-            "ID": "prologue_item_a",
-            "display": "Crafted Item",
-            "value": 10,
-            "craftable":  true,
-            "intId" : 1
         }
-
     ],
     "RecipeData": [
         {

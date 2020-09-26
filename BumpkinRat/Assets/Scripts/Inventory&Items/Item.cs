@@ -8,7 +8,6 @@ public class Item: Identifiable, IComparable<Item>
     public string itemName;
     public string DisplayName => itemName.ToDisplay();
     public int value;
-    public bool craftable;
 
     public string meshPath;
     public string texturePath;

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -182,8 +179,7 @@ public class UiEventArgs : EventArgs
     public KeyCode EscapeKey { get; set; }
 }
 
-public struct CraftingActionButton
+public interface IUiFunctionality<T> where T: UiMenu
 {
-    public Button button;
-    public CraftingAction craftingAction;
+    T MenuFunctionObject { get; set; }
 }
