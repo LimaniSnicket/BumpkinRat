@@ -26,6 +26,12 @@ public class ItemDropper : ItemDistributor
         InstantiateItemsToDrop();
     }
 
+    public void DistributeAtTransform(Transform transform)
+    {
+        SetDropTransform(transform);
+        Distribute();
+    }
+
     void InstantiateItemsToDrop()
     {
         if (!ItemsToDrop.ValidList())
@@ -88,6 +94,8 @@ public interface IDistributeItems<T> where T: ItemDistributor
 public abstract class ItemDistributor
 {
     public List<ItemDrop> ItemsToDrop { get; set; }
+
+    public bool ValidItemDropData => ItemsToDrop.ValidList();
 
     public void SetItemsToDrop((string, int)[] dropData)
     {

@@ -1,0 +1,1 @@
+$"see if this shit works! {testVariable} should say something other than testVariable."

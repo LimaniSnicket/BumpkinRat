@@ -188,9 +188,9 @@ public class InventoryDatabaseWindow : EditorWindow
                     if (GUILayout.Button("Append From JSON"))
                     {
                         if (SaveToJSON == null) { SaveToJSON = jsonPath.InitializeFromJSON<GameData>(); }
-                        if (SaveToJSON.getItemData.ValidList())
+                        if (SaveToJSON.GetItemData().ValidList())
                         {
-                            foreach (Item i in SaveToJSON.getItemData)
+                            foreach (Item i in SaveToJSON.GetItemData())
                             {
                                 sessionData.AddNode(new IdentifiableNode(i, SaveToJSON));
                             }

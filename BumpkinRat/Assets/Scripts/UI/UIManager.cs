@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -65,11 +62,13 @@ public abstract class UiMenu
 [Serializable]
 public class CraftingMenu : UiMenu
 {
+    public ItemCrafter itemCrafter;
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
         menuType = MenuType.Crafting;
+        itemCrafter = new ItemCrafter();
     }
 
     public override void CloseMenu()
@@ -178,4 +177,9 @@ public class UiEventArgs : EventArgs
     public MenuType menuLoaded { get; set; }
 
     public KeyCode EscapeKey { get; set; }
+}
+
+public interface IUiFunctionality<T> where T: UiMenu
+{
+    T MenuFunctionObject { get; set; }
 }

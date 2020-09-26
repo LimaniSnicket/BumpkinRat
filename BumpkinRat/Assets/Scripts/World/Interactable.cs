@@ -19,8 +19,7 @@ public class Interactable : MonoBehaviour, IDistributeItems<ItemDropper>
     {
         if(DistanceFromPlayer <= 1f && Input.GetKeyDown(KeyCode.Space))
         {
-            ItemDistributor.SetDropTransform(transform);
-            ItemDistributor.Distribute();
+            ItemDistributor.DistributeAtTransform(transform);
         }
     }
 

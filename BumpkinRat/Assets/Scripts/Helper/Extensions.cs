@@ -287,10 +287,11 @@ public interface IDelta<T>
 
 public static class CraftX
 {
-    public static void InstantiateItemInWorld(this string itemName, Vector3 spawnPosition)
+    public static void InstantiateItemInWorld(this string itemName, Vector3 spawnPosition, int amnt = 1)
     {
         Collectable collect = DatabaseContainer.InstantiateItem(spawnPosition).GetComponent<Collectable>();
         collect.SetItemName(itemName);
+        collect.amount = amnt;
     }
     public static Item GetItem(this string id)
     {
@@ -348,7 +349,7 @@ public static class CraftX
     public static int CompareItemID(this Item i, Item other)
     {
         if(other == null) { return 1; }
-        return string.Compare(i.ID, other.ID, StringComparison.OrdinalIgnoreCase);
+        return string.Compare(i.itemName, other.itemName, StringComparison.OrdinalIgnoreCase);
     }
 
     public static int CompareItemValue(this Item i, Item other)
