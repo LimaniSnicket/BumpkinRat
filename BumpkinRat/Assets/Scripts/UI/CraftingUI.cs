@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,39 +9,114 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
 {
     public GameObject craftingButton;
 
+    public List<CraftingActionButton> craftingActionButtons;
+
     public CraftingMenu MenuFunctionObject { get; set; }
-    public CraftingActionButton placeButton;
+
+    public ItemObjectUiElement itemObjectA, itemObjectB;
 
     void Start()
     {
         MenuFunctionObject = new CraftingMenu(gameObject);
-        placeButton = new CraftingActionButton(craftingButton, 0);
+        GenerateCraftingActionButtons(gameObject);
+        itemObjectA = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(-400, -100));
+        itemObjectB = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(400, -100));
+
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuFunctionObject.itemCrafter.ClearCraftingHistory();
+        }
+    }
+
+    public void TakeCraftingActionViaCraftingUI(CraftingAction action)
+    {
+        MenuFunctionObject.itemCrafter.TakeCraftingAction(this, action);
+    }
+
+    public void GenerateCraftingActionButtons(GameObject parent)
+    {
+        craftingActionButtons = new List<CraftingActionButton>();
+        for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
+        {
+            GameObject newCraftingActionButton = Instantiate(craftingButton, transform);
+            CraftingActionButton craftAction = new CraftingActionButton(newCraftingActionButton, i, this);
+            craftAction.SetButtonPosition(new Vector2(-400, -500), Vector2.right * 330);
+
+            craftingActionButtons.Add(craftAction);
+        }
     }
 
 }
 
 [Serializable]
-public struct CraftingActionButton
+public class CraftingActionButton
 {
     public Button button;
     public CraftingAction craftingAction;
 
-    public CraftingActionButton(GameObject gameObject, int craftAction)
+    CraftingUI craftingMenuBehaviour;
+
+    public CraftingActionButton(GameObject gameObject, int craftAction, CraftingUI crafter)
     {
-        button = gameObject.GetComponent<Button>();
+        SetOrAddButton(gameObject);
         craftingAction = (CraftingAction)craftAction;
+        craftingMenuBehaviour = crafter;
+
+        SetButtonTextToCraftingAction();
         button.onClick.AddListener(OnClickTakeCraftingAction);
     }
 
-    public CraftingActionButton(Button fromButton, int craftAction)
+    public CraftingActionButton(GameObject gameObject, CraftingAction craftAction, CraftingUI crafter)
     {
-        button = fromButton;
-        craftingAction = (CraftingAction)craftAction;
+        SetOrAddButton(gameObject);
+        craftingAction = craftAction;
+        craftingMenuBehaviour = crafter;
+
+        SetButtonTextToCraftingAction();
         button.onClick.AddListener(OnClickTakeCraftingAction);
+    }
+
+
+    void SetOrAddButton(GameObject gameObject)
+    {
+        try
+        {
+            button = gameObject.GetComponent<Button>();
+        }
+        catch (NullReferenceException)
+        {
+            button = gameObject.AddComponent<Button>();
+        }
+    }
+
+    void SetButtonTextToCraftingAction()
+    {
+        if(button != null)
+        {
+            button.GetComponentInChildren<TextMeshProUGUI>().text = craftingAction.ToString();
+        }
     }
 
     void OnClickTakeCraftingAction()
     {
-        Debug.Log(craftingAction.ToString());
+        craftingMenuBehaviour.TakeCraftingActionViaCraftingUI(craftingAction);
+    }
+
+    public void SetButtonPosition(Vector2 positionInCanvas)
+    {
+        if(button != null)
+        {
+            button.GetComponent<RectTransform>().localPosition = positionInCanvas;
+        }
+    }
+
+    public void SetButtonPosition(Vector2 startingPosition, Vector2 padding)
+    {
+        Vector2 position = startingPosition +  padding * (int)craftingAction;
+        SetButtonPosition(position);
     }
 }

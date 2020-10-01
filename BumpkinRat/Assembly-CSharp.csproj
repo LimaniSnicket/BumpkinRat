@@ -101,6 +101,7 @@
     <Compile Include="Assets\Scripts\God\MouseManager.cs" />
     <Compile Include="Assets\Scripts\Helper\Enums.cs" />
     <Compile Include="Assets\Scripts\Helper\Extensions.cs" />
+    <Compile Include="Assets\Scripts\Helper\LoremIpsum.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRealTimeDependent.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting.cs" />
@@ -119,8 +120,10 @@
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\UI\ConversationUi.cs" />
     <Compile Include="Assets\Scripts\UI\CraftingUI.cs" />
     <Compile Include="Assets\Scripts\UI\GlobalFader.cs" />
+    <Compile Include="Assets\Scripts\UI\ItemObjectUiElement.cs" />
     <Compile Include="Assets\Scripts\UI\PrologueHUD.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 public static class GenericX
 {
@@ -168,6 +167,17 @@ public static class GenericX
         builder.Replace(startingChar, replacing, 0, 1);
 
         return builder.ToString();
+    }
+
+    public static void Increment<T>(this Dictionary<T, int> dict, T key)
+    {
+        if (!dict.ContainsKey(key))
+        {
+            dict.Add(key, 1);
+        } else
+        {
+            dict[key]++;
+        }
     }
 
 }
