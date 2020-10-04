@@ -7,8 +7,8 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     private static UIManager uiManager;
-    public static bool menuActive { get; private set; }
-    public static MenuType activeMenu { get; private set; }
+    public static bool MenuActive { get; private set; }
+    public static MenuType ActiveMenu { get; private set; }
 
     private KeyCode exitCurrentMenuKeyCode;
 
@@ -21,13 +21,13 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E)) { 
-            menuActive = !menuActive; 
+            MenuActive = !MenuActive; 
         }
     }
 
     void OnUiEvent(object source, UiEventArgs args)
     {
-        menuActive = args.load;
+        MenuActive = args.load;
         Debug.Log("Menu Status: " + args.load);
     }
 
@@ -43,19 +43,29 @@ public abstract class UiMenu
     public MenuType menuType { get; protected set; }
     protected GameObject gameObject;
 
+    public bool Active { get; private set; }
     public abstract KeyCode ActivateKeyCode { get; }
     public abstract void LoadMenu();
     public abstract void CloseMenu();
 
     public static event EventHandler<UiEventArgs> UiEvent;
+    public event EventHandler<UiEventArgs> TailoredUiEvent;
 
     public void BroadcastUiEvent(bool load)
     {
+        UiEventArgs eventToSend = new UiEventArgs { load = load, menuLoaded = menuType };
         if (UiEvent != null)
         {
             Debug.LogFormat("{0} a menu of type: " + menuType, load ? "Loading": "Closing");
-            UiEvent(this, new UiEventArgs { load = load, menuLoaded = menuType }) ;
+            UiEvent(this, eventToSend) ;
         }
+
+        if(TailoredUiEvent != null)
+        {
+            TailoredUiEvent(this, eventToSend);
+        }
+
+        Active = load;
     }
 }
 

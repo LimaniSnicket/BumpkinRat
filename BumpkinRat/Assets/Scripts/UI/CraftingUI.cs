@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
 {
@@ -13,23 +11,64 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
 
     public CraftingMenu MenuFunctionObject { get; set; }
 
+    public ConversationUi CraftingConversationBehavior => GetComponent<ConversationUi>();
+
     public ItemObjectUiElement itemObjectA, itemObjectB;
+
+    public ItemObject itemObjectFocus;
+
 
     void Start()
     {
         MenuFunctionObject = new CraftingMenu(gameObject);
         GenerateCraftingActionButtons(gameObject);
-        itemObjectA = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(-400, -100));
-        itemObjectB = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(400, -100));
 
+        CraftingConversationBehavior.enabled = false; //not in conversation by default
+
+        MenuFunctionObject.TailoredUiEvent += OnCraftingMenuStatusChange;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            MenuFunctionObject.CloseMenu();
             MenuFunctionObject.itemCrafter.ClearCraftingHistory();
         }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            MenuFunctionObject.LoadMenu();
+        }
+
+        if (!MenuFunctionObject.Active)
+        {
+            Debug.Log("Crafting not available. Open Menu to craft.");
+            itemObjectFocus = null;
+            return;
+        }
+
+        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rh = new RaycastHit();
+        if (Physics.SphereCast(r, .5f, out rh, Mathf.Infinity))
+        {
+            if(Input.GetMouseButtonDown(0) && rh.RaycastOnComponentOf<ItemObject>(out itemObjectFocus))
+            {
+                Debug.Log("Staring Crafting Process?");
+            } else
+            {
+                itemObjectFocus = null;
+            }
+        } else
+        {
+            itemObjectFocus = null;
+        }
+    }
+
+    void OnCraftingMenuStatusChange(object source, UiEventArgs args)
+    {
+        CraftingConversationBehavior.enabled = args.load;
+        Debug.Log($"Toggling Crafting Conversations {(args.load ? "On" : "Off")}");
     }
 
     public void TakeCraftingActionViaCraftingUI(CraftingAction action)
@@ -43,80 +82,23 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
         for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
         {
             GameObject newCraftingActionButton = Instantiate(craftingButton, transform);
-            CraftingActionButton craftAction = new CraftingActionButton(newCraftingActionButton, i, this);
-            craftAction.SetButtonPosition(new Vector2(-400, -500), Vector2.right * 330);
+            CraftingActionButton craftAction = CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
+            craftAction.SetCraftingActionButton(i, this);
+            craftAction.SetButtonPosition(new Vector2(-750, -500), Vector2.right * 305);
 
             craftingActionButtons.Add(craftAction);
         }
     }
 
-}
-
-[Serializable]
-public class CraftingActionButton
-{
-    public Button button;
-    public CraftingAction craftingAction;
-
-    CraftingUI craftingMenuBehaviour;
-
-    public CraftingActionButton(GameObject gameObject, int craftAction, CraftingUI crafter)
+    void SpawnItemObjectButtons()
     {
-        SetOrAddButton(gameObject);
-        craftingAction = (CraftingAction)craftAction;
-        craftingMenuBehaviour = crafter;
-
-        SetButtonTextToCraftingAction();
-        button.onClick.AddListener(OnClickTakeCraftingAction);
+        itemObjectA = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(-400, -100));
+        itemObjectB = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(400, -100));
     }
 
-    public CraftingActionButton(GameObject gameObject, CraftingAction craftAction, CraftingUI crafter)
+    private void OnDestroy()
     {
-        SetOrAddButton(gameObject);
-        craftingAction = craftAction;
-        craftingMenuBehaviour = crafter;
-
-        SetButtonTextToCraftingAction();
-        button.onClick.AddListener(OnClickTakeCraftingAction);
+        MenuFunctionObject.TailoredUiEvent -= OnCraftingMenuStatusChange;
     }
 
-
-    void SetOrAddButton(GameObject gameObject)
-    {
-        try
-        {
-            button = gameObject.GetComponent<Button>();
-        }
-        catch (NullReferenceException)
-        {
-            button = gameObject.AddComponent<Button>();
-        }
-    }
-
-    void SetButtonTextToCraftingAction()
-    {
-        if(button != null)
-        {
-            button.GetComponentInChildren<TextMeshProUGUI>().text = craftingAction.ToString();
-        }
-    }
-
-    void OnClickTakeCraftingAction()
-    {
-        craftingMenuBehaviour.TakeCraftingActionViaCraftingUI(craftingAction);
-    }
-
-    public void SetButtonPosition(Vector2 positionInCanvas)
-    {
-        if(button != null)
-        {
-            button.GetComponent<RectTransform>().localPosition = positionInCanvas;
-        }
-    }
-
-    public void SetButtonPosition(Vector2 startingPosition, Vector2 padding)
-    {
-        Vector2 position = startingPosition +  padding * (int)craftingAction;
-        SetButtonPosition(position);
-    }
 }

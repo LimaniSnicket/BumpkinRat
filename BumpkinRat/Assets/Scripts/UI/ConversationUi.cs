@@ -1,15 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConversationUi : MonoBehaviour
 {
+    public GameObject conversationSnippetPrefab;
+    public Vector2 conversationSnippetSpawnPoint;
+
     Stack<string> storedMessages;
 
-    bool responding;
+    private bool responding;
 
     public bool CanRespond => responding;
     public string joined;
@@ -18,6 +21,8 @@ public class ConversationUi : MonoBehaviour
     LoremIpsum loremIpsum;
 
     public TextMeshProUGUI displayConversationMessages;
+
+    public event EventHandler SpawningNewConversationSnippet;
 
     private void Start()
     {
@@ -41,6 +46,14 @@ public class ConversationUi : MonoBehaviour
         }
     }
 
+    void BroadcastMessageSpawning()
+    {
+        if (SpawningNewConversationSnippet != null)
+        {
+            SpawningNewConversationSnippet(this, new EventArgs());
+        }
+    }
+
     public void RespondMessage(KeyCode pressed)
     {
         if (!responding)
@@ -52,10 +65,13 @@ public class ConversationUi : MonoBehaviour
     IEnumerator TakeResponse(KeyCode pressed)
     {
         responding = true;
-        string response = $"Responding with {pressed}";
+        string response = $"{$"<color=blue>Responding with {pressed}</color>", 0:F3}";
         storedMessages.Push(response);
         stringBuilder.AppendLine(storedMessages.Peek());
         joined = stringBuilder.ToString();
+
+        BroadcastMessageSpawning();
+
         yield return new WaitForSeconds(1);
         SetConversationNodeToRespondTo();
         responding = false;
@@ -67,6 +83,8 @@ public class ConversationUi : MonoBehaviour
         storedMessages.Push(lorem + ".");
         stringBuilder.AppendLine(storedMessages.Peek());
         joined = stringBuilder.ToString();
+
+        InstantiateConversationSnippet(storedMessages.Peek());
     }
 
     void UpdateConversationDisplay()
@@ -75,5 +93,14 @@ public class ConversationUi : MonoBehaviour
         {
             displayConversationMessages.text = joined;
         }
+    }
+
+    public void InstantiateConversationSnippet(string message)
+    {
+        GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
+        ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
+        convoSnippet.SetConversationUi(this);
+        convoSnippet.SetPositionAndScale(conversationSnippetSpawnPoint, Vector2.one);
+        convoSnippet.ConversationDisplayTMPro.text = message;
     }
 }

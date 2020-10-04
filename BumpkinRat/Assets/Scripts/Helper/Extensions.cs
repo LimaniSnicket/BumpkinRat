@@ -383,6 +383,12 @@ public static class PhysicsX
 
         }
     }
+
+    public static bool RaycastOnComponentOf<T>(this RaycastHit rh, out T raycastedComponent)
+    {
+        raycastedComponent = rh.transform.GetComponent<T>();
+        return raycastedComponent != null;
+    }
 }
 
 public static class CustomGravity

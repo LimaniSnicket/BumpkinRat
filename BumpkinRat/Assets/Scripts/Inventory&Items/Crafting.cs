@@ -114,7 +114,7 @@ public class CraftingInstruction : IComparable<CraftingInstruction>
         }
     }
 
-    char[] dividers => new char[]{':', ',', '/'};
+    char[] dividers = new char[]{':', ',', '/'};
 
     public int CompareTo(CraftingInstruction other)
     {

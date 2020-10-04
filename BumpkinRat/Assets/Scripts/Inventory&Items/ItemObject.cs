@@ -16,4 +16,5 @@ public class ItemObject : MonoBehaviour
     {
         positionOccupiedBy = Enumerable.Repeat("empty", Math.Max(numberOfPositions, 1)).ToArray();
     }
+
 }
