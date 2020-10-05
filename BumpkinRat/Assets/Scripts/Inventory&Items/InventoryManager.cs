@@ -98,8 +98,8 @@ public class Inventory
         AdjustInventory(true, crafted.identifier, amt);
         foreach(RecipeIngredient ing in crafted.ingredients)
         {
-            Debug.Log("Removing " + ing.ID);
-            AdjustInventory(false, ing.ID, ing.amount * amt);
+            Debug.Log("Removing " + ing.id);
+            AdjustInventory(false, ing.id.GetItem().itemName, ing.amount * amt);
         }
     }
 

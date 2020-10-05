@@ -3,9 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
+public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver class
 {
     public GameObject craftingButton;
+
+    public GameObject craftingActionButtonParent;
 
     public List<CraftingActionButton> craftingActionButtons;
 
@@ -13,15 +15,11 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
 
     public ConversationUi CraftingConversationBehavior => GetComponent<ConversationUi>();
 
-    public ItemObjectUiElement itemObjectA, itemObjectB;
-
-    public ItemObject itemObjectFocus;
-
 
     void Start()
     {
         MenuFunctionObject = new CraftingMenu(gameObject);
-        GenerateCraftingActionButtons(gameObject);
+        MenuFunctionObject.SetCraftingActionButtons(craftingActionButtonParent, craftingButton, this);
 
         CraftingConversationBehavior.enabled = false; //not in conversation by default
 
@@ -43,32 +41,18 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
 
         if (!MenuFunctionObject.Active)
         {
-            Debug.Log("Crafting not available. Open Menu to craft.");
-            itemObjectFocus = null;
             return;
         }
 
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit rh = new RaycastHit();
-        if (Physics.SphereCast(r, .5f, out rh, Mathf.Infinity))
+        if (Input.GetMouseButtonUp(0))
         {
-            if(Input.GetMouseButtonDown(0) && rh.RaycastOnComponentOf<ItemObject>(out itemObjectFocus))
-            {
-                Debug.Log("Staring Crafting Process?");
-            } else
-            {
-                itemObjectFocus = null;
-            }
-        } else
-        {
-            itemObjectFocus = null;
+            OnMouseButtonUpEndCraftingSequence();
         }
     }
 
     void OnCraftingMenuStatusChange(object source, UiEventArgs args)
     {
         CraftingConversationBehavior.enabled = args.load;
-        Debug.Log($"Toggling Crafting Conversations {(args.load ? "On" : "Off")}");
     }
 
     public void TakeCraftingActionViaCraftingUI(CraftingAction action)
@@ -76,24 +60,11 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
         MenuFunctionObject.itemCrafter.TakeCraftingAction(this, action);
     }
 
-    public void GenerateCraftingActionButtons(GameObject parent)
+    private void OnMouseButtonUpEndCraftingSequence()
     {
-        craftingActionButtons = new List<CraftingActionButton>();
-        for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
-        {
-            GameObject newCraftingActionButton = Instantiate(craftingButton, transform);
-            CraftingActionButton craftAction = CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
-            craftAction.SetCraftingActionButton(i, this);
-            craftAction.SetButtonPosition(new Vector2(-750, -500), Vector2.right * 305);
-
-            craftingActionButtons.Add(craftAction);
-        }
-    }
-
-    void SpawnItemObjectButtons()
-    {
-        itemObjectA = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(-400, -100));
-        itemObjectB = new ItemObjectUiElement(MenuFunctionObject.itemCrafter, transform, new Vector2(400, -100));
+        Debug.Log("End Crafting Sequence");
+        ItemCrafter.EndCraftingSequence();
+        MenuFunctionObject.itemCrafter.EndLocalCraftingSequence();
     }
 
     private void OnDestroy()

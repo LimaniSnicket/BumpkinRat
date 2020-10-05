@@ -4,15 +4,45 @@
             "itemId": 1,
             "itemName": "action_figure_torso",
             "value": 0,
+        },
+        {
+            "itemId": 2,
+            "itemName": "action_figure_leggies",
+            "value": 0
+        },
+        {
+            "itemId": 3,
+            "itemName": "action_figure",
+            "value": 1
+        },
+        {
+            "itemId": 4,
+            "itemName": "nunchuck_left",
+            "value": 0
+        },
+        {
+            "itemId": 5,
+            "itemName": "nunchuck_right",
+            "value": 0
+        },
+        {
+            "itemId": 6,
+            "itemName": "nunchuck_fixed",
+            "value": 1
         }
     ],
+
     "RecipeData": [
         {
-            "outputID": "crafted_item",
+            "outputID": 6,
             "ingredients": [
                 {
-                    "ID": "basic_item",
+                    "id": 4,
                     "amount":  1
+                }, 
+                {
+                    "id": 5,
+                    "amount": 1
                 }
             ]
         }

@@ -31,7 +31,6 @@ public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
         craftingMenuBehaviour = crafter;
 
         SetButtonTextToCraftingAction();
-        button.onClick.AddListener(OnClickTakeCraftingAction);
     }
 
     public void SetCraftingActionButton(CraftingAction craftAction, CraftingUI crafter)
@@ -41,7 +40,6 @@ public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
         craftingMenuBehaviour = crafter;
 
         SetButtonTextToCraftingAction();
-        button.onClick.AddListener(OnClickTakeCraftingAction);
     }
 
 
@@ -67,7 +65,11 @@ public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("here: " + eventData.pointerCurrentRaycast.gameObject.name);
+        if (!ItemCrafter.CraftingSequenceActive)
+        {
+            return;
+        }
+
         OnClickTakeCraftingAction();
     }
 

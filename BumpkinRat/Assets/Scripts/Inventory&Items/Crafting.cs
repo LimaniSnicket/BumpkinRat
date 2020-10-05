@@ -8,16 +8,35 @@ public class ItemCrafter
 {
     public static event EventHandler<CraftingEventArgs> CraftedItem;
 
-    public string actionItem, targetItem;
+    public string actionItem, targetItem, actionToTake;
 
     public static bool TakingCraftingAction { get; private set; }
+
+    public static bool CraftingSequenceActive { get; private set; }
 
     Dictionary<CraftingAction, int> CraftingHistory { get; set; }
     public ItemCrafter() 
     {
         CraftingHistory = new Dictionary<CraftingAction, int>();
         actionItem = "null";
+        actionToTake = "NONE";
         targetItem = "null";
+
+        ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
+    }
+
+    //check hash eventually
+    bool UniqueItemObjectInteraction(ItemObject itemObject)
+    {
+        return !actionItem.Equals(itemObject.itemId) && !targetItem.Equals(itemObject.itemId);
+    }
+
+    void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
+    {
+        if (UniqueItemObjectInteraction(args.InteractedWith))
+        {
+            SetItemTargets(args.InteractedWith.itemId.ToString());
+        }
     }
 
     public void CraftRecipe(Recipe r, int amt)
@@ -35,13 +54,13 @@ public class ItemCrafter
             return;
         }
 
-        host.StartCoroutine(CraftingAction(craftingAction, 0.25f));
+        host.StartCoroutine(CraftingAction(craftingAction, 0f));
     }
 
     IEnumerator CraftingAction(CraftingAction craftingAction, float waitTime)
     {
         TakingCraftingAction = true;
-        Debug.Log("Taking a crafting action: " + (craftingAction).ToString());
+        actionToTake = craftingAction.ToString();
         CacheAction(craftingAction);
         yield return new WaitForSeconds(waitTime);
         TakingCraftingAction = false;
@@ -75,7 +94,47 @@ public class ItemCrafter
             targetItem = item;
         }
 
-        Debug.Log($"{actionItem} on {targetItem}");
+        if (SequenceReadyForConsumption())
+        {
+            Debug.Log(FormatCraftingSequence());
+        }
+    }
+
+    void ResetItemTargets()
+    {
+        actionItem = "null";
+        actionToTake = "NONE";
+        targetItem = "null";
+    }
+
+    bool SequenceReadyForConsumption()
+    {
+        return !(actionItem.Equals("null")) && !(targetItem.Equals("null")) && !actionToTake.Equals("NONE");
+    }
+
+    string FormatCraftingSequence()
+    {
+        return $"Action Item: {actionItem} --> {actionToTake} --> Target Item: {targetItem}";
+    }
+
+    public static void BeginCraftingSequence()
+    {
+        CraftingSequenceActive = true;
+    }
+
+    public static void EndCraftingSequence()
+    {
+        CraftingSequenceActive = false;
+    }
+
+    public void EndLocalCraftingSequence()
+    {
+        ResetItemTargets();
+    }
+
+    public void UnsubscribeToEvents()
+    {
+        ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
     }
 }
 

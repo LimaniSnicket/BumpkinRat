@@ -74,6 +74,9 @@ public class CraftingMenu : UiMenu
 {
     public ItemCrafter itemCrafter;
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
+
+    GameObject craftingButtonContainer;
+    List<CraftingActionButton> craftingActionButtons;
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
@@ -81,13 +84,37 @@ public class CraftingMenu : UiMenu
         itemCrafter = new ItemCrafter();
     }
 
+    public void SetCraftingActionButtons(GameObject container, GameObject prefab, CraftingUI driver)
+    {
+        craftingButtonContainer = container;
+        GenerateCraftingActionButtons(prefab, driver);
+    }
+
+    void GenerateCraftingActionButtons(GameObject prefab, CraftingUI driver)
+    {
+        craftingActionButtons = new List<CraftingActionButton>();
+        for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
+        {
+            GameObject newCraftingActionButton = GameObject.Instantiate(prefab, craftingButtonContainer.transform);
+            CraftingActionButton craftAction = CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
+            craftAction.SetCraftingActionButton(i, driver);
+            craftAction.SetButtonPosition(new Vector2(-750, -500), Vector2.right * 305);
+
+            craftingActionButtons.Add(craftAction);
+        }
+
+        craftingButtonContainer.SetActive(false);
+    }
+
     public override void CloseMenu()
     {
+        craftingButtonContainer.SetActive(false);
         BroadcastUiEvent(false);
     }
 
     public override void LoadMenu()
     {
+        craftingButtonContainer.SetActive(true);
         BroadcastUiEvent(true);
     }
 }

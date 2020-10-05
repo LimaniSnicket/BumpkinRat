@@ -35,24 +35,41 @@ public class Recipe: Identifiable
 
     public bool Craftable(Inventory inventory)
     {
-        if (!ingredients.ValidList()) { return false; }
+       if (!ingredients.ValidList()) { 
+           return false; 
+       }
+
        foreach(RecipeIngredient i in ingredients)
         {
-            if(!inventory.CheckQuantity(i.ID.GetItem(), i.amount)) { return false; }
+            Item ingredient = i.id.GetItem();
+            if(!inventory.CheckQuantity(ingredient, i.amount)) { return false; }
         }
+
         return true;
+    }
+
+    public Item GetOutputName()
+    {
+        return DatabaseContainer.gameData.GetItem(outputId);
     }
 }
 
 [Serializable]
 public struct RecipeIngredient
 {
-    public string ID;
+    public int id;
     public int amount;
 
     public string[] tags;
-    public RecipeIngredient(string id, int amnt) {
-        ID = id;
+    public RecipeIngredient(int id, int amnt) {
+        this.id = id;
+        amount = amnt;
+        tags = Array.Empty<string>();
+    }
+
+    public RecipeIngredient(string id, int amnt)
+    {
+        this.id = amnt;
         amount = amnt;
         tags = Array.Empty<string>();
     }

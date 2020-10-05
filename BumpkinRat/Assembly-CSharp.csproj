@@ -99,12 +99,14 @@
     <Compile Include="Assets\Scripts\Dialogue\TextReaderExperiment.cs" />
     <Compile Include="Assets\Scripts\God\DatabaseContainer.cs" />
     <Compile Include="Assets\Scripts\God\MouseManager.cs" />
+    <Compile Include="Assets\Scripts\Helper\ColorExtensions.cs" />
     <Compile Include="Assets\Scripts\Helper\Enums.cs" />
     <Compile Include="Assets\Scripts\Helper\Extensions.cs" />
     <Compile Include="Assets\Scripts\Helper\LoremIpsum.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRealTimeDependent.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting.cs" />
+    <Compile Include="Assets\Scripts\Inventory&amp;Items\FocusArea.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Item.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemDropper.cs" />

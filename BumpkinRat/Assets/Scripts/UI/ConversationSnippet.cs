@@ -15,6 +15,8 @@ public class ConversationSnippet : MonoBehaviour
 
     private ConversationUi conversationUI;
 
+    public bool isResponse;
+
     private void OnEnable()
     {
         AssignOrCreateTMPro();
@@ -65,9 +67,24 @@ public class ConversationSnippet : MonoBehaviour
 
     public void OnSnippetSpawnMoveConversationBubble(object source, EventArgs args)
     {
-        Vector2 setPos = thisRect.localPosition + Vector3.one * 100;
+
+        float scaleFactor = thisRect.localScale.x / 1;
+
+        Vector2 setPos = thisRect.localPosition + Vector3.one * 100 * scaleFactor;
         Vector2 setScale = thisRect.localScale - Vector3.one * 0.2f;
+
+        if(setScale.x <= 0)
+        {
+            Destroy(gameObject); //destroy to avoid negative scaling!
+        }
+
         SetPositionAndScale(setPos, setScale);
+    }
+
+    public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
+    {
+        BackingImage.color = aesthetic.GetBubbleColor(isResponse);
+        ConversationDisplayTMPro.color = aesthetic.GetTextColor(isResponse);
     }
 
     private void OnDestroy()
@@ -75,4 +92,34 @@ public class ConversationSnippet : MonoBehaviour
         UnSubscribeToConversationUiEvents();
     }
 
+}
+
+[Serializable]
+public struct ConversationAesthetic
+{
+    public Color promptBubbleColor, repsonseBubbleColor;
+    public Color promptTextColor, responseTextColor;
+
+    public Color GetBubbleColor(bool response)
+    {
+        return response ? repsonseBubbleColor : promptBubbleColor;
+    }
+
+    public Color GetTextColor(bool response)
+    {
+        return response ? responseTextColor : promptTextColor;
+    }
+    public static ConversationAesthetic SpookyConversationAesthetic
+    {
+        get
+        {
+            return new ConversationAesthetic
+            {
+                promptBubbleColor = ColorX.Orange,
+                repsonseBubbleColor = Color.black,
+                promptTextColor = Color.black,
+                responseTextColor = ColorX.Orange
+            };
+        }
+    }
 }

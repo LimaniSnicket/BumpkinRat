@@ -24,11 +24,14 @@ public class ConversationUi : MonoBehaviour
 
     public event EventHandler SpawningNewConversationSnippet;
 
+    public ConversationAesthetic currentConversationAesthetic;
+
     private void Start()
     {
         storedMessages = new Stack<string>();
         stringBuilder = new StringBuilder();
         loremIpsum = new LoremIpsum();
+        currentConversationAesthetic = ConversationAesthetic.SpookyConversationAesthetic;
     }
 
     private void Update()
@@ -65,14 +68,22 @@ public class ConversationUi : MonoBehaviour
     IEnumerator TakeResponse(KeyCode pressed)
     {
         responding = true;
-        string response = $"{$"<color=blue>Responding with {pressed}</color>", 0:F3}";
-        storedMessages.Push(response);
-        stringBuilder.AppendLine(storedMessages.Peek());
-        joined = stringBuilder.ToString();
 
         BroadcastMessageSpawning();
 
+        string response = $"{$"Responding with {pressed}", 0:F3}";
+        storedMessages.Push(response);
+
+        InstantiateConversationSnippet(storedMessages.Peek(), true);
         yield return new WaitForSeconds(1);
+
+
+        stringBuilder.AppendLine(storedMessages.Peek());
+        joined = stringBuilder.ToString();
+
+        yield return new WaitForSeconds(1);
+        BroadcastMessageSpawning();
+
         SetConversationNodeToRespondTo();
         responding = false;
     }
@@ -84,7 +95,7 @@ public class ConversationUi : MonoBehaviour
         stringBuilder.AppendLine(storedMessages.Peek());
         joined = stringBuilder.ToString();
 
-        InstantiateConversationSnippet(storedMessages.Peek());
+        InstantiateConversationSnippet(storedMessages.Peek(), false);
     }
 
     void UpdateConversationDisplay()
@@ -95,11 +106,13 @@ public class ConversationUi : MonoBehaviour
         }
     }
 
-    public void InstantiateConversationSnippet(string message)
+    public void InstantiateConversationSnippet(string message, bool response)
     {
         GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
         ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
+        convoSnippet.isResponse = response;
         convoSnippet.SetConversationUi(this);
+        convoSnippet.ApplyConversationAesthetic(currentConversationAesthetic);
         convoSnippet.SetPositionAndScale(conversationSnippetSpawnPoint, Vector2.one);
         convoSnippet.ConversationDisplayTMPro.text = message;
     }

@@ -180,6 +180,14 @@ public static class GenericX
         }
     }
 
+    public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
+    {
+        if(handler != null)
+        {
+            handler(source, eventArgs);
+        }
+    }
+
 }
 
 public static class MathfX
@@ -304,6 +312,11 @@ public static class CraftX
         collect.amount = amnt;
     }
     public static Item GetItem(this string id)
+    {
+        return DatabaseContainer.gameData.GetItem(id);
+    }
+
+    public static Item GetItem(this int id)
     {
         return DatabaseContainer.gameData.GetItem(id);
     }
