@@ -21,6 +21,7 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
         GetOrAddMovementController();
 
         DialogueRunner.DialogueEventIndicated += OnDialogueEvent;
+        UiMenu.UiEvent += OnUiEvent;
     }
 
     private void Update()
@@ -44,6 +45,11 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
         if (args.TargetObject(this)){
             Debug.Log("Valid Indicator Event");
         }
+    }
+
+    void OnUiEvent(object source, UiEventArgs args)
+    {
+        SetFreezePlayerMovementController(args.load);
     }
 
     void OnDisable()

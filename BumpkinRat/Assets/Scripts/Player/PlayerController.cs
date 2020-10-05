@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
 
     void MouseControlledOverworldMovement()
     {
-        if (UIManager.menuActive) { return; }
+        if (UIManager.MenuActive) { return; }
         freezeXZ = true;
         Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY);
         if (kInput.z > 0)

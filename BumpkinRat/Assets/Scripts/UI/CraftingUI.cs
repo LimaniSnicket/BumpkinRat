@@ -1,46 +1,75 @@
 ﻿using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu>
+public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver class
 {
     public GameObject craftingButton;
 
+    public GameObject craftingActionButtonParent;
+
+    public List<CraftingActionButton> craftingActionButtons;
+
     public CraftingMenu MenuFunctionObject { get; set; }
-    public CraftingActionButton placeButton;
+
+    public ConversationUi CraftingConversationBehavior => GetComponent<ConversationUi>();
+
 
     void Start()
     {
         MenuFunctionObject = new CraftingMenu(gameObject);
-        placeButton = new CraftingActionButton(craftingButton, 0);
+        MenuFunctionObject.SetCraftingActionButtons(craftingActionButtonParent, craftingButton, this);
+
+        CraftingConversationBehavior.enabled = false; //not in conversation by default
+
+        MenuFunctionObject.TailoredUiEvent += OnCraftingMenuStatusChange;
     }
 
-}
-
-[Serializable]
-public struct CraftingActionButton
-{
-    public Button button;
-    public CraftingAction craftingAction;
-
-    public CraftingActionButton(GameObject gameObject, int craftAction)
+    void Update()
     {
-        button = gameObject.GetComponent<Button>();
-        craftingAction = (CraftingAction)craftAction;
-        button.onClick.AddListener(OnClickTakeCraftingAction);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuFunctionObject.CloseMenu();
+            MenuFunctionObject.itemCrafter.ClearCraftingHistory();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            MenuFunctionObject.LoadMenu();
+        }
+
+        if (!MenuFunctionObject.Active)
+        {
+            return;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            OnMouseButtonUpEndCraftingSequence();
+        }
     }
 
-    public CraftingActionButton(Button fromButton, int craftAction)
+    void OnCraftingMenuStatusChange(object source, UiEventArgs args)
     {
-        button = fromButton;
-        craftingAction = (CraftingAction)craftAction;
-        button.onClick.AddListener(OnClickTakeCraftingAction);
+        CraftingConversationBehavior.enabled = args.load;
     }
 
-    void OnClickTakeCraftingAction()
+    public void TakeCraftingActionViaCraftingUI(CraftingAction action)
     {
-        Debug.Log(craftingAction.ToString());
+        MenuFunctionObject.itemCrafter.TakeCraftingAction(this, action);
     }
+
+    private void OnMouseButtonUpEndCraftingSequence()
+    {
+        Debug.Log("End Crafting Sequence");
+        ItemCrafter.EndCraftingSequence();
+        MenuFunctionObject.itemCrafter.EndLocalCraftingSequence();
+    }
+
+    private void OnDestroy()
+    {
+        MenuFunctionObject.TailoredUiEvent -= OnCraftingMenuStatusChange;
+    }
+
 }

@@ -174,7 +174,7 @@ public class RecipeNode
     public RecipeNode() { id = "New Ingredient"; amount = 0; }
     public RecipeNode(RecipeIngredient ingredient)
     {
-        id = ingredient.ID;
+        id = ingredient.id.ToString();
         amount = ingredient.amount;
     }
 

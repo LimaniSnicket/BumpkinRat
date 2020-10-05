@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 public static class GenericX
 {
@@ -170,6 +169,25 @@ public static class GenericX
         return builder.ToString();
     }
 
+    public static void Increment<T>(this Dictionary<T, int> dict, T key)
+    {
+        if (!dict.ContainsKey(key))
+        {
+            dict.Add(key, 1);
+        } else
+        {
+            dict[key]++;
+        }
+    }
+
+    public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
+    {
+        if(handler != null)
+        {
+            handler(source, eventArgs);
+        }
+    }
+
 }
 
 public static class MathfX
@@ -298,6 +316,11 @@ public static class CraftX
         return DatabaseContainer.gameData.GetItem(id);
     }
 
+    public static Item GetItem(this int id)
+    {
+        return DatabaseContainer.gameData.GetItem(id);
+    }
+
     public static Item GetItem(this string id, Inventory i)
     {
         Item it = id.GetItem();
@@ -372,6 +395,12 @@ public static class PhysicsX
         {
 
         }
+    }
+
+    public static bool RaycastOnComponentOf<T>(this RaycastHit rh, out T raycastedComponent)
+    {
+        raycastedComponent = rh.transform.GetComponent<T>();
+        return raycastedComponent != null;
     }
 }
 
