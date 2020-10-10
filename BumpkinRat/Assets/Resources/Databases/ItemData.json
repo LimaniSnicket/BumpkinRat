@@ -1,40 +1,48 @@
 ﻿{
-    "ItemData": [
-        {
-            "itemId": 1,
-            "itemName": "action_figure_torso",
-            "value": 0,
-        },
-        {
-            "itemId": 2,
-            "itemName": "action_figure_leggies",
-            "value": 0
-        },
-        {
-            "itemId": 3,
-            "itemName": "action_figure",
-            "value": 1
-        },
-        {
+	"ItemData":[
+		{
+			"itemId": 1,
+			"itemName": "action_figure_torso",
+			"craftable": false,
+			"value": 0
+		},
+		{
+			"itemId": 2,
+			"itemName": "action_figure_leggies",
+			"craftable": false,
+			"value": 0
+		},
+		{
+			"itemId": 3,
+			"itemName": "action_figure",
+			"craftable": true,
+			"value": 10
+		},
+		{
             "itemId": 4,
             "itemName": "nunchuck_left",
+            "craftable": false,
             "value": 0
         },
         {
             "itemId": 5,
             "itemName": "nunchuck_right",
+            "craftable": false,
             "value": 0
         },
         {
             "itemId": 6,
             "itemName": "nunchuck_fixed",
+            "craftable": true,
             "value": 1
         }
-    ],
+	], 
 
-    "RecipeData": [
-        {
+	"RecipeData":[
+		{
+            "recipeId": 0,
             "outputID": 6,
+            "recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
             "ingredients": [
                 {
                     "id": 4,
@@ -46,5 +54,5 @@
                 }
             ]
         }
-    ]
+	]
 }

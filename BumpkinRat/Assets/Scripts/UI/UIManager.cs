@@ -10,25 +10,25 @@ public class UIManager : MonoBehaviour
     public static bool MenuActive { get; private set; }
     public static MenuType ActiveMenu { get; private set; }
 
+    public static List<MenuType> ActiveMenus { get; private set; }
+
     private KeyCode exitCurrentMenuKeyCode;
 
     private void Awake()
     {
         if (uiManager == null) { uiManager = this; } else { Destroy(this); }
         UiMenu.UiEvent += OnUiEvent;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E)) { 
-            MenuActive = !MenuActive; 
-        }
+        ActiveMenus = new List<MenuType>();
     }
 
     void OnUiEvent(object source, UiEventArgs args)
     {
-        MenuActive = args.load;
-        Debug.Log("Menu Status: " + args.load);
+        if (args.load)
+        {
+            MenuActive = args.load;
+        }
+
+        ActiveMenus.HandleInstanceObjectInList(args.menuLoaded, args.load);
     }
 
     private void OnDisable()
@@ -43,6 +43,10 @@ public abstract class UiMenu
     public MenuType menuType { get; protected set; }
     protected GameObject gameObject;
 
+    public bool exitDisabled;
+
+    public bool entryDisabled;
+
     public bool Active { get; private set; }
     public abstract KeyCode ActivateKeyCode { get; }
     public abstract void LoadMenu();
@@ -50,6 +54,18 @@ public abstract class UiMenu
 
     public static event EventHandler<UiEventArgs> UiEvent;
     public event EventHandler<UiEventArgs> TailoredUiEvent;
+
+    public void ChangeMenuStatus()
+    {
+        if (Active && !exitDisabled)
+        {
+            CloseMenu();
+        } 
+        else if(!Active && !entryDisabled)
+        {
+            LoadMenu();
+        }
+    }
 
     public void BroadcastUiEvent(bool load)
     {
@@ -75,7 +91,7 @@ public class CraftingMenu : UiMenu
     public ItemCrafter itemCrafter;
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
 
-    GameObject craftingButtonContainer;
+    public GameObject craftingButtonContainer;
     List<CraftingActionButton> craftingActionButtons;
     public CraftingMenu(GameObject g)
     {
@@ -109,6 +125,7 @@ public class CraftingMenu : UiMenu
     public override void CloseMenu()
     {
         craftingButtonContainer.SetActive(false);
+        itemCrafter.ClearCraftingHistory();
         BroadcastUiEvent(false);
     }
 
@@ -122,52 +139,33 @@ public class CraftingMenu : UiMenu
 [Serializable]
 public class InventoryMenu : UiMenu
 {
-    TextMeshProUGUI displayInventory;
     public override KeyCode ActivateKeyCode => KeyCode.Y;
 
     public InventoryMenu(GameObject g)
     {
         gameObject = g;
         menuType = MenuType.Inventory;
-        displayInventory = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-        displayInventory.gameObject.SetActive(false);
-
+        gameObject.SetActive(false);
     }
 
     public override void CloseMenu()
     {
         BroadcastUiEvent(false);
-        displayInventory.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public override void LoadMenu()
     {
         BroadcastUiEvent(true);
+        gameObject.SetActive(true);
+
     }
 
     public void LoadMenu(Inventory i)
     {
         LoadMenu();
-
-        displayInventory.gameObject.SetActive(true);
-
-        StringBuilder builder = new StringBuilder();
-
-        foreach(KeyValuePair<string, int> pair in i.inventoryListings)
-        {
-            builder.AppendLine($"{pair.Key}: {pair.Value}");
-        }
-
-        SetDisplayText(builder.ToString());
     }
 
-    void SetDisplayText(string message)
-    {
-        if(displayInventory != null)
-        {
-            displayInventory.text = message;
-        }
-    }
 }
 
 [Serializable]

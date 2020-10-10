@@ -10,6 +10,13 @@ public class FollowBehaviorBasic: MonoBehaviour
 
     public Vector3 offset;
 
+    Quaternion originalRotation;
+
+    private void Start()
+    {
+        originalRotation = transform.rotation;
+    }
+
     private void Update()
     {
         transform.position = Position();
@@ -27,6 +34,11 @@ public class FollowBehaviorBasic: MonoBehaviour
         float z = offset.z + toFollow.transform.position.z * axisInfluence.z;
 
         return new Vector3(x, y, z);
+    }
+
+    public void SetRotationToOriginal()
+    {
+        transform.rotation = originalRotation;
     }
 
 }

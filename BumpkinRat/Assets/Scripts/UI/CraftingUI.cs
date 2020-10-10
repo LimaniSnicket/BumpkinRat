@@ -15,6 +15,8 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     public ConversationUi CraftingConversationBehavior => GetComponent<ConversationUi>();
 
+    int numberOfTimesOpened;
+
 
     void Start()
     {
@@ -28,15 +30,10 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            MenuFunctionObject.CloseMenu();
-            MenuFunctionObject.itemCrafter.ClearCraftingHistory();
-        }
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            MenuFunctionObject.LoadMenu();
+            MenuFunctionObject.ChangeMenuStatus();
         }
 
         if (!MenuFunctionObject.Active)
@@ -53,6 +50,7 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
     void OnCraftingMenuStatusChange(object source, UiEventArgs args)
     {
         CraftingConversationBehavior.enabled = args.load;
+        numberOfTimesOpened.IncrementIfTrue(args.load);
     }
 
     public void TakeCraftingActionViaCraftingUI(CraftingAction action)

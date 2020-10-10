@@ -62,7 +62,7 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
     {
         if (plantNames.ValidList())
         {
-            int r = UnityEngine.Random.Range(0, DatabaseContainer.gameData.plantData.plantNames.Count);
+            int r = 0;//UnityEngine.Random.Range(0, DatabaseContainer.gameData.plantData.plantNames.Count);
             return plantNames[r];
         }
         return "Default Plant";

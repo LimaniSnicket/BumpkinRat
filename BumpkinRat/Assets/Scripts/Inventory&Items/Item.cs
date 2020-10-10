@@ -7,17 +7,13 @@ public class Item: Identifiable, IComparable<Item>
     public int itemId;
     public string itemName;
     public string DisplayName => itemName.ToDisplay();
+    public bool craftable;
     public int value;
 
-    public string meshPath;
-    public string texturePath;
+    //public string meshPath;
+    //public string texturePath;
 
     public string identifier => itemName;
-
-    public virtual bool CraftableItem(GameData data)
-    {
-        return data.HasRecipe(this);
-    }
 
     public int CompareTo(Item other)
     {
@@ -28,8 +24,12 @@ public class Item: Identifiable, IComparable<Item>
 [Serializable]
 public class Recipe: Identifiable
 {
+    public int recipeId;
     public int outputId;
-    public string outputName;
+    public string outputName = "fuck this variable";
+
+    public string recipeDescription;
+
     public List<RecipeIngredient> ingredients;
     public string identifier => outputName;
 
@@ -48,7 +48,7 @@ public class Recipe: Identifiable
         return true;
     }
 
-    public Item GetOutputName()
+    public Item GetOutputItem()
     {
         return DatabaseContainer.gameData.GetItem(outputId);
     }

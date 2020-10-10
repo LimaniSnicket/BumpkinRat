@@ -9,6 +9,8 @@ public class FocusArea : MonoBehaviour
 
     public int focusAreaId;
 
+    internal bool IsFocus { get; set; }
+
     private void OnEnable()
     {
         AssignParentItemObject();
@@ -28,10 +30,18 @@ public class FocusArea : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (IsFocus)
+        {
+
+            
+        }
+    }
+
     void OnItemObjectFocusChange(bool inFocus)
     {
-        Debug.Log($"Parent Item Object {(inFocus ? "is": "isn't")} Focus");
-        //sphereCollider.enabled = inFocus;
+        sphereCollider.enabled = true;
         spriteRenderer.color = inFocus ? Color.blue : Color.gray;
         transform.forward = Camera.main.transform.forward * -1;
     }
@@ -40,5 +50,34 @@ public class FocusArea : MonoBehaviour
     {
         spriteRenderer.color = Color.gray;
         transform.forward = Camera.main.transform.forward * -1;
+    }
+
+    private void OnMouseOver()
+    {
+        if (!IsFocus)
+        {
+            IsFocus = true;
+            if (ItemCrafter.CraftingSequenceActive)
+            {
+                parentItemObject.BroadcastInteractionWithFocusArea(this);
+
+            }
+        }
+    }
+
+    private void OnMouseDown()
+    { 
+        ItemCrafter.BeginCraftingSequence();
+        parentItemObject.BroadcastInteractionWithFocusArea(this);  
+    }
+
+    private void OnMouseExit()
+    {
+        IsFocus = false;
+    }
+
+    public override string ToString()
+    {
+        return $"{parentItemObject.name} Id:{parentItemObject.itemId} FA:{focusAreaId}";
     }
 }

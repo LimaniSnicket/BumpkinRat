@@ -37,6 +37,8 @@ public class GlobalFader : MonoBehaviour
         }
     }
 
+    public static bool IsClear => IsColor(Color.clear);
+
     private void Awake()
     {
         if (globalFader == null)

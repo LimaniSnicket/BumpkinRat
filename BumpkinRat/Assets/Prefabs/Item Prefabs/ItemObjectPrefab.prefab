@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbf3a22141378ca4fb0318c43894ae4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 0
+  itemId: 1
   numberOfPositions: 0
   positionOccupiedBy: []
 --- !u!114 &392792343707777590
@@ -168,7 +168,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &8987616736452551801
 SpriteRenderer:

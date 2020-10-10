@@ -35,7 +35,7 @@ public class ItemCrafter
     {
         if (UniqueItemObjectInteraction(args.InteractedWith))
         {
-            SetItemTargets(args.InteractedWith.itemId.ToString());
+            SetItemTargets(args.AtFocusArea.ToString());
         }
     }
 
@@ -136,14 +136,6 @@ public class ItemCrafter
     {
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
     }
-}
-
-[Serializable]
-public class CustomerCraftingOrder
-{
-    public int recipeLookup;
-
-    public int craftingActions;
 }
 
 [Serializable]
