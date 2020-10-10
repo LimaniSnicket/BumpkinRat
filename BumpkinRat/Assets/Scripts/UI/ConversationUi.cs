@@ -47,6 +47,11 @@ public class ConversationUi : MonoBehaviour
         {
             RespondMessage(KeyCode.Alpha2);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            RespondMessage(KeyCode.Alpha3);
+        }
     }
 
     void BroadcastMessageSpawning()
@@ -75,7 +80,7 @@ public class ConversationUi : MonoBehaviour
         storedMessages.Push(response);
 
         InstantiateConversationSnippet(storedMessages.Peek(), true);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.25f);
 
 
         stringBuilder.AppendLine(storedMessages.Peek());

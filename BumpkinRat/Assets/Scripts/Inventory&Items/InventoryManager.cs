@@ -8,7 +8,6 @@ public class InventoryManager : MonoBehaviour
 {
     public string itemDataPath;
     public Inventory activeInventory { get; set; }
-    ItemCrafter itemCrafter;
     public GameObject inventoryMenuObject;
     public InventoryMenu inventoryMenu;
 
@@ -19,7 +18,6 @@ public class InventoryManager : MonoBehaviour
 
         ItemProvisioner.ItemProvisioning += OnCollectedItem;
 
-        itemCrafter = new ItemCrafter();
         activeInventory = new Inventory();
         activeInventory.InitializeInventory();
         inventoryMenu = new InventoryMenu(inventoryMenuObject != null ? inventoryMenuObject : new GameObject());
@@ -27,7 +25,7 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+/*        if (Input.GetKeyDown(KeyCode.Y))
         {
             inventoryMenu.LoadMenu(activeInventory);
             //itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
@@ -36,7 +34,7 @@ public class InventoryManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             inventoryMenu.CloseMenu();
-        }
+        }*/
     }
 
     void OnCollectedItem(object source, CollectableEventArgs args)
@@ -66,6 +64,8 @@ public class Inventory
 {
     public Dictionary<string, int> inventoryListings;   
     bool inventoryExists => inventoryListings != null;
+
+    public event EventHandler<InventoryAdjustmentEventArgs> InventoryAdjusted;
 
     public void InitializeInventory()
     {
@@ -116,12 +116,22 @@ public class Inventory
 
     void AddToInventory(string itemName, int amount = 1)
     {
+        bool addingNew = false;
         if (ValidInventoryListing(itemName)) {
             inventoryListings[itemName] += amount;
         } else
         {
             inventoryListings.Add(itemName, amount);
+            addingNew = true;
         }
+
+        InventoryAdjusted.BroadcastEvent(this,
+            new InventoryAdjustmentEventArgs {
+                ItemToAdjust = itemName,
+                NewAmountToDisplay = inventoryListings[itemName].ToString(),
+                AmountToAdjustBy = amount,
+                Adding = addingNew
+            }) ;
     }
 
     void RemoveFromInventory(string itemName, int amountToRemove = 1)
@@ -137,7 +147,25 @@ public class Inventory
             } else
             {
                 inventoryListings.Remove(itemName);
+
+                InventoryAdjusted.BroadcastEvent(this,
+                    new InventoryAdjustmentEventArgs
+                    {
+                        ItemToAdjust = itemName,
+                        Removing = true
+                    }) ;
+
+                return;
+                      
             }
+
+            InventoryAdjusted.BroadcastEvent(this,
+                new InventoryAdjustmentEventArgs
+                {
+                    ItemToAdjust = itemName,
+                    NewAmountToDisplay = inventoryListings[itemName].ToString(),
+                    AmountToAdjustBy = -1 * amountToRemove,
+                }); ;
         }
     }
 
@@ -163,4 +191,14 @@ public class ItemListing
 {
    public Item item { get; set; }
    public int amount { get; set; }
+}
+
+public class InventoryAdjustmentEventArgs: EventArgs
+{
+    public string ItemToAdjust { get; set; }
+    public int AmountToAdjustBy { get; set; }
+
+    public string NewAmountToDisplay { get; set; }
+    public bool Adding { get; set; }
+    public bool Removing { get; set; }
 }

@@ -15,7 +15,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     {
         get
         {
-            if(timer != prologueCounter.TimerComplete)
+            if (timer != prologueCounter.TimerComplete)
             {
                 OnBreakChange(!timer);
             }
@@ -31,6 +31,12 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
 
     public List<ItemDrop> ItemDropData { get; set; }
 
+    public CustomerCraftingOrder CraftingOrderTest;
+
+    public bool craftingMenuOpened;
+
+    CraftingUI craftingUi;
+
     private void Start()
     {
         prologueCounter = new RealTimeCounter(1f, TimeUnitToTrack.Minute);
@@ -42,12 +48,25 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
 
         ItemDistributor.Distribute();
+
+        CraftingOrderTest = new CustomerCraftingOrder { customerName = "Froggert", recipeLookupIds = new int[]{ 0 } };
+
+/*        craftingUi = FindObjectOfType<CraftingUI>();
+        craftingUi.enabled = false;*/
+
+        UiMenu.UiEvent += OnUiEvent;
     }
 
     private void Update()
     {
         prologueCounter.DecrementTimerOverTime();
         PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{BreakMessage}");
+
+        if (atWork && GlobalFader.IsClear)
+        {
+            Debug.Log("Actively taking customers");
+            //ui display of customer at counter --> crafting ui
+        }
     }
 
     IEnumerator AddToTimeSpan()
@@ -71,5 +90,25 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         yield return new WaitForSeconds(1);
         WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
         ItemDistributor.Distribute();
+    }
+
+    void OnUiEvent(object source, UiEventArgs args)
+    {
+        if (!craftingMenuOpened && args.menuLoaded.Equals(MenuType.Crafting) && args.load)
+        {
+            craftingMenuOpened = true;
+            StartCoroutine(IntroductionToCraftingAndCustomers());
+        }
+    }
+
+    IEnumerator IntroductionToCraftingAndCustomers()
+    {
+        print("Crafting introduction!");
+        yield return null;
+    }
+
+    void OnDestroy()
+    {
+        UiMenu.UiEvent -= OnUiEvent;
     }
 }

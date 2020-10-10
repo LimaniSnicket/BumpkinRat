@@ -20,9 +20,8 @@ public class DatabaseContainer : MonoBehaviour
     }
      void InitializeData()
     {
-        //gameData = itemDataPath.InitializeFromJSON<GameData>();
+        gameData = itemDataPath.InitializeFromJSON<GameData>();
         //gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
-        //gameData.InitializeLookupTables();
     }
 
     public static GameObject InstantiateItem(Vector3 position)
@@ -38,12 +37,17 @@ public class GameData
 {
     [SerializeField] List<Item> ItemData;
     [SerializeField] List<Recipe> RecipeData;
-    public PlantDataStorage plantData;
+    //public PlantDataStorage plantData;
 
     private Dictionary<string, Item> ItemMap => ItemData.ToDictionary(i => i.itemName);
     private Dictionary<string, Recipe> item_recipe_lookup = new Dictionary<string, Recipe>();
 
     public Dictionary<int, Item> ItemIdLookup => ItemData.ToDictionary(i => i.itemId);
+    public Dictionary<int, Recipe> RecipeIdLookup => RecipeData.ToDictionary(i => i.recipeId);
+
+    public Dictionary<Item, List<Recipe>> ItemToRecipeLookup => 
+        ItemData.Where(i => i.craftable).
+        ToDictionary(r => r, r => GetRecipesOfOutputId(r.itemId));
 
 
     public List<Item> GetItemData() { 
@@ -56,15 +60,25 @@ public class GameData
         //InitializeDataLookupsByID(RecipeData, item_recipe_lookup);
     }
 
-    public bool HasRecipe(Item i)
+    List<Recipe> GetRecipesOfOutputId(int id)
     {
-        if(item_recipe_lookup == null) { return false; }
-        return item_recipe_lookup.ContainsKey(i.itemName);
+        return RecipeData.Where(r => r.outputId == id).ToList();
     }
 
-  public Recipe GetRecipe(int index)
+    public bool HasRecipe(Item i)
     {
-        return item_recipe_lookup.ElementAt(Mathf.Clamp(index, 0, item_recipe_lookup.Count - 1)).Value;
+        if(RecipeIdLookup == null)
+        {
+            return false;
+        }
+
+        return GetRecipesOfOutputId(i.itemId).Count > 0;
+
+    }
+
+    public Recipe GetRecipe(int index)
+    {
+        return RecipeIdLookup[index];
     }
 
     public Recipe GetRecipe(string lookup)
@@ -99,17 +113,6 @@ public class GameData
         return ItemMap.ContainsKey(itemID);
     }
 
-    void InitializeDataLookupsByID<T>(List<T> l, Dictionary<string, T> d) where T : Identifiable
-    {
-        if (l.ValidList())
-        {
-            foreach(var listObj in l)
-            {
-                string id = listObj.identifier;
-                d.Add(id, listObj);
-            }
-        }
-    }
    public void SetItemList(List<Item> items)
     {
         if (Application.isEditor)

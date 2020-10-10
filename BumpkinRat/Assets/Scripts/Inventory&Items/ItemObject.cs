@@ -9,6 +9,8 @@ public class ItemObject : MonoBehaviour
 
     Item item;
 
+    public bool Altered { get; private set; }
+
     public int numberOfPositions;
 
     public string[] positionOccupiedBy;
@@ -22,6 +24,7 @@ public class ItemObject : MonoBehaviour
     {
         positionOccupiedBy = Enumerable.Repeat("empty", Math.Max(numberOfPositions, 1)).ToArray();
         SetFocusAreaDictionary();
+        //tag = TagX.itemObject;
     }
 
     public void SetFromItem(Item item)
@@ -39,21 +42,24 @@ public class ItemObject : MonoBehaviour
             return;
         }
 
-        InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
+        //InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
         MouseHoveringOnItemObject = true;
     }
 
     private void OnMouseExit()
     {
-        gameObject.BroadcastMessage("OnItemObjectFocusChange", false);
+        if (NumberOfInFocusAreas() <= 0)
+        {
+            gameObject.BroadcastMessage("OnItemObjectFocusChange", false);
 
-        MouseHoveringOnItemObject = false;
+            MouseHoveringOnItemObject = false;
+        }
     }
 
     private void OnMouseDown()
     {
-        ItemCrafter.BeginCraftingSequence();
-        InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
+        //ItemCrafter.BeginCraftingSequence();
+        //InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
     }
 
     void SetFocusAreaDictionary()
@@ -69,9 +75,31 @@ public class ItemObject : MonoBehaviour
         SetFocusAreaDictionary();
         FocusAreaLookup.Add(focusArea.focusAreaId, focusArea);
     }
+
+    internal void BroadcastInteractionWithFocusArea(FocusArea focus)
+    {
+        ItemCrafter.BeginCraftingSequence();
+        InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this, AtFocusArea = focus });
+    }
+
+    internal int NumberOfInFocusAreas()
+    {
+        if(FocusAreaLookup == null) { return -1; }
+
+        return FocusAreaLookup.Where(k => k.Value.IsFocus).Count();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag(TagX.itemObject))
+        {
+            //Physics.IgnoreCollision()
+        }
+    }
 }
 
 public class ItemObjectEventArgs: EventArgs
 {
     public ItemObject InteractedWith { get; set; }
+    public FocusArea AtFocusArea { get; set; }
 }
