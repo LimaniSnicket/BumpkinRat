@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConversationUi : MonoBehaviour
 {
     public GameObject conversationSnippetPrefab;
+    public GameObject uiContainer, responseContainer;
+
     public Vector2 conversationSnippetSpawnPoint;
 
     Stack<string> storedMessages;
@@ -20,11 +23,12 @@ public class ConversationUi : MonoBehaviour
     StringBuilder stringBuilder;
     LoremIpsum loremIpsum;
 
-    public TextMeshProUGUI displayConversationMessages;
-
     public event EventHandler SpawningNewConversationSnippet;
 
     public ConversationAesthetic currentConversationAesthetic;
+    ConversationResponseDisplay[] conversationResponses;
+
+    KeyCode[] inputKeys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3 };
 
     private void Start()
     {
@@ -32,25 +36,31 @@ public class ConversationUi : MonoBehaviour
         stringBuilder = new StringBuilder();
         loremIpsum = new LoremIpsum();
         currentConversationAesthetic = ConversationAesthetic.SpookyConversationAesthetic;
+        conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), currentConversationAesthetic);
+    }
+
+    private void OnEnable()
+    {
+        uiContainer.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        uiContainer.SetActive(false);
     }
 
     private void Update()
     {
         UpdateConversationDisplay();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            RespondMessage(KeyCode.Alpha1);
-        }  
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        for(int i = 0; i< inputKeys.Length; i++)
         {
-            RespondMessage(KeyCode.Alpha2);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            RespondMessage(KeyCode.Alpha3);
+            if (Input.GetKeyDown(inputKeys[i]))
+            {
+                RespondMessage(inputKeys[i]);
+                Debug.Log(conversationResponses[i].ToString());
+            }
         }
     }
 
@@ -105,10 +115,7 @@ public class ConversationUi : MonoBehaviour
 
     void UpdateConversationDisplay()
     {
-        if(displayConversationMessages != null)
-        {
-            displayConversationMessages.text = joined;
-        }
+    
     }
 
     public void InstantiateConversationSnippet(string message, bool response)
@@ -121,4 +128,65 @@ public class ConversationUi : MonoBehaviour
         convoSnippet.SetPositionAndScale(conversationSnippetSpawnPoint, Vector2.one);
         convoSnippet.ConversationDisplayTMPro.text = message;
     }
+}
+
+[Serializable]
+public struct ConversationResponseDisplay
+{
+    //set to low, medium, or high
+    static string[] priorities = {"Low", "Medium", "High" };
+    private int priority;
+
+    public int Priority => priority;
+
+    private string responseMessageDisplay;
+
+    private Image backing;
+    private TextMeshProUGUI textMesh;
+
+    ConversationResponseDisplay(int pri, GameObject prefab)
+    {
+        priority = pri;
+        responseMessageDisplay = string.Empty;
+
+        backing = prefab.GetOrAddComponent<Image>();
+        textMesh = backing.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    public static ConversationResponseDisplay[] GetResponseDisplays(GameObject[] uiElements, ConversationAesthetic aesthetics)
+    {
+        ConversationResponseDisplay[] arr = new ConversationResponseDisplay[3];
+
+        for(int i = 0; i< arr.Length; i++)
+        {
+            arr[i] = new ConversationResponseDisplay(i, uiElements[i]);
+            arr[i].SetDisplayString($"{priorities[i]} Level Response!");
+            arr[i].ApplyConversationAesthetic(aesthetics);
+        }
+
+        return arr;
+    }
+
+    public void SetDisplayString(string message)
+    {
+        responseMessageDisplay = message;
+        textMesh.text = responseMessageDisplay;
+    }
+
+    public void SetPriority(int i)
+    {
+        priority = Mathf.Clamp(i, 0, 2);
+    }
+
+    public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
+    {
+        backing.color = aesthetic.GetBubbleColor(false);
+        textMesh.color = aesthetic.GetTextColor(false);
+    }
+
+    public override string ToString()
+    {
+        return responseMessageDisplay;
+    }
+
 }

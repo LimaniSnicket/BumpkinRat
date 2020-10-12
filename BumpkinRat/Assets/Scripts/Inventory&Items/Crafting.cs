@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ public class ItemCrafter
     public static event EventHandler<CraftingEventArgs> CraftedItem;
 
     public string actionItem, targetItem, actionToTake;
+
+    public CraftingSequence activeSequence;
 
     public static bool TakingCraftingAction { get; private set; }
 
@@ -22,6 +25,8 @@ public class ItemCrafter
         actionToTake = "NONE";
         targetItem = "null";
 
+        activeSequence = new CraftingSequence();
+
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
     }
 
@@ -33,6 +38,8 @@ public class ItemCrafter
 
     void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
     {
+        activeSequence.SetFromItemObjectEventArgs(args);
+
         if (UniqueItemObjectInteraction(args.InteractedWith))
         {
             SetItemTargets(args.AtFocusArea.ToString());
@@ -135,6 +142,54 @@ public class ItemCrafter
     public void UnsubscribeToEvents()
     {
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
+    }
+}
+
+[Serializable]
+public struct CraftingSequence
+{
+    public ItemObject actionItemObject, targetItemObject;
+    public string actionItemAtFocusArea, targetItemAtFocusArea;
+    public CraftingAction actionTaken;
+
+    public static event EventHandler CraftingSequenceCompleted;
+
+    public void SetFromItemObjectEventArgs(ItemObjectEventArgs args)
+    {
+        if(actionItemObject == null)
+        {
+            actionItemObject = args.InteractedWith;
+            actionItemAtFocusArea = args.AtFocusArea.ToString();
+
+        } else
+        {
+            targetItemObject = args.InteractedWith;
+            targetItemAtFocusArea = args.AtFocusArea.ToString();
+        }
+    }
+
+    public void ClearSequence()
+    {
+        actionItemObject = null;
+        targetItemObject = null;
+        actionItemAtFocusArea = string.Empty;
+        targetItemAtFocusArea = string.Empty;
+        actionTaken = CraftingAction.NONE;
+    }
+
+    public bool IsValid()
+    {
+        return actionItemObject != null && targetItemObject != null && !actionTaken.Equals(CraftingAction.NONE);
+    }
+
+    public void BroadcastCraftingSequenceTaken()
+    {
+        
+    }
+
+    public override string ToString()
+    {
+        return $"Action Item: {actionItemAtFocusArea} --> {actionTaken} --> Target Item: {targetItemAtFocusArea}";
     }
 }
 

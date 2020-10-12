@@ -109,6 +109,20 @@ public struct ConversationAesthetic
     {
         return response ? responseTextColor : promptTextColor;
     }
+
+    public static ConversationAesthetic BasicConversationAesthetic
+    {
+        get
+        {
+            return new ConversationAesthetic
+            {
+                promptBubbleColor = Color.white,
+                repsonseBubbleColor = Color.blue,
+                promptTextColor = Color.black,
+                responseTextColor = Color.white
+            };
+        }
+    }
     public static ConversationAesthetic SpookyConversationAesthetic
     {
         get

@@ -18,13 +18,14 @@ public class ItemObject : MonoBehaviour
     public bool MouseHoveringOnItemObject { get; private set; }
     Dictionary<int, FocusArea> FocusAreaLookup { get; set; }
 
+    ItemObject connectedTo;
+
     public static event EventHandler<ItemObjectEventArgs> InteractedWithItemObject;
 
     private void Start()
     {
         positionOccupiedBy = Enumerable.Repeat("empty", Math.Max(numberOfPositions, 1)).ToArray();
         SetFocusAreaDictionary();
-        //tag = TagX.itemObject;
     }
 
     public void SetFromItem(Item item)
@@ -56,12 +57,6 @@ public class ItemObject : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
-    {
-        //ItemCrafter.BeginCraftingSequence();
-        //InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
-    }
-
     void SetFocusAreaDictionary()
     {
         if (FocusAreaLookup == null)
@@ -91,10 +86,7 @@ public class ItemObject : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.collider.CompareTag(TagX.itemObject))
-        {
-            //Physics.IgnoreCollision()
-        }
+
     }
 }
 

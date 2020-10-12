@@ -135,6 +135,7 @@
     <Compile Include="Assets\Scripts\UI\OnMouseHoverBehaviour.cs" />
     <Compile Include="Assets\Scripts\UI\PrologueHUD.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UI\UiElementContainer.cs" />
     <Compile Include="Assets\Scripts\World\ClimbingSurface.cs" />
     <Compile Include="Assets\Scripts\World\CustomGravitySurface.cs" />
     <Compile Include="Assets\Scripts\World\FollowBehaviorBasic.cs" />
@@ -736,6 +737,9 @@
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

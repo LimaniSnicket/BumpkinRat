@@ -665,6 +665,9 @@
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">

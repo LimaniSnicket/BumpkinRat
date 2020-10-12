@@ -104,7 +104,7 @@ public class MovementController : MonoBehaviour
 
     void OverworldMovement()
     {
-        if (UIManager.MenuActive) { return; }
+       // if (UIManager.MenuActive) { return; }
         if (movementVector != Vector3.zero)
         {
             body.AddForce(movementVector.normalized * forceMultiplier, ForceMode.Force);
@@ -114,7 +114,7 @@ public class MovementController : MonoBehaviour
 
     void MouseOverworldMovement()
     {
-        if (UIManager.MenuActive || yieldPlayerControl) { return; }
+       // if (UIManager.MenuActive || yieldPlayerControl) { return; }
         upAxis = -Physics.gravity.normalized;
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY);

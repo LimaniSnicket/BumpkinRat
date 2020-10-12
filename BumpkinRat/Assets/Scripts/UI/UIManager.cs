@@ -91,8 +91,7 @@ public class CraftingMenu : UiMenu
     public ItemCrafter itemCrafter;
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
 
-    public GameObject craftingButtonContainer;
-    List<CraftingActionButton> craftingActionButtons;
+    public UiElementContainer craftingButtonContainer;
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
@@ -102,36 +101,35 @@ public class CraftingMenu : UiMenu
 
     public void SetCraftingActionButtons(GameObject container, GameObject prefab, CraftingUI driver)
     {
-        craftingButtonContainer = container;
+        craftingButtonContainer = container.GetOrAddComponent<UiElementContainer>();
         GenerateCraftingActionButtons(prefab, driver);
     }
 
     void GenerateCraftingActionButtons(GameObject prefab, CraftingUI driver)
     {
-        craftingActionButtons = new List<CraftingActionButton>();
+        //Rect dimensions = prefab.GetComponent<RectTransform>().rect;
+
         for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
         {
-            GameObject newCraftingActionButton = GameObject.Instantiate(prefab, craftingButtonContainer.transform);
-            CraftingActionButton craftAction = CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
+            craftingButtonContainer.SpawnAtAlternatingVerticalPositions(prefab, 100, 150);
+            CraftingActionButton craftAction = craftingButtonContainer.GetLastChild().GetComponent<CraftingActionButton>();//CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
             craftAction.SetCraftingActionButton(i, driver);
-            craftAction.SetButtonPosition(new Vector2(-750, -500), Vector2.right * 305);
 
-            craftingActionButtons.Add(craftAction);
         }
 
-        craftingButtonContainer.SetActive(false);
+        craftingButtonContainer.gameObject.SetActive(false);
     }
 
     public override void CloseMenu()
     {
-        craftingButtonContainer.SetActive(false);
+        craftingButtonContainer.gameObject.SetActive(false);
         itemCrafter.ClearCraftingHistory();
         BroadcastUiEvent(false);
     }
 
     public override void LoadMenu()
     {
-        craftingButtonContainer.SetActive(true);
+        craftingButtonContainer.gameObject.SetActive(true);
         BroadcastUiEvent(true);
     }
 }

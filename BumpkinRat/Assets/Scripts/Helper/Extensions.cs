@@ -88,6 +88,24 @@ public static class GenericX
         }
     }
 
+    public static GameObject[] GetChildren(this Transform parent)
+    {
+        if(parent.childCount <= 0)
+        {
+            return Array.Empty<GameObject>();
+        }
+
+        int length = parent.childCount;
+        GameObject[] arr = new GameObject[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            arr[i] = parent.GetChild(i).gameObject;
+        }
+
+        return arr;
+    }
+
     public static T InitializeFromJSON<T>(this string path)
     {
         string json = File.ReadAllText(path);
@@ -448,7 +466,7 @@ public static class CraftX
 
 public static class TagX
 {
-    public static string itemObject = "ItemObject";
+    public static string ItemObject => "ItemObject";
 }
 
 public static class PhysicsX
