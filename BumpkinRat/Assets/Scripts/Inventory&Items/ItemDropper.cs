@@ -64,22 +64,37 @@ public class ItemDropper : ItemDistributor
 [Serializable]
 public class ItemDrop {
 
-    public string itemName;
+    public string itemName = string.Empty;
+
+    int itemId = -1;
+
     public int amountToDrop;
-    public string ItemToDropName => itemName;
+    public string ItemToDropName => ToDrop.itemName;
     public int AmountToDrop => Math.Max(0, amountToDrop);
 
     public Item ToDrop
     {
         get
         {
-            return DatabaseContainer.gameData.GetItem(ItemToDropName);
+            try
+            {
+                return itemId.GetItem();
+            } catch (KeyNotFoundException)
+            {
+                return DatabaseContainer.gameData.GetItem(ItemToDropName);
+
+            }
         }
     }
 
     public static List<ItemDrop> GetListOfItemsToDrop(params (string, int)[] drops)
     {
         return drops.Select(d => new ItemDrop { itemName = d.Item1, amountToDrop = d.Item2 }).ToList();
+    }
+
+    public static List<ItemDrop> GetListOfItemsToDrop(params (int, int)[] drops)
+    {
+        return drops.Select(d => new ItemDrop { itemId = d.Item1, amountToDrop = d.Item2 }).ToList();
     }
 
 }

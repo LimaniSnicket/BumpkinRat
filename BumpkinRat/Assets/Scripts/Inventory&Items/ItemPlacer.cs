@@ -7,9 +7,21 @@ public class ItemPlacer : ItemDistributor
     IDistributeItems<ItemPlacer> Placer { get; set; }
     private List<Vector3> placementPositions;
 
+    Dictionary<int, bool> occupiedPlacementPositions;
+
+    public bool spawnPrefab;
+    bool CanSpawnPrefab => spawnPrefab && prefab != null;
+    GameObject prefab;
+
     public ItemPlacer(IDistributeItems<ItemPlacer> placer)
     {
         Placer = placer;
+        occupiedPlacementPositions = new Dictionary<int, bool>();
+    }
+
+    public void SetPrefab(GameObject p)
+    {
+        prefab = p;
     }
 
     public void SetItemsAndPlacements(params (string, int, Vector3)[] itemDropPlacements)
@@ -42,9 +54,31 @@ public class ItemPlacer : ItemDistributor
         return index >= placementPositions.Count ? Vector3.zero : placementPositions[index];
     }
 
+    public int GetNextUnoccupiedPosition()
+    {
+        if(placementPositions == null || occupiedPlacementPositions == null)
+        {
+            return -1;
+        }
+
+        int pos = 0;
+
+        while (occupiedPlacementPositions.ContainsKey(pos))
+        {
+            if (occupiedPlacementPositions[0])
+            {
+                break;
+            }
+            pos++;
+        }
+
+        return pos >= occupiedPlacementPositions.Count ? -1 : pos;
+    }
+
     public void SetPlacementPositions(params Vector3[] vects)
     {
         placementPositions = new List<Vector3>(vects);
+        occupiedPlacementPositions = new Dictionary<int, bool>();
     }
     public override void Distribute()
     {

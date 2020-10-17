@@ -16,6 +16,12 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
     List<InventoryButton> inventoryButtons;
     Dictionary<string, InventoryButton> inventoryButtonLookup => inventoryButtons.ToDictionary(k => k.ItemNameToDisplay);
+
+    public Transform spawnAtTransform; 
+    public GameObject spawnPrefab;
+
+    public Workbench workbench;
+
     //todo replace with Dictionary<ItemCategory, List<Button>> if/when we categorize buttons! 
     //or a gameobject that is the root of the button list?
     //OR Lookup buttons by item name but when they're spawned just spawn them on the appropriate item tab!
@@ -78,6 +84,7 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
         InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
         inventoryButton.SetInventoryDisplay(itemLabel, amountLabel);
+        inventoryButton.onClick.AddListener(() => OnClickSpawnPrefabAtTransformPosition());
 
 
         inventoryButtons.Add(inventoryButton);
@@ -94,6 +101,17 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
     public InventoryButton SpawnInventoryButtonFromPrefab()
     {
         return Instantiate(inventoryButtonPrefab, itemScroller.content.transform).GetOrAddComponent<InventoryButton>();
+    }
+
+    void OnClickSpawnAtWorkbench()
+    {
+        workbench.SpawnItemObject(spawnPrefab);
+    }
+
+    void OnClickSpawnPrefabAtTransformPosition()
+    {
+        GameObject obj = Instantiate(spawnPrefab);
+        obj.transform.position = spawnAtTransform.position;
     }
 
     private void OnDestroy()

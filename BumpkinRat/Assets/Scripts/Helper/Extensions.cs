@@ -311,6 +311,11 @@ public static class MathfX
         return (pulseValue * modifier);
     }
 
+    public static Vector3 PulseVector3(float modifier, float freq, float offset, float amplitude)
+    {
+        return Vector3.one * PulseSineFloat(modifier, freq, offset, amplitude);
+    }
+
     public static bool Squeeze(this Vector3 c, Vector3 comp, float threshold = 0.001f)
     {
         return Mathf.Abs(Vector3.Distance(c, comp)) <= threshold;

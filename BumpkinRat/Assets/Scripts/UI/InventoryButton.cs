@@ -10,7 +10,11 @@ public class InventoryButton : Button
     public string ItemNameToDisplay { get; private set; }
     public string ItemAmountToDisplay { get; private set; }
 
+    int itemId;
+
     public TextMeshProUGUI textMesh => gameObject.GetOrAddComponentInChildren<TextMeshProUGUI>();
+
+
 
     protected override void Start()
     {
@@ -29,7 +33,6 @@ public class InventoryButton : Button
 
         textMesh.text = ToString();
     }
-
 
     void OnClickPrintToString()
     {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ItemProvisioner : ItemDistributor
 {
     IDistributeItems<ItemProvisioner> Provisioner { get; set; }
@@ -32,11 +28,12 @@ public class ItemProvisioner : ItemDistributor
     {
         if(ItemProvisioning != null)
         {
-            ItemProvisioning(this, 
-                new CollectableEventArgs { 
-                    CollectableName = collecting.itemName, 
-                    CollectedAmount = collecting.AmountToDrop 
-                });
+            ItemProvisioning(this,
+                new CollectableEventArgs {
+                    CollectedItem = collecting.ToDrop,
+                    CollectableName = collecting.ItemToDropName,
+                    CollectedAmount = collecting.AmountToDrop
+                }) ;
         }
     }
 }

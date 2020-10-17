@@ -34,6 +34,5 @@ public class ItemObjectUiElement
 
     void OnClickDebug()
     {
-        itemCrafter.SetItemTargets(gameObject.name);
     }
 }

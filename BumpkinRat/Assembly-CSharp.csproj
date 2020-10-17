@@ -94,6 +94,7 @@
     <Compile Include="Assets\Demigiant\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\Demigiant\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
+    <Compile Include="Assets\Scripts\Camera\CursorTrail.cs" />
     <Compile Include="Assets\Scripts\Dialogue\Dialogue.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueExtensions.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueRunner.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Assets\Scripts\World\Interactable.cs" />
     <Compile Include="Assets\Scripts\World\Placer.cs" />
     <Compile Include="Assets\Scripts\World\WarpBehavior.cs" />
+    <Compile Include="Assets\Scripts\World\Workbench.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
@@ -732,14 +734,14 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

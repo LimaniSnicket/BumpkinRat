@@ -12,7 +12,7 @@ public class ItemCrafter
     public string actionItem, targetItem, actionToTake;
 
     public CraftingSequence activeSequence;
-
+    Stack<CraftingSequence> completedCraftingSequences; //use this for caching itemObject positions and rotations to undo crafting actions!
     public static bool TakingCraftingAction { get; private set; }
 
     public static bool CraftingSequenceActive { get; private set; }
@@ -26,24 +26,15 @@ public class ItemCrafter
         targetItem = "null";
 
         activeSequence = new CraftingSequence();
+        completedCraftingSequences = new Stack<CraftingSequence>();
 
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
-    }
-
-    //check hash eventually
-    bool UniqueItemObjectInteraction(ItemObject itemObject)
-    {
-        return !actionItem.Equals(itemObject.itemId) && !targetItem.Equals(itemObject.itemId);
     }
 
     void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
     {
         activeSequence.SetFromItemObjectEventArgs(args);
 
-        if (UniqueItemObjectInteraction(args.InteractedWith))
-        {
-            SetItemTargets(args.AtFocusArea.ToString());
-        }
     }
 
     public void CraftRecipe(Recipe r, int amt)
@@ -68,6 +59,9 @@ public class ItemCrafter
     {
         TakingCraftingAction = true;
         actionToTake = craftingAction.ToString();
+
+        activeSequence.actionTaken = craftingAction;
+
         CacheAction(craftingAction);
         yield return new WaitForSeconds(waitTime);
         TakingCraftingAction = false;
@@ -88,40 +82,8 @@ public class ItemCrafter
         targetItem = "null";
         actionItem = "null";
         CraftingHistory.Clear();
-    }
-
-    public void SetItemTargets(string item)
-    {
-        if (actionItem.Equals("null"))
-        {
-            actionItem = item;
-        }
-        else
-        {
-            targetItem = item;
-        }
-
-        if (SequenceReadyForConsumption())
-        {
-            Debug.Log(FormatCraftingSequence());
-        }
-    }
-
-    void ResetItemTargets()
-    {
-        actionItem = "null";
-        actionToTake = "NONE";
-        targetItem = "null";
-    }
-
-    bool SequenceReadyForConsumption()
-    {
-        return !(actionItem.Equals("null")) && !(targetItem.Equals("null")) && !actionToTake.Equals("NONE");
-    }
-
-    string FormatCraftingSequence()
-    {
-        return $"Action Item: {actionItem} --> {actionToTake} --> Target Item: {targetItem}";
+        completedCraftingSequences.Clear();
+        activeSequence.ClearSequence();
     }
 
     public static void BeginCraftingSequence()
@@ -136,7 +98,15 @@ public class ItemCrafter
 
     public void EndLocalCraftingSequence()
     {
-        ResetItemTargets();
+        if (activeSequence.IsValid())
+        { 
+            Debug.Log(activeSequence.ToString());
+            activeSequence.RegisterSuccessfulSequenceConclusion();
+            completedCraftingSequences.Push(activeSequence);
+            activeSequence = new CraftingSequence();
+        }
+
+        activeSequence.ClearSequence();
     }
 
     public void UnsubscribeToEvents()
@@ -163,9 +133,24 @@ public struct CraftingSequence
 
         } else
         {
+            if (!UniqueItemObject(args.InteractedWith))
+            {
+                return;
+            }
+
             targetItemObject = args.InteractedWith;
             targetItemAtFocusArea = args.AtFocusArea.ToString();
         }
+    }
+
+    public void RegisterSuccessfulSequenceConclusion()
+    {
+        if (!IsValid())
+        {
+            return;
+        }
+
+        actionItemObject.SuccessfullyCraftedWith(this);
     }
 
     public void ClearSequence()
@@ -175,6 +160,11 @@ public struct CraftingSequence
         actionItemAtFocusArea = string.Empty;
         targetItemAtFocusArea = string.Empty;
         actionTaken = CraftingAction.NONE;
+    }
+
+    bool UniqueItemObject(ItemObject obj)
+    {
+        return actionItemObject != obj;
     }
 
     public bool IsValid()

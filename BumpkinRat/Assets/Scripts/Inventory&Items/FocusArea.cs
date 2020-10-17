@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class FocusArea : MonoBehaviour
@@ -32,11 +33,7 @@ public class FocusArea : MonoBehaviour
 
     private void Update()
     {
-        if (IsFocus)
-        {
-
-            
-        }
+        spriteRenderer.color = parentItemObject.NumberOfInFocusAreas() > 0 ? Color.blue : Color.gray;
     }
 
     void OnItemObjectFocusChange(bool inFocus)
@@ -52,17 +49,28 @@ public class FocusArea : MonoBehaviour
         transform.forward = Camera.main.transform.forward * -1;
     }
 
+
+    Coroutine exitProcess;
+
     private void OnMouseOver()
     {
-        if (!IsFocus)
+        if (!IsFocus && parentItemObject.NumberOfInFocusAreas() == 0)
         {
             IsFocus = true;
             if (ItemCrafter.CraftingSequenceActive)
             {
                 parentItemObject.BroadcastInteractionWithFocusArea(this);
-
             }
         }
+
+        if(exitProcess != null)
+        {
+            StopCoroutine(exitProcess);
+        }
+
+        transform.forward = Camera.main.transform.forward * -1;
+
+        transform.localScale = Vector3.one + MathfX.PulseVector3(0.3f, 0.3f, 1, 2f);
     }
 
     private void OnMouseDown()
@@ -73,7 +81,14 @@ public class FocusArea : MonoBehaviour
 
     private void OnMouseExit()
     {
+        exitProcess = StartCoroutine(StartExitProcess());
+    }
+
+    IEnumerator StartExitProcess()
+    {
+        yield return new WaitForSeconds(0.2f);
         IsFocus = false;
+        transform.localScale = Vector3.one;
     }
 
     public override string ToString()

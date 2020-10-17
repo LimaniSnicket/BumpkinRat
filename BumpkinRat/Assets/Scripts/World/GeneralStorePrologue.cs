@@ -45,7 +45,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         StartCoroutine(AddToTimeSpan());
 
         ItemDistributor = new ItemProvisioner(this);
-        ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
+        ItemDropData = ItemDrop.GetListOfItemsToDrop((4, 1), (5, 2));
 
         ItemDistributor.Distribute();
 

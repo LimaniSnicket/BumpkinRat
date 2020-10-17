@@ -6,6 +6,9 @@ public class Collectable : MonoBehaviour
 {
     public string itemName;
     public int amount;
+
+    int itemId;
+
     public static event EventHandler<CollectableEventArgs> Collected;
 
     private void FixedUpdate()
@@ -40,6 +43,7 @@ public class Collectable : MonoBehaviour
 
 public class CollectableEventArgs : EventArgs
 {
+    public Item CollectedItem { get; set; }
     public string CollectableName { get; set; }
     public int CollectedAmount { get; set; }
 }
