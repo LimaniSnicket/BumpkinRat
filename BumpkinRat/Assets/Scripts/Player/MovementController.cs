@@ -104,7 +104,7 @@ public class MovementController : MonoBehaviour
 
     void OverworldMovement()
     {
-        if (UIManager.menuActive) { return; }
+       // if (UIManager.MenuActive) { return; }
         if (movementVector != Vector3.zero)
         {
             body.AddForce(movementVector.normalized * forceMultiplier, ForceMode.Force);
@@ -114,7 +114,7 @@ public class MovementController : MonoBehaviour
 
     void MouseOverworldMovement()
     {
-        if (UIManager.menuActive || yieldPlayerControl) { return; }
+       // if (UIManager.MenuActive || yieldPlayerControl) { return; }
         upAxis = -Physics.gravity.normalized;
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY);
@@ -201,6 +201,11 @@ public class MovementController : MonoBehaviour
     {
         onSurface = false;
         contactNormal = Vector3.zero;
+    }
+
+    public void SetFreezePlayerMovement(bool yielding)
+    {
+        yieldPlayerControl = yielding;
     }
 }
 

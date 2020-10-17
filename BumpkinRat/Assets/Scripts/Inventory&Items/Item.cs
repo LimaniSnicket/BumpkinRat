@@ -1,50 +1,77 @@
 ﻿using System;
-using System.Collections;
-using System.Reflection;
 using System.Collections.Generic;
 
 [Serializable]
-public class Item: Identifiable
-{
-    public string ID;
-    public string display;
-    public int value;
+public class Item: Identifiable, IComparable<Item>
+{    
+    public int itemId;
+    public string itemName;
+    public string DisplayName => itemName.ToDisplay();
     public bool craftable;
-    public string identifier => ID;
+    public int value;
 
-    public virtual bool CraftableItem(GameData data)
+    //public string meshPath;
+    //public string texturePath;
+
+    public string identifier => itemName;
+
+    public int CompareTo(Item other)
     {
-        return data.HasRecipe(this);
+        return itemId.CompareTo(other.itemId);
     }
 }
 
 [Serializable]
 public class Recipe: Identifiable
 {
-    public string outputID;
-    public List<RecipeIngredient> ingredients;
+    public int recipeId;
+    public int outputId;
+    public string outputName = "fuck this variable";
 
-    public string identifier => outputID;
+    public string recipeDescription;
+
+    public List<RecipeIngredient> ingredients;
+    public string identifier => outputName;
 
     public bool Craftable(Inventory inventory)
     {
-        if (!ingredients.ValidList()) { return false; }
+       if (!ingredients.ValidList()) { 
+           return false; 
+       }
+
        foreach(RecipeIngredient i in ingredients)
         {
-            if(!inventory.CheckQuantity(i.ID.GetItem(), i.amount)) { return false; }
+            Item ingredient = i.id.GetItem();
+            if(!inventory.CheckQuantity(ingredient, i.amount)) { return false; }
         }
+
         return true;
+    }
+
+    public Item GetOutputItem()
+    {
+        return DatabaseContainer.gameData.GetItem(outputId);
     }
 }
 
 [Serializable]
 public struct RecipeIngredient
 {
-    public string ID;
+    public int id;
     public int amount;
-    public RecipeIngredient(string id, int amnt) {
-        ID = id;
+
+    public string[] tags;
+    public RecipeIngredient(int id, int amnt) {
+        this.id = id;
         amount = amnt;
+        tags = Array.Empty<string>();
+    }
+
+    public RecipeIngredient(string id, int amnt)
+    {
+        this.id = amnt;
+        amount = amnt;
+        tags = Array.Empty<string>();
     }
 }
 

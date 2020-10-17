@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class Collectable : MonoBehaviour
 {
     public string itemName;
+    public int amount;
+
+    int itemId;
+
     public static event EventHandler<CollectableEventArgs> Collected;
 
     private void FixedUpdate()
@@ -18,7 +20,10 @@ public class Collectable : MonoBehaviour
 
     public virtual void OnCollected(int amnt = 1)
     {
-        if(Collected != null) { Collected(this, new CollectableEventArgs() { CollectableName = itemName, CollectedAmount = amnt }) ; }
+        if(Collected != null) { Collected(this, new CollectableEventArgs() { 
+            CollectableName = itemName, 
+            CollectedAmount = Math.Max(amnt, amount) 
+        }) ; }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,10 +34,16 @@ public class Collectable : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void SetItemName(string item)
+    {
+        itemName = item;
+    }
 }
 
 public class CollectableEventArgs : EventArgs
 {
+    public Item CollectedItem { get; set; }
     public string CollectableName { get; set; }
     public int CollectedAmount { get; set; }
 }

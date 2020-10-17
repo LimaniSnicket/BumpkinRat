@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-
+using UnityEngine;
 
 public static class GenericX
 {
@@ -13,6 +13,21 @@ public static class GenericX
     {
         if(check == null || check.Count <= 0) { return false; }
         return true;
+    }
+
+    public static bool CollectionIsNotNullOrEmpty<T>(this IEnumerable<T> collection)
+    {
+        return collection != null && collection.Count() > 0;
+    }
+
+    public static bool CollectionCountEquals<T>(this IEnumerable<T> collection, int count)
+    {
+        if (!collection.CollectionIsNotNullOrEmpty())
+        {
+            return false;
+        }
+
+        return collection.Count() == count;
     }
 
     public static bool ValidArray<T>(this T[] check)
@@ -34,10 +49,75 @@ public static class GenericX
         }
     }
 
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T: UnityEngine.Component
+    {
+        try
+        {
+            return gameObject.GetComponent<T>();
+        }
+        catch (NullReferenceException)
+        {
+            return gameObject.AddComponent<T>();
+        }
+    }
+
+    public static T GetOrAddComponentInChildren<T>(this GameObject gameObject, int childIndex = 0) where T: Component
+    {
+        try
+        {
+            T child = gameObject.GetComponentInChildren<T>();
+            if (!child.gameObject.activeSelf)
+            {
+                child.gameObject.SetActive(true);
+            }
+            return child;
+        }
+        catch (NullReferenceException)
+        {
+            GameObject addTo;
+            if (gameObject.transform.childCount <= childIndex)
+            {
+                addTo = new GameObject($"{gameObject.name}_Child");
+                addTo.transform.SetParent(gameObject.transform);
+            } else
+            {
+                addTo = gameObject.transform.GetChild(childIndex).gameObject;
+            }
+
+            return addTo.GetOrAddComponent<T>();
+        }
+    }
+
+    public static GameObject[] GetChildren(this Transform parent)
+    {
+        if(parent.childCount <= 0)
+        {
+            return Array.Empty<GameObject>();
+        }
+
+        int length = parent.childCount;
+        GameObject[] arr = new GameObject[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            arr[i] = parent.GetChild(i).gameObject;
+        }
+
+        return arr;
+    }
+
     public static T InitializeFromJSON<T>(this string path)
     {
         string json = File.ReadAllText(path);
         return JsonUtility.FromJson<T>(json);
+    }
+
+    public static void IncrementIfTrue(this int i, bool evaluate, int amount = 1)
+    {
+        if (evaluate)
+        {
+            i += amount;
+        }
     }
 
     public static void DebugTuple<T, U>(this (T, U) tuple)
@@ -158,6 +238,37 @@ public static class GenericX
         return indices;
     }
 
+    public static string GetCapitalizedString(this string toCap)
+    {
+        StringBuilder builder = new StringBuilder(toCap);
+
+        string startingChar = toCap.Substring(0, 1);
+        string replacing = startingChar.ToUpper();
+
+        builder.Replace(startingChar, replacing, 0, 1);
+
+        return builder.ToString();
+    }
+
+    public static void Increment<T>(this Dictionary<T, int> dict, T key)
+    {
+        if (!dict.ContainsKey(key))
+        {
+            dict.Add(key, 1);
+        } else
+        {
+            dict[key]++;
+        }
+    }
+
+    public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
+    {
+        if(handler != null)
+        {
+            handler(source, eventArgs);
+        }
+    }
+
 }
 
 public static class MathfX
@@ -198,6 +309,11 @@ public static class MathfX
     {
         float pulseValue = (amplitude * Mathf.Sin(Time.time * TAU * freq)) + offset;
         return (pulseValue * modifier);
+    }
+
+    public static Vector3 PulseVector3(float modifier, float freq, float offset, float amplitude)
+    {
+        return Vector3.one * PulseSineFloat(modifier, freq, offset, amplitude);
     }
 
     public static bool Squeeze(this Vector3 c, Vector3 comp, float threshold = 0.001f)
@@ -275,7 +391,18 @@ public interface IDelta<T>
 
 public static class CraftX
 {
+    public static void InstantiateItemInWorld(this string itemName, Vector3 spawnPosition, int amnt = 1)
+    {
+        Collectable collect = DatabaseContainer.InstantiateItem(spawnPosition).GetComponent<Collectable>();
+        collect.SetItemName(itemName);
+        collect.amount = amnt;
+    }
     public static Item GetItem(this string id)
+    {
+        return DatabaseContainer.gameData.GetItem(id);
+    }
+
+    public static Item GetItem(this int id)
     {
         return DatabaseContainer.gameData.GetItem(id);
     }
@@ -291,6 +418,28 @@ public static class CraftX
         StringBuilder sb = new StringBuilder(display.ToLowerInvariant());
         sb.Replace(' ', '_');
         return sb.ToString();
+    }
+
+    public static string ToDisplay(this string Id)
+    {
+        if(Id.Length <= 0) { return Id; }
+
+        if (Id.Contains("_"))
+        {
+            StringBuilder builder = new StringBuilder(Id.Length);
+            string[] segments = Id.Split('_').Select(s => s.GetCapitalizedString()).ToArray();
+            
+            foreach(string s in segments)
+            {
+                builder.Append($"{s} ");
+            }
+
+            return builder.ToString();
+
+        } else {
+            return Id.GetCapitalizedString();
+        }
+
     }
 
     public static bool Plantable(this Identifiable i)
@@ -309,7 +458,7 @@ public static class CraftX
     public static int CompareItemID(this Item i, Item other)
     {
         if(other == null) { return 1; }
-        return string.Compare(i.ID, other.ID, StringComparison.OrdinalIgnoreCase);
+        return string.Compare(i.itemName, other.itemName, StringComparison.OrdinalIgnoreCase);
     }
 
     public static int CompareItemValue(this Item i, Item other)
@@ -318,6 +467,32 @@ public static class CraftX
         return Mathf.Abs(i.value - other.value);
     }
 
+}
+
+public static class TagX
+{
+    public static string ItemObject => "ItemObject";
+}
+
+public static class PhysicsX
+{
+    public static void CancelRigidBodyVelocity(this GameObject g)
+    {
+        try
+        {
+            g.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+        catch (NullReferenceException)
+        {
+
+        }
+    }
+
+    public static bool RaycastOnComponentOf<T>(this RaycastHit rh, out T raycastedComponent)
+    {
+        raycastedComponent = rh.transform.GetComponent<T>();
+        return raycastedComponent != null;
+    }
 }
 
 public static class CustomGravity

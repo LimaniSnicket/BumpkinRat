@@ -1,0 +1,57 @@
+{
+    "ItemData": [
+        {
+            "itemId": 1,
+            "itemName": "action_figure_torso",
+            "craftable": false,
+            "value": 0,
+        },
+        {
+            "itemId": 2,
+            "itemName": "action_figure_leggies",
+            "craftable": false,
+            "value": 0
+        },
+        {
+            "itemId": 3,
+            "itemName": "action_figure",
+            "craftable": true,
+            "value": 1
+        },
+        {
+            "itemId": 4,
+            "itemName": "nunchuck_left",
+            "craftable": false,
+            "value": 0
+        },
+        {
+            "itemId": 5,
+            "itemName": "nunchuck_right",
+            "craftable": false,
+            "value": 0
+        },
+        {
+            "itemId": 6,
+            "itemName": "nunchuck_fixed",
+            "craftable": true,
+            "value": 1
+        }
+    ],
+
+    "RecipeData": [
+        {
+            "recipeId": 0,
+            "outputID": 6,
+            "ingredients": [
+                {
+                    "id": 4,
+                    "amount":  1
+                }, 
+                {
+                    "id": 5,
+                    "amount": 1
+                }
+            ]
+        }
+    ]
+}
