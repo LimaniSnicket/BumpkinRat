@@ -62,20 +62,11 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
         if (args.Adding)
         {
-            SpawnButtonForItem(args.ItemToAdjust, args.NewAmountToDisplay);
-        }
-
-        try
-        {
-            inventoryButtonLookup[args.ItemToAdjust].OnInventoryAdjustment(this, args);
-        }
-        catch (KeyNotFoundException)
-        {
-            Debug.LogError("Item doesn't have a corresponding Inventory Button");
+            SpawnButtonForItem(args.Listing.item, args.NewAmountToDisplay);
         }
     }
 
-    void SpawnButtonForItem(string itemLabel, string amountLabel)
+    void SpawnButtonForItem(Item i, string amountLabel)
     {
         if (inventoryButtons == null)
         {
@@ -83,19 +74,11 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
         }
 
         InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
-        inventoryButton.SetInventoryDisplay(itemLabel, amountLabel);
+        inventoryButton.SetInventoryDisplay(i, amountLabel);
         inventoryButton.onClick.AddListener(() => OnClickSpawnPrefabAtTransformPosition());
 
 
         inventoryButtons.Add(inventoryButton);
-    }
-
-    void SpawnButtonsFromInventory(Inventory i)
-    {
-        foreach (KeyValuePair<string, int> pair in i.inventoryListings)
-        {
-            SpawnButtonForItem(pair.Key, pair.Value.ToString());
-        }
     }
 
     public InventoryButton SpawnInventoryButtonFromPrefab()

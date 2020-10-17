@@ -23,25 +23,10 @@ public class InventoryManager : MonoBehaviour
         inventoryMenu = new InventoryMenu(inventoryMenuObject != null ? inventoryMenuObject : new GameObject());
     }
 
-    private void Update()
-    {
-/*        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            inventoryMenu.LoadMenu(activeInventory);
-            //itemCrafter.CraftRecipe(DatabaseContainer.gameData.GetRecipe(0), 1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            inventoryMenu.CloseMenu();
-        }*/
-    }
-
     void OnCollectedItem(object source, CollectableEventArgs args)
     {
         activeInventory.AdjustInventory(args);
-        //activeInventory.AdjustInventory(args.CollectedItem.itemId, true, args.CollectedAmount);
-        //activeInventory.AdjustInventory(true, args.CollectableName, args.CollectedAmount);
+        //activeInventory.AdjustInventory(args.CollectedItem.itemId, true ,args.CollectedAmount);
         Debug.Log(args.CollectableName + " Collected. Adding to Inventory");
     }
 
@@ -127,7 +112,7 @@ public class Inventory
     {
         if(args.CollectedItem == null)
         {
-
+            AdjustInventory(true, args.CollectableName, args.CollectedAmount);
         } else
         {
             AddToInventory(args.CollectedItem, args.CollectedAmount);
@@ -164,6 +149,8 @@ public class Inventory
         if (addingNew)
         {
             inventoryListingsByItemId.Add(item.itemId, new ItemListing { item = item, amount = amount });
+            InventoryAdjusted.BroadcastEvent(this,
+                InventoryAdjustmentEventArgs.FromListing(inventoryListingsByItemId[item.itemId], 'a'));
         }
         else
         {
@@ -207,7 +194,6 @@ public class Inventory
             new InventoryAdjustmentEventArgs {
                 ItemToAdjust = itemName,
                 NewAmountToDisplay = inventoryListings[itemName].ToString(),
-                AmountToAdjustBy = amount,
                 Adding = addingNew
             }) ;
     }
@@ -264,7 +250,6 @@ public class Inventory
                 {
                     ItemToAdjust = itemName,
                     NewAmountToDisplay = inventoryListings[itemName].ToString(),
-                    AmountToAdjustBy = -1 * amountToRemove,
                 }); ;
         }
     }
@@ -312,16 +297,16 @@ public struct ItemListing
 
 public class InventoryAdjustmentEventArgs: EventArgs
 {
-    public string ItemToAdjust { get; set; }
-    public int AmountToAdjustBy { get; set; }
-
-    public string NewAmountToDisplay { get; set; }
+    public ItemListing Listing { get; set; }
+    public string ItemToAdjust { get; set; } = string.Empty;
+    public string NewAmountToDisplay { get; set; } = "0";
     public bool Adding { get; set; }
     public bool Removing { get; set; }
 
     public static InventoryAdjustmentEventArgs FromListing(ItemListing listing, char addOrRemove = ' ')
     {
         return new InventoryAdjustmentEventArgs {
+            Listing = listing,
             ItemToAdjust = listing.item.DisplayName,
             NewAmountToDisplay = listing.amount.ToString(),
             Adding = addOrRemove.Equals('a'),
