@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 678, y: 342}
   m_MaxSize: {x: 12003, y: 8042}
   vertical: 0
-  controlID: 34
+  controlID: 91
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 342}
   m_MaxSize: {x: 8003, y: 8042}
   vertical: 1
-  controlID: 35
+  controlID: 92
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 81
+  controlID: 67
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -239,8 +239,8 @@ MonoBehaviour:
     y: 483
     width: 874
     height: 344
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 17}
@@ -426,9 +426,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 7a350000
-      m_LastClickedID: 13690
-      m_ExpandedIDs: 6afbffff
+      m_SelectedIDs: 0ae9ffff
+      m_LastClickedID: 0
+      m_ExpandedIDs: aaf8ffff7c360000863600008c360000b2360000c236000084370000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -632,20 +632,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Inventory&Items
+    - Assets/Scripts/UI
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Inventory&Items
+  - Assets/Scripts/UI
   m_LastFoldersGridSize: 64
   m_LastProjectPath: C:\Users\veralimani\Documents\Game Development\BumpkinRat\BumpkinRat
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 149}
-    m_SelectedIDs: fa370000
-    m_LastClickedID: 14330
-    m_ExpandedIDs: 00000000d8370000da370000dc37000000ca9a3b
+    scrollPos: {x: 0, y: 81}
+    m_SelectedIDs: fc380000
+    m_LastClickedID: 14588
+    m_ExpandedIDs: 00000000d2380000d4380000d638000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -673,7 +673,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d8370000da370000dc370000
+    m_ExpandedIDs: 00000000d2380000d4380000d6380000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -698,9 +698,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 80360000
-    m_LastClickedInstanceID: 13952
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 422f0000
+    m_LastClickedInstanceID: 12098
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000bc490000b63e00003a4c00009e370000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -725,7 +725,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 12}
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 274

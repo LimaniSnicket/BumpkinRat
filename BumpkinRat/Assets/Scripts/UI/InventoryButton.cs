@@ -1,20 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class InventoryButton : Button
 {
-    public string ItemNameToDisplay { get; private set; }
+    public string ItemNameToDisplay => associatedItem == null ? string.Empty : associatedItem.DisplayName;
     public string ItemAmountToDisplay { get; private set; }
 
-    int itemId;
+    Item associatedItem;
 
     public TextMeshProUGUI textMesh => gameObject.GetOrAddComponentInChildren<TextMeshProUGUI>();
-
-
 
     protected override void Start()
     {
@@ -26,9 +21,9 @@ public class InventoryButton : Button
 
     }
 
-    public void SetInventoryDisplay(string itemName, string itemAmount)
+    public void SetInventoryDisplay(Item i, string itemAmount)
     {
-        ItemNameToDisplay = itemName;
+        associatedItem = i;
         ItemAmountToDisplay = itemAmount;
 
         textMesh.text = ToString();
@@ -42,14 +37,15 @@ public class InventoryButton : Button
     internal void OnInventoryAdjustment(object source, InventoryAdjustmentEventArgs args)
     {
 
-        if (args.ItemToAdjust.Equals(ItemNameToDisplay))
+        if(args.Listing.item.itemId.Equals(associatedItem.itemId))
         {
             if (args.Removing)
             {
                 Destroy(gameObject);
             }
 
-            SetInventoryDisplay(args.ItemToAdjust, args.NewAmountToDisplay);
+            SetInventoryDisplay(args.Listing.item, args.NewAmountToDisplay);
+
         }
     }
 
