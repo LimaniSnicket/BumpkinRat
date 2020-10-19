@@ -9,6 +9,8 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     public GameObject craftingActionButtonParent;
 
+    public GameObject ratPointer;
+
     public List<CraftingActionButton> craftingActionButtons;
 
     public CraftingMenu MenuFunctionObject { get; set; }
@@ -40,6 +42,9 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         {
             return;
         }
+
+        ratPointer.transform.position = Input.mousePosition;
+
 
         if (Input.GetMouseButtonUp(0))
         {
