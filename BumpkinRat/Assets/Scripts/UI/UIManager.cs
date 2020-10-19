@@ -122,6 +122,7 @@ public class CraftingMenu : UiMenu
 
     public override void CloseMenu()
     {
+        Cursor.visible = true;
         craftingButtonContainer.gameObject.SetActive(false);
         itemCrafter.ClearCraftingHistory();
         BroadcastUiEvent(false);
@@ -129,6 +130,7 @@ public class CraftingMenu : UiMenu
 
     public override void LoadMenu()
     {
+        Cursor.visible = false;
         craftingButtonContainer.gameObject.SetActive(true);
         BroadcastUiEvent(true);
     }

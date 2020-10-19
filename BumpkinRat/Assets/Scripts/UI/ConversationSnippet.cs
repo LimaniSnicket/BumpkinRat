@@ -68,9 +68,9 @@ public class ConversationSnippet : MonoBehaviour
     public void OnSnippetSpawnMoveConversationBubble(object source, EventArgs args)
     {
 
-        float scaleFactor = thisRect.localScale.x / 1;
+        float scaleFactor = thisRect.localScale.x * 1.1f;
 
-        Vector2 setPos = thisRect.localPosition + Vector3.one * 100 * scaleFactor;
+        Vector2 setPos = thisRect.localPosition + ((Vector3.right * -100) + (Vector3.up * 200)) * scaleFactor;
         Vector2 setScale = thisRect.localScale - Vector3.one * 0.2f;
 
         if(setScale.x <= 0)

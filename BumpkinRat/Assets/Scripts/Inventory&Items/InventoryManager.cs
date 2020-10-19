@@ -3,13 +3,13 @@ using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class InventoryManager : MonoBehaviour
 {
     public string itemDataPath;
     public Inventory activeInventory { get; set; }
     public GameObject inventoryMenuObject;
-    public InventoryMenu inventoryMenu;
 
     private void OnEnable()
     {
@@ -17,10 +17,10 @@ public class InventoryManager : MonoBehaviour
         ItemCrafter.CraftedItem += OnCraftedItem;
 
         ItemProvisioner.ItemProvisioning += OnCollectedItem;
+        InventoryButton.FinalPossiblePress += OnInventoryButtonPressed;
 
         activeInventory = new Inventory();
         activeInventory.InitializeInventory();
-        inventoryMenu = new InventoryMenu(inventoryMenuObject != null ? inventoryMenuObject : new GameObject());
     }
 
     void OnCollectedItem(object source, CollectableEventArgs args)
@@ -38,44 +38,36 @@ public class InventoryManager : MonoBehaviour
 
     }
 
-    private void OnDisable()
+    void OnInventoryButtonPressed(object source, InventoryButtonArgs args)
+    {
+        activeInventory.AdjustInventory(args.ItemId, false);
+    }
+
+    private void OnDestroy()
     {
         Collectable.Collected -= OnCollectedItem;
         ItemCrafter.CraftedItem -= OnCraftedItem;
         ItemProvisioner.ItemProvisioning -= OnCollectedItem;
+        InventoryButton.FinalPossiblePress -= OnInventoryButtonPressed;
     }
 }
 
 [Serializable]
 public class Inventory
 {
-    public Dictionary<string, int> inventoryListings;
-
-
-    //todo make inventory int id based!
-    //int id to (string, int) inventory Listing
     Dictionary<int, ItemListing> inventoryListingsByItemId;
-    bool inventoryExists => inventoryListings != null;
-
     bool InventoryValid => inventoryListingsByItemId != null;
 
     public event EventHandler<InventoryAdjustmentEventArgs> InventoryAdjusted;
 
     public void InitializeInventory()
     {
-        inventoryListings = new Dictionary<string, int>();
         inventoryListingsByItemId = new Dictionary<int, ItemListing>();
-    }
-
-    public bool CheckQuantity(string id, int amt = 1)
-    {
-        if (!Owned(id)) { return false; }
-        return inventoryListings[id] >= amt;
     }
 
     public bool CheckQuantity(Item i, int amt = 1)
     {
-        return CheckQuantity(i.identifier, amt);
+        return CheckQuantity(i.itemId, amt);
     }
 
     public bool CheckQuantity(int itemId, int amount = 1)
@@ -88,23 +80,13 @@ public class Inventory
         return inventoryListingsByItemId.ContainsKey(itemId) && inventoryListingsByItemId[itemId].amount >= amount;
     }
 
-    public List<Item> GetItems(params string[] ids)
-    {
-        List<Item> returnItems = new List<Item>();
-       foreach(string i in ids)
-        {
-            if (CheckQuantity(i)) { returnItems.Add(i.GetItem()); }
-        }
-        return returnItems;
-    }
-
     public void AdjustInventory(Recipe crafted, int amt = 1)
     {
-        AdjustInventory(true, crafted.identifier, amt);
+        AdjustInventory(crafted.outputId, true, amt);
         foreach(RecipeIngredient ing in crafted.ingredients)
         {
             Debug.Log("Removing " + ing.id);
-            AdjustInventory(false, ing.id.GetItem().itemName, ing.amount * amt);
+            AdjustInventory(ing.id.GetItem().itemId, false, ing.amount * amt);
         }
     }
 
@@ -112,21 +94,10 @@ public class Inventory
     {
         if(args.CollectedItem == null)
         {
-            AdjustInventory(true, args.CollectableName, args.CollectedAmount);
+            AdjustInventory(args.CollectedItem.itemId, true, args.CollectedAmount);
         } else
         {
             AddToInventory(args.CollectedItem, args.CollectedAmount);
-        }
-    }
-
-    public void AdjustInventory(bool add, string itemName, int amount = 1)
-    {
-        if (add)
-        {
-            AddToInventory(itemName, amount);
-        } else
-        {
-            RemoveFromInventory(itemName, amount);
         }
     }
 
@@ -149,6 +120,9 @@ public class Inventory
         if (addingNew)
         {
             inventoryListingsByItemId.Add(item.itemId, new ItemListing { item = item, amount = amount });
+
+            Debug.Log(inventoryListingsByItemId[item.itemId].ToString());
+
             InventoryAdjusted.BroadcastEvent(this,
                 InventoryAdjustmentEventArgs.FromListing(inventoryListingsByItemId[item.itemId], 'a'));
         }
@@ -179,25 +153,6 @@ public class Inventory
             InventoryAdjustmentEventArgs.FromListing(inventoryListingsByItemId[itemId], add));
     }
 
-    void AddToInventory(string itemName, int amount = 1)
-    {
-        bool addingNew = false;
-        if (ValidInventoryListing(itemName)) {
-            inventoryListings[itemName] += amount;
-        } else
-        {
-            inventoryListings.Add(itemName, amount);
-            addingNew = true;
-        }
-
-        InventoryAdjusted.BroadcastEvent(this,
-            new InventoryAdjustmentEventArgs {
-                ItemToAdjust = itemName,
-                NewAmountToDisplay = inventoryListings[itemName].ToString(),
-                Adding = addingNew
-            }) ;
-    }
-
     void RemoveFromInventory(int itemId, int amount = 1)
     {
         if (Owned(itemId))
@@ -220,69 +175,31 @@ public class Inventory
         }
     }
 
-    void RemoveFromInventory(string itemName, int amountToRemove = 1)
-    {
-        if (ValidInventoryListing(itemName))
-        {
-            if(inventoryListings[itemName] > amountToRemove)
-            {
-                inventoryListings[itemName] -= amountToRemove;
-            } else if(inventoryListings[itemName] < amountToRemove)
-            {
-                Debug.Log("Not enough in inventory");
-            } else
-            {
-                inventoryListings.Remove(itemName);
-
-                InventoryAdjusted.BroadcastEvent(this,
-                    new InventoryAdjustmentEventArgs
-                    {
-                        ItemToAdjust = itemName,
-                        Removing = true
-                    }) ;
-
-                return;
-                      
-            }
-
-            InventoryAdjusted.BroadcastEvent(this,
-                new InventoryAdjustmentEventArgs
-                {
-                    ItemToAdjust = itemName,
-                    NewAmountToDisplay = inventoryListings[itemName].ToString(),
-                }); ;
-        }
-    }
-
-    bool Owned(Item i)
-    {
-        return inventoryListings.ContainsKey(i.identifier);
-    }
-
-    bool Owned(string id)
-    {
-        return inventoryListings.ContainsKey(id);
-    }
-
     bool Owned(int id)
     {
         return InventoryValid && inventoryListingsByItemId.ContainsKey(id);
     }
-
-    bool ValidInventoryListing(string name)
-    {
-        if (!inventoryExists) { return false; }
-        return inventoryListings.ContainsKey(name);
-    }
 }
 
 [Serializable]
-public struct ItemListing
+public class ItemListing
 {
    public Item item { get; set; }
-   public int amount { get; set; }
+    internal int amount;
 
-    public bool EmptyListing => amount <= 0;
+    public int ListingAmount => amount;
+
+    private bool empty;
+    public bool EmptyListing
+    {
+        get
+        {
+            empty = amount <= 0;
+            return empty;
+        }
+    }
+
+    public event EventHandler ItemListingEmpty;
 
     public void Add(int adding)
     {
@@ -292,6 +209,11 @@ public struct ItemListing
     public void Remove(int removing)
     {
         amount -= removing;
+    }
+
+    public override string ToString()
+    {
+        return $"{item.DisplayName}: {amount}";
     }
 }
 

@@ -72,19 +72,32 @@ public class ItemDrop {
     public string ItemToDropName => ToDrop.itemName;
     public int AmountToDrop => Math.Max(0, amountToDrop);
 
+    private Item toDrop;
+
     public Item ToDrop
     {
         get
         {
+            if(toDrop != null)
+            {
+                return toDrop;
+            }
             try
             {
-                return itemId.GetItem();
+                toDrop = itemId.GetItem();
+                return toDrop;
+
             } catch (KeyNotFoundException)
             {
                 return DatabaseContainer.gameData.GetItem(ItemToDropName);
 
             }
         }
+    }
+
+    public static ItemDrop SetFromItem(Item i)
+    {
+        return new ItemDrop { toDrop = i, itemId = i.itemId };
     }
 
     public static List<ItemDrop> GetListOfItemsToDrop(params (string, int)[] drops)
@@ -108,6 +121,8 @@ public interface IDistributeItems<T> where T: ItemDistributor
 
 public abstract class ItemDistributor
 {
+    public bool clearOnDistribute;
+
     public List<ItemDrop> ItemsToDrop { get; set; }
 
     public bool ValidItemDropData => ItemsToDrop.ValidList();

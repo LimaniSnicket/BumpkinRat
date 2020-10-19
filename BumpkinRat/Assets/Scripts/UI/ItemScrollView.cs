@@ -62,7 +62,8 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
         if (args.Adding)
         {
-            SpawnButtonForItem(args.Listing.item, args.NewAmountToDisplay);
+            //SpawnButtonForItem(args.Listing.item, args.NewAmountToDisplay);
+            SpawnButtonForItemListing(args.Listing);
         }
     }
 
@@ -74,9 +75,20 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
         }
 
         InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
-        inventoryButton.SetInventoryDisplay(i, amountLabel);
-        inventoryButton.onClick.AddListener(() => OnClickSpawnPrefabAtTransformPosition());
+        //inventoryButton.SetInventoryDisplay(i, amountLabel);
 
+        inventoryButtons.Add(inventoryButton);
+    }
+
+    void SpawnButtonForItemListing(ItemListing i)
+    {
+        if (inventoryButtons == null)
+        {
+            inventoryButtons = new List<InventoryButton>();
+        }
+
+        InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
+        inventoryButton.SetItemListing(i);
 
         inventoryButtons.Add(inventoryButton);
     }
@@ -84,17 +96,6 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
     public InventoryButton SpawnInventoryButtonFromPrefab()
     {
         return Instantiate(inventoryButtonPrefab, itemScroller.content.transform).GetOrAddComponent<InventoryButton>();
-    }
-
-    void OnClickSpawnAtWorkbench()
-    {
-        workbench.SpawnItemObject(spawnPrefab);
-    }
-
-    void OnClickSpawnPrefabAtTransformPosition()
-    {
-        GameObject obj = Instantiate(spawnPrefab);
-        obj.transform.position = spawnAtTransform.position;
     }
 
     private void OnDestroy()

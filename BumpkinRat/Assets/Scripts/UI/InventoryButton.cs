@@ -1,15 +1,18 @@
 ﻿
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class InventoryButton : Button
 {
-    public string ItemNameToDisplay => associatedItem == null ? string.Empty : associatedItem.DisplayName;
+    public string ItemNameToDisplay => associatedItemListing == null ? string.Empty : associatedItemListing.item.DisplayName;
     public string ItemAmountToDisplay { get; private set; }
 
-    Item associatedItem;
+    ItemListing associatedItemListing;
 
     public TextMeshProUGUI textMesh => gameObject.GetOrAddComponentInChildren<TextMeshProUGUI>();
+
+    public static event EventHandler<InventoryButtonArgs> InventoryButtonPressed, FinalPossiblePress;
 
     protected override void Start()
     {
@@ -17,41 +20,53 @@ public class InventoryButton : Button
 
         transform.GetChild(0).gameObject.SetActive(true);
 
-        onClick.AddListener(() => OnClickPrintToString());
+        onClick.AddListener(() => OnClickBroadcastPressed());
 
     }
 
-    public void SetInventoryDisplay(Item i, string itemAmount)
+    public void SetItemListing(ItemListing listing)
     {
-        associatedItem = i;
-        ItemAmountToDisplay = itemAmount;
-
-        textMesh.text = ToString();
+        associatedItemListing = listing;
+        UpdateDisplay();
     }
 
-    void OnClickPrintToString()
+
+    void UpdateDisplay()
     {
-        print(ToString());
+        textMesh.text = associatedItemListing.ToString();
     }
 
-    internal void OnInventoryAdjustment(object source, InventoryAdjustmentEventArgs args)
+    public void SetUpWorkbenchSpawning(Workbench workbench)
     {
+        workbench.SpawnOnWorkbench(associatedItemListing.item);
+    }
 
-        if(args.Listing.item.itemId.Equals(associatedItem.itemId))
+    void OnClickBroadcastPressed()
+    {
+        associatedItemListing.Remove(1);
+
+        UpdateDisplay();
+
+
+        if (associatedItemListing.EmptyListing)
         {
-            if (args.Removing)
-            {
-                Destroy(gameObject);
-            }
+            FinalPossiblePress.BroadcastEvent(this,
+                new InventoryButtonArgs { ItemId = associatedItemListing.item.itemId });
 
-            SetInventoryDisplay(args.Listing.item, args.NewAmountToDisplay);
+            Destroy(gameObject);
+        } 
+        
+            InventoryButtonPressed.BroadcastEvent(this,
+                new InventoryButtonArgs { AssociatedItem = associatedItemListing.item });
+        
 
-        }
     }
+}
 
-    public override string ToString()
-    {
-        return $"{ItemNameToDisplay}: {ItemAmountToDisplay}";
-    }
+public class InventoryButtonArgs: EventArgs
+{
+    public int ItemId { get; set; }
+    public Item AssociatedItem { get; set; }
 
+    public bool PassByItemId => AssociatedItem == null;
 }
