@@ -31,7 +31,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
 
     public List<ItemDrop> ItemDropData { get; set; }
 
-    public CustomerCraftingOrder CraftingOrderTest;
+    public static CustomerCraftingOrder CraftingOrderTest;
 
     public bool craftingMenuOpened;
 
@@ -45,7 +45,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         StartCoroutine(AddToTimeSpan());
 
         ItemDistributor = new ItemProvisioner(this);
-        ItemDropData = ItemDrop.GetListOfItemsToDrop((4, 1), (5, 2));
+        ItemDropData = ItemDrop.GetListOfItemsToDrop((4, 2));
 
         ItemDistributor.Distribute();
 

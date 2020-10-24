@@ -30,9 +30,9 @@ public class ItemProvisioner : ItemDistributor
         {
             ItemProvisioning(this,
                 new CollectableEventArgs {
-                    CollectedItem = collecting.ToDrop,
+                    ItemToPass = collecting.ToDrop,
                     CollectableName = collecting.ItemToDropName,
-                    CollectedAmount = collecting.AmountToDrop
+                    AmountToPass = collecting.AmountToDrop
                 }) ;
         }
     }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Events;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -18,6 +15,8 @@ public class InventoryManager : MonoBehaviour
 
         ItemProvisioner.ItemProvisioning += OnCollectedItem;
         InventoryButton.FinalPossiblePress += OnInventoryButtonPressed;
+
+        ItemObject.PlaceItemBackInInventory += OnPlaceItemObjectBack;
 
         activeInventory = new Inventory();
         activeInventory.InitializeInventory();
@@ -43,12 +42,20 @@ public class InventoryManager : MonoBehaviour
         activeInventory.AdjustInventory(args.ItemId, false);
     }
 
+    void OnPlaceItemObjectBack(object source, ItemEventArgs args)
+    {
+        activeInventory.AdjustInventory(args);
+    }
+
     private void OnDestroy()
     {
         Collectable.Collected -= OnCollectedItem;
         ItemCrafter.CraftedItem -= OnCraftedItem;
         ItemProvisioner.ItemProvisioning -= OnCollectedItem;
         InventoryButton.FinalPossiblePress -= OnInventoryButtonPressed;
+
+        ItemObject.PlaceItemBackInInventory += OnPlaceItemObjectBack;
+
     }
 }
 
@@ -90,15 +97,9 @@ public class Inventory
         }
     }
 
-    public void AdjustInventory(CollectableEventArgs args)
+    public void AdjustInventory(ItemEventArgs args)
     {
-        if(args.CollectedItem == null)
-        {
-            AdjustInventory(args.CollectedItem.itemId, true, args.CollectedAmount);
-        } else
-        {
-            AddToInventory(args.CollectedItem, args.CollectedAmount);
-        }
+        AddToInventory(args.ItemToPass, args.AmountToPass);
     }
 
     public void AdjustInventory(int itemId, bool add, int amount = 1)
@@ -120,9 +121,6 @@ public class Inventory
         if (addingNew)
         {
             inventoryListingsByItemId.Add(item.itemId, new ItemListing { item = item, amount = amount });
-
-            Debug.Log(inventoryListingsByItemId[item.itemId].ToString());
-
             InventoryAdjusted.BroadcastEvent(this,
                 InventoryAdjustmentEventArgs.FromListing(inventoryListingsByItemId[item.itemId], 'a'));
         }
@@ -201,14 +199,26 @@ public class ItemListing
 
     public event EventHandler ItemListingEmpty;
 
+    public event EventHandler ItemListingChanged;
+
     public void Add(int adding)
     {
         amount += adding;
+        Broadcast();
     }
 
     public void Remove(int removing)
     {
         amount -= removing;
+        Broadcast();
+    }
+
+    void Broadcast()
+    {
+        if(ItemListingChanged != null)
+        {
+            ItemListingChanged(this, new EventArgs());
+        }
     }
 
     public override string ToString()

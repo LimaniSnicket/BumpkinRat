@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -29,20 +27,23 @@ public class CameraManager : MonoBehaviour
 
     private void OnUiEvent(object source, UiEventArgs args)
     {
-        basicCameraFollow.enabled = !args.load;
 
-        if (!args.load)
+        if (UIManager.MenuActive)
         {
-            basicCameraFollow.SetRotationToOriginal();
+            basicCameraFollow.enabled = false;
         } else
         {
-            if (args.menuLoaded == MenuType.Crafting)
+            basicCameraFollow.enabled = true;
+            basicCameraFollow.SetRotationToOriginal();
+        }
+
+        if (args.menuLoaded == MenuType.Crafting)
+        {
+            if (args.load)
             {
                 ChangeViewTo();
             }
         }
-
-     
     }
 
     public static void ChangeViewTo()

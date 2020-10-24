@@ -21,24 +21,23 @@ public class InventoryButton : Button
         transform.GetChild(0).gameObject.SetActive(true);
 
         onClick.AddListener(() => OnClickBroadcastPressed());
-
     }
 
     public void SetItemListing(ItemListing listing)
     {
+        listing.ItemListingChanged += OnItemListingChange;
         associatedItemListing = listing;
         UpdateDisplay();
     }
 
+    void OnItemListingChange(object source, EventArgs args)
+    {
+        UpdateDisplay();
+    }
 
     void UpdateDisplay()
     {
         textMesh.text = associatedItemListing.ToString();
-    }
-
-    public void SetUpWorkbenchSpawning(Workbench workbench)
-    {
-        workbench.SpawnOnWorkbench(associatedItemListing.item);
     }
 
     void OnClickBroadcastPressed()
@@ -57,16 +56,25 @@ public class InventoryButton : Button
         } 
         
             InventoryButtonPressed.BroadcastEvent(this,
-                new InventoryButtonArgs { AssociatedItem = associatedItemListing.item });
+                new InventoryButtonArgs { 
+                    ItemToPass = associatedItemListing.item , 
+                    ItemId = associatedItemListing.item.itemId
+                });
         
 
     }
+
+    protected override void OnDestroy()
+    {
+        if(associatedItemListing != null)
+        {
+            associatedItemListing.ItemListingChanged -= OnItemListingChange;
+        }
+    }
 }
 
-public class InventoryButtonArgs: EventArgs
+public class InventoryButtonArgs: ItemEventArgs
 {
     public int ItemId { get; set; }
-    public Item AssociatedItem { get; set; }
-
-    public bool PassByItemId => AssociatedItem == null;
+    public bool PassByItemId => ItemToPass == null;
 }

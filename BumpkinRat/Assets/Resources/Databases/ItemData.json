@@ -20,18 +20,13 @@
 		},
 		{
             "itemId": 4,
-            "itemName": "nunchuck_left",
+            "itemName": "nunchuck_broken_half",
             "craftable": false,
-            "value": 0
+            "value": 0,
+			"prefabPath": "Assets/Prefabs/Item Prefabs/broken_nunchuck.prefab"
         },
         {
             "itemId": 5,
-            "itemName": "nunchuck_right",
-            "craftable": false,
-            "value": 0
-        },
-        {
-            "itemId": 6,
             "itemName": "nunchuck_fixed",
             "craftable": true,
             "value": 1
@@ -41,18 +36,17 @@
 	"RecipeData":[
 		{
             "recipeId": 0,
-            "outputID": 6,
+            "outputID": 5,
             "recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
             "ingredients": [
                 {
                     "id": 4,
-                    "amount":  1
-                }, 
-                {
-                    "id": 5,
-                    "amount": 1
+                    "amount":  2
                 }
-            ]
+            ],
+			"craftingSequences":[
+				"Action(Id:4 FA:0) --> ATTACH --> Target(Id:4 FA:0)"
+			]
         }
 	]
 }

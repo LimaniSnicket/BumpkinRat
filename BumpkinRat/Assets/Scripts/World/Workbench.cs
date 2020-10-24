@@ -26,7 +26,7 @@ public class Workbench : MonoBehaviour, IDistributeItems<ItemPlacer>
 
     void OnInventoryButtonPressed(object source, InventoryButtonArgs args)
     {
-        SpawnOnWorkbench(args.AssociatedItem);
+        SpawnOnWorkbench(args.ItemToPass);
     }
 
     public void AddItemToDrop(Item item)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ItemObject : MonoBehaviour
+public class ItemObject : MonoBehaviour, IOccupyPositions
 {
     public int itemId;
 
@@ -17,12 +17,10 @@ public class ItemObject : MonoBehaviour
     
     public bool MouseHoveringOnItemObject { get; private set; }
     Dictionary<int, FocusArea> FocusAreaLookup { get; set; }
-
-    ItemObject connectedTo;
-
-    int placementPosition = -1;
+    public OccupiedPosition Occupied { get; set; }
 
     public static event EventHandler<ItemObjectEventArgs> InteractedWithItemObject;
+    public static event EventHandler<ItemEventArgs> PlaceItemBackInInventory;
 
     Dictionary<CraftingSequence, ItemObjectSnapshot> localItemObjectHistoryCache;
 
@@ -31,6 +29,17 @@ public class ItemObject : MonoBehaviour
         positionOccupiedBy = Enumerable.Repeat("empty", Math.Max(numberOfPositions, 1)).ToArray();
         localItemObjectHistoryCache = new Dictionary<CraftingSequence, ItemObjectSnapshot>();
         SetFocusAreaDictionary();
+    }
+
+    private void Update()
+    {
+        if(NumberOfInFocusAreas() > 0 && Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("Put item back into inventory!");
+            PlaceItemBackInInventory.BroadcastEvent(this, new ItemEventArgs { ItemToPass = itemId.GetItem() });
+            OccupiedPosition.Release(this);
+            Destroy(gameObject);
+        }
     }
 
     public void SetFromItem(Item item)
@@ -60,6 +69,11 @@ public class ItemObject : MonoBehaviour
 
             MouseHoveringOnItemObject = false;
         }
+    }
+
+    public void ConnectFocusAreas(int thisFocusId, FocusArea other)
+    {
+
     }
 
     void SetFocusAreaDictionary()
@@ -110,14 +124,11 @@ public class ItemObject : MonoBehaviour
         localItemObjectHistoryCache.Add(craftingSequence, ItemObjectSnapshot.TakeSnapshot(transform));
     }
 
-    public void Place(ItemPlacer placer)
-    {
-
-    }
 }
 
 public class ItemObjectEventArgs: EventArgs
 {
+    public bool PutBack { get; set; }
     public ItemObject InteractedWith { get; set; }
     public FocusArea AtFocusArea { get; set; }
 }

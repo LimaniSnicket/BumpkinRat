@@ -22,7 +22,7 @@ public class Collectable : MonoBehaviour
     {
         if(Collected != null) { Collected(this, new CollectableEventArgs() { 
             CollectableName = itemName, 
-            CollectedAmount = Math.Max(amnt, amount) 
+            AmountToPass = Math.Max(amnt, amount) 
         }) ; }
     }
 
@@ -41,9 +41,7 @@ public class Collectable : MonoBehaviour
     }
 }
 
-public class CollectableEventArgs : EventArgs
+public class CollectableEventArgs : ItemEventArgs
 {
-    public Item CollectedItem { get; set; }
     public string CollectableName { get; set; }
-    public int CollectedAmount { get; set; }
 }
