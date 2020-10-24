@@ -116,6 +116,7 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemPlacer.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemProvisioner.cs" />
+    <Compile Include="Assets\Scripts\Inventory&amp;Items\RecipeProgressTracker.cs" />
     <Compile Include="Assets\Scripts\Npc\NpcBehavior.cs" />
     <Compile Include="Assets\Scripts\Planting\Plant.cs" />
     <Compile Include="Assets\Scripts\Planting\PlantingManager.cs" />

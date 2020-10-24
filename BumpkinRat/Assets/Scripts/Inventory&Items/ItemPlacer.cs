@@ -41,7 +41,12 @@ public class ItemPlacer : ItemDistributor
     {
         placementPositions = new List<Vector3>(vects);
         int index = 0;
-        occupiedPositions = placementPositions.Select(p => new OccupiedPosition { position = p, positionIndex = index++ }).ToList();
+        Vector3 eulers = Vector3.zero;
+        occupiedPositions = placementPositions.Select(p => new OccupiedPosition 
+        { position = p,
+          eulers = eulers + (Vector3.up * 90 * index),
+          positionIndex = index++
+        }).ToList();
     }
 
     int Next()
@@ -74,8 +79,8 @@ public class ItemPlacer : ItemDistributor
             int next = Next();
             if (next > -1)
             {
-                GameObject g = GameObject.Instantiate(prefab);
-                occupiedPositions[next].Occupy(g.transform);
+                ItemObject itemObject = ItemsToDrop[i].ToDrop.SpawnFromPrefabPath();
+                occupiedPositions[next].Occupy(itemObject);
             } else
             {
                 Debug.LogWarning("Can no longer spawn items here!");
@@ -93,6 +98,8 @@ public class ItemPlacer : ItemDistributor
 public class OccupiedPosition: INullable
 {
     public Vector3 position;
+
+    public Vector3 eulers;
     public bool Occupied { get; set; }
 
     public int positionIndex;
@@ -107,5 +114,36 @@ public class OccupiedPosition: INullable
         t.position = position;
     }
 
+    public void Occupy(ItemObject itemObject)
+    {
+        Occupied = true;
+
+        GameObject instantiate = GameObject.Instantiate(itemObject.gameObject);
+
+        float yOffset = instantiate.GetComponent<MeshFilter>().mesh.bounds.extents.y;
+
+        instantiate.transform.position = position + Vector3.up * yOffset;
+
+        instantiate.transform.rotation = Quaternion.Euler(eulers);
+
+        instantiate.GetComponent<ItemObject>().Occupied = this;
+    }
+
+    public static void Release(IOccupyPositions occupying)
+    {
+        if(occupying.Occupied != null)
+        {
+            occupying.Occupied.Occupied = false;
+            occupying.Occupied = null;
+        }
+    }
+
     public static OccupiedPosition Null => new OccupiedPosition { isNull = true };
+}
+
+
+public interface IOccupyPositions
+{
+    OccupiedPosition Occupied { get; set; }
+
 }

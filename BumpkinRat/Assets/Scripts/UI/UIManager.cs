@@ -7,7 +7,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     private static UIManager uiManager;
-    public static bool MenuActive { get; private set; }
+    public static bool MenuActive => ActiveMenus.ValidList();
     public static MenuType ActiveMenu { get; private set; }
 
     public static List<MenuType> ActiveMenus { get; private set; }
@@ -23,11 +23,6 @@ public class UIManager : MonoBehaviour
 
     void OnUiEvent(object source, UiEventArgs args)
     {
-        if (args.load)
-        {
-            MenuActive = args.load;
-        }
-
         ActiveMenus.HandleInstanceObjectInList(args.menuLoaded, args.load);
     }
 

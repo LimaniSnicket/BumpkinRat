@@ -34,6 +34,8 @@ public class FocusArea : MonoBehaviour
     private void Update()
     {
         spriteRenderer.color = parentItemObject.NumberOfInFocusAreas() > 0 ? Color.blue : Color.gray;
+        transform.forward = Camera.main.transform.forward * -1;
+
     }
 
     void OnItemObjectFocusChange(bool inFocus)
@@ -68,8 +70,6 @@ public class FocusArea : MonoBehaviour
             StopCoroutine(exitProcess);
         }
 
-        transform.forward = Camera.main.transform.forward * -1;
-
         transform.localScale = Vector3.one + MathfX.PulseVector3(0.3f, 0.3f, 1, 2f);
     }
 
@@ -93,6 +93,6 @@ public class FocusArea : MonoBehaviour
 
     public override string ToString()
     {
-        return $"{parentItemObject.name} Id:{parentItemObject.itemId} FA:{focusAreaId}";
+        return $"Id:{parentItemObject.itemId} FA:{focusAreaId}";
     }
 }

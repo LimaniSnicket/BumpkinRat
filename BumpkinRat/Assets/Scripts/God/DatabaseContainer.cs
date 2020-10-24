@@ -45,10 +45,6 @@ public class GameData
     public Dictionary<int, Item> ItemIdLookup => ItemData.ToDictionary(i => i.itemId);
     public Dictionary<int, Recipe> RecipeIdLookup => RecipeData.ToDictionary(i => i.recipeId);
 
-    public Dictionary<Item, List<Recipe>> ItemToRecipeLookup => 
-        ItemData.Where(i => i.craftable).
-        ToDictionary(r => r, r => GetRecipesOfOutputId(r.itemId));
-
 
     public List<Item> GetItemData() { 
         return ItemData; 
@@ -65,6 +61,11 @@ public class GameData
         return RecipeData.Where(r => r.outputId == id).ToList();
     }
 
+    public List<Recipe> GetCraftableRecipes(Dictionary<int, int> availableIngredients)
+    {
+        return RecipeData.Where(r => r.Craftable(availableIngredients)).ToList();
+    }
+
     public bool HasRecipe(Item i)
     {
         if(RecipeIdLookup == null)
@@ -79,12 +80,6 @@ public class GameData
     public Recipe GetRecipe(int index)
     {
         return RecipeIdLookup[index];
-    }
-
-    public Recipe GetRecipe(string lookup)
-    {
-        if (!item_recipe_lookup.ContainsKey(lookup)) { return new Recipe(); }
-        return item_recipe_lookup[lookup];
     }
 
     public Item GetItem(string itemID)

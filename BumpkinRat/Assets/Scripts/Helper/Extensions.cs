@@ -261,6 +261,37 @@ public static class GenericX
         }
     }
 
+    public static void Decrement<T>(this Dictionary<T, int> dict, T key, out KeyValuePair<T, int> altered, bool removeLessThanEqualToZero = true)
+    {
+        int outValue = 0;
+
+        if (dict.ContainsKey(key))
+        {
+            int newAmount = dict[key] - 1;
+            if(newAmount <= 0 && removeLessThanEqualToZero)
+            {
+                dict.Remove(key);
+            } else
+            {
+                dict[key] = newAmount;
+                outValue = newAmount;
+            }
+        }
+
+        altered = new KeyValuePair<T, int>(key, outValue);
+    }
+
+    public static void AddMany<T, U>(this Dictionary<T, U> dict, IEnumerable<KeyValuePair<T, U>> adding)
+    {
+        if (dict.CollectionIsNotNullOrEmpty() && adding.CollectionIsNotNullOrEmpty())
+        {
+            foreach(var a in adding)
+            {
+                dict.Add(a.Key, a.Value);
+            }
+        }
+    }
+
     public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
     {
         if(handler != null)

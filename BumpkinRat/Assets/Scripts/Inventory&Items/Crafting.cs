@@ -4,12 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ItemCrafter
 {
     public static event EventHandler<CraftingEventArgs> CraftedItem;
-
-    public string actionItem, targetItem, actionToTake;
 
     public CraftingSequence activeSequence;
     Stack<CraftingSequence> completedCraftingSequences; //use this for caching itemObject positions and rotations to undo crafting actions!
@@ -18,31 +17,54 @@ public class ItemCrafter
     public static bool CraftingSequenceActive { get; private set; }
 
     Dictionary<CraftingAction, int> CraftingHistory { get; set; }
+
+    Dictionary<int, int> activeItemObjects;
+
+    List<Recipe> potentialCraftingCache;
+
+    RecipeProgressTracker progressTracker;
+    
     public ItemCrafter() 
     {
         CraftingHistory = new Dictionary<CraftingAction, int>();
-        actionItem = "null";
-        actionToTake = "NONE";
-        targetItem = "null";
 
         activeSequence = new CraftingSequence();
         completedCraftingSequences = new Stack<CraftingSequence>();
 
+        potentialCraftingCache = new List<Recipe>();
+        activeItemObjects = new Dictionary<int, int>();
+
+        progressTracker = new RecipeProgressTracker();
+
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
+        ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
+        InventoryButton.InventoryButtonPressed += OnInventoryButtonPressed;
+    }
+
+    private void OnItemObjectPlacedBack(object sender, ItemEventArgs e)
+    {
+        KeyValuePair<int, int> altered;
+        activeItemObjects.Decrement(e.ItemToPass.itemId, out altered);
+        RefineCraftingCache(altered);
+        progressTracker.RemoveFromCache(altered);
     }
 
     void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
     {
         activeSequence.SetFromItemObjectEventArgs(args);
-
     }
 
-    public void CraftRecipe(Recipe r, int amt)
+    void OnInventoryButtonPressed(object source, InventoryButtonArgs args)
     {
-        if(CraftedItem != null)
-        {
-            CraftedItem(this, new CraftingEventArgs { craftedRecipe = r, craftedAmount = amt });
-        }
+        activeItemObjects.Increment(args.ItemId);
+        potentialCraftingCache = DatabaseContainer.gameData.GetCraftableRecipes(activeItemObjects);
+        progressTracker.AddToCache(activeItemObjects);
+    }
+
+    void RefineCraftingCache(KeyValuePair<int, int> altered)
+    {
+        potentialCraftingCache = potentialCraftingCache.Where(p => !p.RenderedUncraftable(altered)).ToList();
+        Debug.Log(potentialCraftingCache.Count);
     }
 
     public void TakeCraftingAction(MonoBehaviour host, CraftingAction craftingAction)
@@ -58,7 +80,6 @@ public class ItemCrafter
     IEnumerator CraftingAction(CraftingAction craftingAction, float waitTime)
     {
         TakingCraftingAction = true;
-        actionToTake = craftingAction.ToString();
 
         activeSequence.actionTaken = craftingAction;
 
@@ -79,8 +100,6 @@ public class ItemCrafter
 
     public void ClearCraftingHistory()
     {
-        targetItem = "null";
-        actionItem = "null";
         CraftingHistory.Clear();
         completedCraftingSequences.Clear();
         activeSequence.ClearSequence();
@@ -103,15 +122,30 @@ public class ItemCrafter
             Debug.Log(activeSequence.ToString());
             activeSequence.RegisterSuccessfulSequenceConclusion();
             completedCraftingSequences.Push(activeSequence);
+
             activeSequence = new CraftingSequence();
+
+            Debug.Log(RecipeSuccesfullyCompleted());
         }
 
         activeSequence.ClearSequence();
     }
 
+    bool RecipeSuccesfullyCompleted() //check only 1 deep for now!
+    {
+        if (!potentialCraftingCache.ValidList())
+        {
+            return false;
+        }
+
+        return potentialCraftingCache[0].craftingSequences.Contains(completedCraftingSequences.Peek().ToString());
+    }
+
     public void UnsubscribeToEvents()
     {
-        ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
+        ItemObject.InteractedWithItemObject -= OnInteractedWithItemObject;
+        InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
+        ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
     }
 }
 
@@ -123,6 +157,7 @@ public struct CraftingSequence
     public CraftingAction actionTaken;
 
     public static event EventHandler CraftingSequenceCompleted;
+    public CraftingSequenceTaken onSequence; 
 
     public void SetFromItemObjectEventArgs(ItemObjectEventArgs args)
     {
@@ -172,14 +207,24 @@ public struct CraftingSequence
         return actionItemObject != null && targetItemObject != null && !actionTaken.Equals(CraftingAction.NONE);
     }
 
-    public void BroadcastCraftingSequenceTaken()
+    void OnSequence()
     {
-        
+        if(onSequence == null)
+        {
+            onSequence = new CraftingSequenceTaken();
+        }
+
+        onSequence.Invoke();
     }
 
     public override string ToString()
     {
-        return $"Action Item: {actionItemAtFocusArea} --> {actionTaken} --> Target Item: {targetItemAtFocusArea}";
+        return $"Action({actionItemAtFocusArea}) --> {actionTaken} --> Target({targetItemAtFocusArea})";
+    }
+
+    public class CraftingSequenceTaken : UnityEvent
+    {
+
     }
 }
 
