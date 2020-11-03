@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -16,8 +18,9 @@ public class ConversationUi : MonoBehaviour
     Stack<string> storedMessages;
 
     private bool responding;
+    private bool responseEnabled;
 
-    public bool CanRespond => responding;
+    public bool CanRespond => responding && responseEnabled;
     public string joined;
 
     StringBuilder stringBuilder;
@@ -28,7 +31,14 @@ public class ConversationUi : MonoBehaviour
     public ConversationAesthetic currentConversationAesthetic;
     ConversationResponseDisplay[] conversationResponses;
 
-    KeyCode[] inputKeys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3 };
+    public CustomerDialogueTracker conversationTracker;
+
+    Dictionary<KeyCode, string> keyToResponseLevel = new Dictionary<KeyCode, string>
+    {
+        { KeyCode.Alpha1, "low" },
+        { KeyCode.Alpha2, "medium" },
+        { KeyCode.Alpha3, "high" }
+    };
 
     private void Start()
     {
@@ -36,7 +46,13 @@ public class ConversationUi : MonoBehaviour
         stringBuilder = new StringBuilder();
         loremIpsum = new LoremIpsum();
         currentConversationAesthetic = ConversationAesthetic.SpookyConversationAesthetic;
-        conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), currentConversationAesthetic);
+        conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), 
+            currentConversationAesthetic);
+
+        CustomerDialogue activeConversation = GeneralStorePrologue.CraftingOrderTest.GetCustomerDialogueForOrder();
+        conversationTracker = CustomerDialogueTracker.GetCustomerDialogueTracker(activeConversation);
+
+        StartCoroutine(RunCustomerDialogueIntro(activeConversation));
     }
 
     private void OnEnable()
@@ -51,17 +67,20 @@ public class ConversationUi : MonoBehaviour
 
     private void Update()
     {
-        UpdateConversationDisplay();
 
-
-        for(int i = 0; i< inputKeys.Length; i++)
+        if (!responseEnabled)
         {
-            if (Input.GetKeyDown(inputKeys[i]))
+            return;
+        }
+
+        foreach(KeyValuePair<KeyCode, string> pairs in keyToResponseLevel)
+        {
+            if (Input.GetKeyDown(pairs.Key))
             {
-                RespondMessage(inputKeys[i]);
-                Debug.Log(conversationResponses[i].ToString());
+                RespondMessage(pairs.Key);
             }
         }
+
     }
 
     void BroadcastMessageSpawning()
@@ -76,65 +95,147 @@ public class ConversationUi : MonoBehaviour
     {
         if (!responding)
         {
-            StartCoroutine(TakeResponse(pressed));
+            StartCoroutine(TakeResponseFromConversationIntro(pressed, conversationTracker));
         }
     }
 
-    IEnumerator TakeResponse(KeyCode pressed)
+    IEnumerator TakeResponseFromConversationIntro(KeyCode pressed, CustomerDialogueTracker tracker)
     {
+        string level = string.Empty;
+        bool valid = keyToResponseLevel.TryGetValue(pressed, out level);
+
         responding = true;
 
-        BroadcastMessageSpawning();
+        Dictionary<string, string> responseMap = tracker.Tracking.introResponses.ToDictionary(r => r.responseLevel, r => r.displayDialogue);
 
-        string response = $"{$"Responding with {pressed}", 0:F3}";
-        storedMessages.Push(response);
+        if (responseMap.ContainsKey(level) && !tracker.DialogueComplete)
+        {
+            string message = responseMap[level];
 
-        InstantiateConversationSnippet(storedMessages.Peek(), true);
-        yield return new WaitForSeconds(0.25f);
+            ConversationResponseDisplay.SetAllInactive();
 
+            if (message != string.Empty)
+            {
+                ConversationSnippet snip;
+                InstantiateConversationSnippet(message, true, out snip);
 
-        stringBuilder.AppendLine(storedMessages.Peek());
-        joined = stringBuilder.ToString();
+                while (snip.Typing)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
 
-        yield return new WaitForSeconds(1);
-        BroadcastMessageSpawning();
+                yield return new WaitForSeconds(0.25f);
 
-        SetConversationNodeToRespondTo();
+            }
+
+            yield return StartCoroutine(GetCustomerResponse(tracker, level));
+
+        }
+
         responding = false;
+
+        yield return null;
     }
 
-    void SetConversationNodeToRespondTo()
+    IEnumerator GetCustomerResponse(CustomerDialogueTracker tracker, string level)
     {
-        string lorem = loremIpsum.GetLoremIpsum();
-        storedMessages.Push(lorem + ".");
-        stringBuilder.AppendLine(storedMessages.Peek());
-        joined = stringBuilder.ToString();
+        BroadcastMessageSpawning();
+        ConversationSnippet snip;
 
-        InstantiateConversationSnippet(storedMessages.Peek(), false);
+        string message = tracker.Tracking.promptedCustomerDialogue[tracker.DialogueIndex].GetCustomerResponse(level);
+
+        InstantiateConversationSnippet(message, false, out snip);
+
+        while (snip.Typing)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        ConversationResponseDisplay.SetFromConversationResponses(tracker.GetResponses());
+        tracker.Advance();
+
+        if (tracker.DialogueComplete)
+        {
+            ConversationSnippet.DestroyAllSnippets(this);
+        }
     }
 
-    void UpdateConversationDisplay()
+    public void InstantiateConversationSnippet(string message, bool response, out ConversationSnippet snippet)
     {
-    
+        ConversationSnippet snip = GetSnippet(message, response);
+        snippet = snip;
     }
 
-    public void InstantiateConversationSnippet(string message, bool response)
+    IEnumerator RunCustomerDialogueIntro(CustomerDialogue dialogue)
+    {
+        yield return StartCoroutine(ReadMultiLineConversationSnippet(dialogue.introLines));
+        yield return new WaitForSeconds(0.2f);
+        ConversationResponseDisplay.SetFromConversationResponses(dialogue.introResponses);
+    }
+
+    IEnumerator ReadMultiLineConversationSnippet(string[] lines)
+    {
+        if (!lines.CollectionIsNotNullOrEmpty())
+        {
+            yield return null;
+        }
+
+        responseEnabled = false;
+
+        int tracker = 0;
+        int amount = lines.Length;
+
+        Debug.Log($"Reading multiple lines: {amount}");
+
+        yield return new WaitForSeconds(0.5f);
+
+        ConversationSnippet active = GetSnippet(lines[tracker], false);
+        BroadcastMessageSpawning();
+
+        while (tracker < amount)
+        {
+            if (active.Typing)
+            {
+                yield return new WaitForEndOfFrame();
+            } else
+            {
+                yield return new WaitForSeconds(1.5f);
+                try
+                {
+                    active = GetSnippet(lines[tracker + 1], false);
+                    BroadcastMessageSpawning();
+                    tracker++;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    break;
+                }
+            }
+        }
+
+        responseEnabled = true;
+
+    }
+
+    ConversationSnippet GetSnippet(string message, bool response)
     {
         GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
         ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
         convoSnippet.isResponse = response;
         convoSnippet.SetConversationUi(this);
         convoSnippet.ApplyConversationAesthetic(currentConversationAesthetic);
-        convoSnippet.SetPositionAndScale(conversationSnippetSpawnPoint, Vector2.one);
-        convoSnippet.ConversationDisplayTMPro.text = message;
+        convoSnippet.InitializeSnippet(conversationSnippetSpawnPoint);
+        convoSnippet.ReadLine(message, 0.07f);
+        return convoSnippet;
     }
 }
 
 [Serializable]
 public struct ConversationResponseDisplay
 {
-    //set to low, medium, or high
-    static string[] priorities = {"Low", "Medium", "High" };
+    static string[] priorities = { "low", "medium", "high" };
     private int priority;
 
     public int Priority => priority;
@@ -143,14 +244,30 @@ public struct ConversationResponseDisplay
 
     private Image backing;
     private TextMeshProUGUI textMesh;
+    private RectTransform rectTransform;
+
+    private Color activeColor, inactiveColor;
+
+    public bool Active { get; private set; }
+
+    public static Dictionary<string, ConversationResponseDisplay> ActiveInConversation { get; private set; }
 
     ConversationResponseDisplay(int pri, GameObject prefab)
     {
-        priority = pri;
+        priority = SetPriority(pri);
         responseMessageDisplay = string.Empty;
 
         backing = prefab.GetOrAddComponent<Image>();
         textMesh = backing.GetComponentInChildren<TextMeshProUGUI>();
+        rectTransform = backing.GetComponent<RectTransform>();
+        activeColor = Color.white;
+        inactiveColor = Color.clear;
+        Active = false;
+
+        if(ActiveInConversation == null)
+        {
+            ActiveInConversation = new Dictionary<string, ConversationResponseDisplay>();
+        }
     }
 
     public static ConversationResponseDisplay[] GetResponseDisplays(GameObject[] uiElements, ConversationAesthetic aesthetics)
@@ -160,11 +277,50 @@ public struct ConversationResponseDisplay
         for(int i = 0; i< arr.Length; i++)
         {
             arr[i] = new ConversationResponseDisplay(i, uiElements[i]);
-            arr[i].SetDisplayString($"{priorities[i]} Level Response!");
+            arr[i].SetDisplayString(". . .");
             arr[i].ApplyConversationAesthetic(aesthetics);
+
+            ActiveInConversation.AddOrReplaceKeyValue(priorities[i], arr[i]);
+
+            arr[i].SetActiveState(false);
         }
 
         return arr;
+    }
+
+    public static void SetFromConversationResponses(PlayerResponse[] responses)
+    {
+        if (responses.CollectionIsNotNullOrEmpty())
+        {
+            Dictionary<string, string> mapResponses = responses.ToDictionary(r => r.responseLevel.ToLower(), r => r.displayDialogue);
+            for(int i = 0; i < priorities.Length; i++)
+            {
+                string level = priorities[i];
+
+                try
+                {
+                    ActiveInConversation[level].SetDisplayString(mapResponses[level]);
+                    ActiveInConversation[level].SetActiveState(true);
+
+                } catch (KeyNotFoundException)
+                {
+
+                }
+            }
+        }
+    }
+
+    public static void SetAllInactive()
+    {
+        for(int i = 0; i < ActiveInConversation.Values.Count; i++)
+        {
+            ActiveInConversation.ElementAt(i).Value.SetActiveState(false);
+        }
+    }
+
+    public string GetResponseLevel()
+    {
+        return priorities[priority];
     }
 
     public void SetDisplayString(string message)
@@ -173,15 +329,35 @@ public struct ConversationResponseDisplay
         textMesh.text = responseMessageDisplay;
     }
 
-    public void SetPriority(int i)
+    static int SetPriority(int i)
     {
-        priority = Mathf.Clamp(i, 0, 2);
+        return Mathf.Clamp(i, 0, 2);
     }
 
     public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
     {
-        backing.color = aesthetic.GetBubbleColor(false);
+        activeColor = aesthetic.GetBubbleColor(false);
+        inactiveColor = new Color(activeColor.r, activeColor.g, activeColor.b, 0.5f);
+
+        backing.color = inactiveColor;
         textMesh.color = aesthetic.GetTextColor(false);
+    }
+
+    void SetActiveState(bool active)
+    {
+        if (active)
+        {
+            backing.color = activeColor;
+            rectTransform.localScale = Vector3.one;
+
+        } else
+        {
+            backing.color = inactiveColor;
+            rectTransform.localScale = Vector3.one * 0.5f;
+            SetDisplayString(". . .");
+        }
+
+        Active = active;
     }
 
     public override string ToString()

@@ -1,0 +1,14 @@
+{
+	"npcEntries":[
+		{
+			"npcId": 0,
+			"npcName": "Assets/Resources/Froggert.json",
+			"conversationDataPath": "Assets/Resources/Froggert.json"
+		},
+		{
+			"npcId": 1,
+			"npcName": "Skeeter",
+			"conversationDataPath": ""
+		}
+	]
+}

@@ -7,7 +7,7 @@ using System.Linq;
 
 public class DatabaseContainer : MonoBehaviour
 {
-    public string itemDataPath, plantDataPath;
+    public string itemDataPath, plantDataPath, npcDataPath;
     private static DatabaseContainer database;
     public static GameData gameData { get; private set; }
 
@@ -21,6 +21,9 @@ public class DatabaseContainer : MonoBehaviour
      void InitializeData()
     {
         gameData = itemDataPath.InitializeFromJSON<GameData>();
+
+        NpcData.InitializeFromPath(npcDataPath);
+
         //gameData.plantData = plantDataPath.InitializeFromJSON<PlantDataStorage>();
     }
 
@@ -80,17 +83,6 @@ public class GameData
     public Recipe GetRecipe(int index)
     {
         return RecipeIdLookup[index];
-    }
-
-    public Item GetItem(string itemID)
-    {
-        try
-        {
-            return ItemMap[itemID];
-        } catch (KeyNotFoundException)
-        {
-            return new Item { itemName = $"{itemID}_invalid", value = -1 };
-        }
     }
 
     public Item GetItem(int id)

@@ -1,0 +1,42 @@
+﻿{
+	"dialogueId": 0,
+	"levelId": 0,
+	"introLines":[
+		"Hey cuzz I...*sniff*",
+		"fell while trick or treatin' and...*sniff*",
+        "B-b-broke my nunchuck!", 
+		"I can't fight crime without it!",
+        "Can you fix it...?"
+	],
+
+	"introResponses":[
+		{
+			"responseLevel": "medium",
+			"displayDialogue": "No worries buddy, I can fix that up"
+		}
+	],
+
+	"promptedCustomerDialogue":[
+		{
+			"medium": "Aw thanks cuzzo! You're the greatest!",
+
+			"possibleResponses":[
+				{
+					"responseLevel": "low",
+					"displayDialogue": "Don't mention it bud"
+				},
+				{
+					"responseLevel": "medium",
+					"displayDialogue": "Anytime sport, it's no problem!"
+				},
+				{
+					"responseLevel": "high",
+					"displayDialogue": "No problem buddy, I know you love Halloween!"
+				}
+			]
+		},
+		{
+			"high": "some response idk"
+		}
+	]
+}

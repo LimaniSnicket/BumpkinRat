@@ -96,8 +96,8 @@
     <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Camera\CursorTrail.cs" />
     <Compile Include="Assets\Scripts\Dialogue\Dialogue.cs" />
-    <Compile Include="Assets\Scripts\Dialogue\DialogueExtensions.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueRunner.cs" />
+    <Compile Include="Assets\Scripts\Dialogue\DialogueX.cs" />
     <Compile Include="Assets\Scripts\Dialogue\TextReaderExperiment.cs" />
     <Compile Include="Assets\Scripts\God\DatabaseContainer.cs" />
     <Compile Include="Assets\Scripts\God\MouseManager.cs" />
@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\Helper\Enums.cs" />
     <Compile Include="Assets\Scripts\Helper\Extensions.cs" />
     <Compile Include="Assets\Scripts\Helper\LoremIpsum.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\ILevel.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IRealTimeDependent.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\ItemProvisioner.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\RecipeProgressTracker.cs" />
     <Compile Include="Assets\Scripts\Npc\NpcBehavior.cs" />
+    <Compile Include="Assets\Scripts\Npc\NpcData.cs" />
     <Compile Include="Assets\Scripts\Planting\Plant.cs" />
     <Compile Include="Assets\Scripts\Planting\PlantingManager.cs" />
     <Compile Include="Assets\Scripts\Planting\PlantingSpace.cs" />

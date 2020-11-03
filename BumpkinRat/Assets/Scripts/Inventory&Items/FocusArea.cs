@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class FocusArea : MonoBehaviour
@@ -7,16 +8,24 @@ public class FocusArea : MonoBehaviour
     private ItemObject parentItemObject;
     SphereCollider sphereCollider;
     SpriteRenderer spriteRenderer;
+    TextMeshPro numberDisplay;
 
     public int focusAreaId;
 
+    bool Selected { get; set; }
     internal bool IsFocus { get; set; }
+
+    Vector3 originalScale;
 
     private void OnEnable()
     {
         AssignParentItemObject();
         sphereCollider = GetComponent<SphereCollider>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        numberDisplay = GetComponentInChildren<TextMeshPro>();
+        originalScale = transform.localScale;
+
+        SetNumberDisplay();
     }
     void AssignParentItemObject()
     {
@@ -33,22 +42,9 @@ public class FocusArea : MonoBehaviour
 
     private void Update()
     {
-        spriteRenderer.color = parentItemObject.NumberOfInFocusAreas() > 0 ? Color.blue : Color.gray;
+        spriteRenderer.color = parentItemObject.NumberOfInFocusAreas() > 0 ? Color.cyan : Color.gray;
         transform.forward = Camera.main.transform.forward * -1;
-
-    }
-
-    void OnItemObjectFocusChange(bool inFocus)
-    {
-        sphereCollider.enabled = true;
-        spriteRenderer.color = inFocus ? Color.blue : Color.gray;
-        transform.forward = Camera.main.transform.forward * -1;
-    }
-
-    void SetFocusAreaSprite()
-    {
-        spriteRenderer.color = Color.gray;
-        transform.forward = Camera.main.transform.forward * -1;
+        if(Selected && !ItemCrafter.CraftingSequenceActive) { Selected = false; }
     }
 
 
@@ -56,6 +52,16 @@ public class FocusArea : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (!Selected)
+        {
+            transform.localScale = originalScale.PulseVector3(1.2f, 0.1f, 2, 3f);
+
+        } else
+        {
+            transform.localScale = originalScale;
+            return;
+        }
+
         if (!IsFocus && parentItemObject.NumberOfInFocusAreas() == 0)
         {
             IsFocus = true;
@@ -70,13 +76,13 @@ public class FocusArea : MonoBehaviour
             StopCoroutine(exitProcess);
         }
 
-        transform.localScale = Vector3.one + MathfX.PulseVector3(0.3f, 0.3f, 1, 2f);
     }
 
     private void OnMouseDown()
     { 
         ItemCrafter.BeginCraftingSequence();
-        parentItemObject.BroadcastInteractionWithFocusArea(this);  
+        parentItemObject.BroadcastInteractionWithFocusArea(this);
+        Selected = true;
     }
 
     private void OnMouseExit()
@@ -88,7 +94,19 @@ public class FocusArea : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         IsFocus = false;
-        transform.localScale = Vector3.one;
+        transform.localScale = originalScale;
+    }
+
+    void SetNumberDisplay()
+    {
+        try
+        {
+            numberDisplay.text = focusAreaId.ToString();
+        }
+        catch (NullReferenceException)
+        {
+
+        }
     }
 
     public override string ToString()

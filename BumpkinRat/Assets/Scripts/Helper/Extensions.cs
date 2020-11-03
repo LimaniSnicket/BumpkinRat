@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-using UnityEngine;
+using UnityEngine.Events;
 
 public static class GenericX
 {
@@ -283,7 +283,7 @@ public static class GenericX
 
     public static void AddMany<T, U>(this Dictionary<T, U> dict, IEnumerable<KeyValuePair<T, U>> adding)
     {
-        if (dict.CollectionIsNotNullOrEmpty() && adding.CollectionIsNotNullOrEmpty())
+        if (dict != null && adding.CollectionIsNotNullOrEmpty())
         {
             foreach(var a in adding)
             {
@@ -292,11 +292,90 @@ public static class GenericX
         }
     }
 
+    public static void FilterOut<T, U>(this Dictionary<T, U> dict, Func<T, bool> predicate)
+    {
+        try
+        {
+            if (dict.CollectionIsNotNullOrEmpty())
+            {
+                foreach (var kp in dict)
+                {
+                    if (predicate(kp.Key))
+                    {
+                        dict.Remove(kp.Key);
+                    }
+                }
+            }
+        }
+        catch(InvalidOperationException)
+        {
+
+        }
+    }
+
+    public static void AddOrReplaceKeyValue<T, U>(this Dictionary<T, U> dict, T key, U value)
+    {
+        if(dict != null)
+        {
+            if (dict.ContainsKey(key))
+            {
+                dict[key] = value;
+            } else
+            {
+                dict.Add(key, value);
+            }
+        }
+    }
+
+    public static void RemoveKeys<T, U, K>(this Dictionary<T, U> dict, Func<K, bool> predicate, Func<K, T> output, params K[] keys)
+    {
+        if (!dict.CollectionIsNotNullOrEmpty() || !keys.CollectionIsNotNullOrEmpty())
+        {
+            return;
+        }
+
+        for(int i = 0; i < keys.Length; i++)
+        {
+            if (predicate(keys[i])) {
+            
+            }
+        }
+
+     /*   foreach(T key in keys)
+        {
+            if (dict.ContainsKey(key))
+            {
+                dict.Remove(key);
+            }
+        }*/
+    }
+
+/*    public static void FilterOutRemoveListeners<TKey, TValue, T>(this Dictionary<TKey, TValue> dict, Func<TKey, bool> predicate, UnityEvent<T> eventCall, string callback)
+    {
+        if (dict.CollectionIsNotNullOrEmpty())
+        {
+            foreach(var kp in dict)
+            {
+                if (predicate(kp.Key))
+                {
+                }
+            }
+        }
+    }*/
+
     public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
     {
         if(handler != null)
         {
             handler(source, eventArgs);
+        }
+    }
+
+    public static void BroadcastEvent(this EventHandler handler, object source)
+    {
+        if(handler != null)
+        {
+            handler(source, new EventArgs());
         }
     }
 
@@ -338,13 +417,18 @@ public static class MathfX
 
     public static float PulseSineFloat(float modifier, float freq, float offset, float amplitude)
     {
-        float pulseValue = (amplitude * Mathf.Sin(Time.time * TAU * freq)) + offset;
-        return (pulseValue * modifier);
+        float pulseValue = (amplitude * Mathf.Sin(Time.time * TAU * freq));
+        return (pulseValue * modifier) + offset;
     }
 
     public static Vector3 PulseVector3(float modifier, float freq, float offset, float amplitude)
     {
         return Vector3.one * PulseSineFloat(modifier, freq, offset, amplitude);
+    }
+
+    public static Vector3 PulseVector3(this Vector3 scale, float modifier, float freq, float offset, float amplitude)
+    {
+        return scale * PulseSineFloat(modifier, freq, offset, amplitude);
     }
 
     public static bool Squeeze(this Vector3 c, Vector3 comp, float threshold = 0.001f)
@@ -428,21 +512,12 @@ public static class CraftX
         collect.SetItemName(itemName);
         collect.amount = amnt;
     }
-    public static Item GetItem(this string id)
-    {
-        return DatabaseContainer.gameData.GetItem(id);
-    }
 
     public static Item GetItem(this int id)
     {
         return DatabaseContainer.gameData.GetItem(id);
     }
 
-    public static Item GetItem(this string id, Inventory i)
-    {
-        Item it = id.GetItem();
-        return i.CheckQuantity(it, 1) ? it : null;
-    }
 
    public static string ToID(this string display)
     {

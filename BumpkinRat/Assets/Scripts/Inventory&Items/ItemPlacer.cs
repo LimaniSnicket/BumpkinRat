@@ -19,6 +19,7 @@ public class ItemPlacer : ItemDistributor
     {
         Placer = placer;
         clearOnDistribute = true;
+        RecipeProgressTracker.onRecipeCompleted.AddListener(PlaceFromRecipe);
     }
 
     public void SetPrefab(GameObject p)
@@ -93,9 +94,17 @@ public class ItemPlacer : ItemDistributor
             ItemsToDrop.Clear();
         }
     }
+
+    void PlaceFromRecipe(Recipe recipe)
+    {
+        Item i = recipe.GetOutputItem();
+        ItemDrop drop = ItemDrop.SetFromItem(i);
+        ItemsToDrop.Add(drop);
+        Distribute();
+    }
 }
 
-public class OccupiedPosition: INullable
+public class OccupiedPosition
 {
     public Vector3 position;
 
@@ -103,10 +112,6 @@ public class OccupiedPosition: INullable
     public bool Occupied { get; set; }
 
     public int positionIndex;
-
-    public bool IsNull => isNull;
-
-    bool isNull;
 
     public void Occupy(Transform t)
     {
@@ -118,15 +123,17 @@ public class OccupiedPosition: INullable
     {
         Occupied = true;
 
-        GameObject instantiate = GameObject.Instantiate(itemObject.gameObject);
+        //GameObject instantiate = GameObject.Instantiate(itemObject.gameObject);
 
-        float yOffset = instantiate.GetComponent<MeshFilter>().mesh.bounds.extents.y;
+        float yOffset = itemObject.GetComponent<MeshFilter>().mesh.bounds.extents.y;
 
-        instantiate.transform.position = position + Vector3.up * yOffset;
+        itemObject.transform.position = position + Vector3.up * yOffset;
 
-        instantiate.transform.rotation = Quaternion.Euler(eulers);
+        itemObject.transform.rotation = Quaternion.Euler(eulers);
 
-        instantiate.GetComponent<ItemObject>().Occupied = this;
+        itemObject.Occupied = this;
+
+        //instantiate.GetComponent<ItemObject>().Occupied = this;
     }
 
     public static void Release(IOccupyPositions occupying)
@@ -137,8 +144,6 @@ public class OccupiedPosition: INullable
             occupying.Occupied = null;
         }
     }
-
-    public static OccupiedPosition Null => new OccupiedPosition { isNull = true };
 }
 
 

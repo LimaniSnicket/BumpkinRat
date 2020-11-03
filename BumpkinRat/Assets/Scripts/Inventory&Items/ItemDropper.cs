@@ -89,7 +89,7 @@ public class ItemDrop {
 
             } catch (KeyNotFoundException)
             {
-                return DatabaseContainer.gameData.GetItem(ItemToDropName);
+                return DatabaseContainer.gameData.GetItem(itemId);
 
             }
         }
