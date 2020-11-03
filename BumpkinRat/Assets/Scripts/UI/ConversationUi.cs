@@ -49,7 +49,7 @@ public class ConversationUi : MonoBehaviour
         conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), 
             currentConversationAesthetic);
 
-        CustomerDialogue activeConversation = GeneralStorePrologue.CraftingOrderTest.GetCustomerDialogueForOrder();
+        CustomerDialogue activeConversation = GeneralStorePrologue.CraftingOrderTest.GetCustomerDialogue();
         conversationTracker = CustomerDialogueTracker.GetCustomerDialogueTracker(activeConversation);
 
         StartCoroutine(RunCustomerDialogueIntro(activeConversation));

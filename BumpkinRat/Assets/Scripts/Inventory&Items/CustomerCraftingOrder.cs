@@ -21,6 +21,11 @@ public class CustomerOrder
         host.StartCoroutine(WaitForNpcDatabase(level));
     }
 
+    public CustomerDialogue GetCustomerDialogue()
+    {
+        return orderDialogueCache;
+    }
+
     IEnumerator WaitForNpcDatabase(ILevel level)
     {
         while (!NpcData.CanRead)
