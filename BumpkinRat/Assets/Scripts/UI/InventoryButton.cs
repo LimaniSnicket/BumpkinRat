@@ -1,5 +1,4 @@
-﻿
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -14,6 +13,8 @@ public class InventoryButton : Button
 
     public static event EventHandler<InventoryButtonArgs> InventoryButtonPressed, FinalPossiblePress;
 
+    public static bool CanSpawnItems { get; set; }
+
     protected override void Start()
     {
         base.Start();
@@ -21,6 +22,11 @@ public class InventoryButton : Button
         transform.GetChild(0).gameObject.SetActive(true);
 
         onClick.AddListener(() => OnClickBroadcastPressed());
+    }
+
+    private void Update()
+    {
+        interactable = CanSpawnItems;
     }
 
     public void SetItemListing(ItemListing listing)

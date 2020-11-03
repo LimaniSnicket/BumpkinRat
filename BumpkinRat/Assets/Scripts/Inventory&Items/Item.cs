@@ -20,7 +20,7 @@ public class Item: Identifiable, IComparable<Item>
 
     public bool PrefabPathExists => prefabPath != null && prefabPath != string.Empty;
 
-    private static Dictionary<int, ItemObject> ItemObjectCache { get; set; }
+    private static Dictionary<int, GameObject> ItemObjectCache { get; set; }
 
     bool CheckCache()
     {
@@ -42,21 +42,26 @@ public class Item: Identifiable, IComparable<Item>
     {
         if(ItemObjectCache == null)
         {
-            ItemObjectCache = new Dictionary<int, ItemObject>();
+            ItemObjectCache = new Dictionary<int, GameObject>();
         }
         try
         {
 
             if (CheckCache())
             {
-                return ItemObjectCache[itemId];
+                Debug.Log("Spawning from cache!");
+                return GameObject.Instantiate(ItemObjectCache[itemId]).GetOrAddComponent<ItemObject>();
             }
 
-            ItemObject itemObj = (ItemObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(ItemObject));
-            ItemObjectCache.Add(itemId, itemObj);
+            GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
+
+            ItemObject itemObj = GameObject.Instantiate(gameObject).GetOrAddComponent<ItemObject>();
+
+            ItemObjectCache.Add(itemId, gameObject);
+
             return itemObj;
 
-        } catch (NullReferenceException)
+        } catch (ArgumentException)
         {
             return new GameObject("Invalid_Item_Object", typeof(ItemObject)).GetComponent<ItemObject>();
         }
@@ -78,6 +83,11 @@ public class Recipe: Identifiable
     public string identifier => outputName;
 
     public Dictionary<int, int> IngredientMap => ingredients.ToDictionary(k => k.id, k => k.amount);
+
+    public bool ValidateCraftingSequence(CraftingSequence sequence)
+    {
+        return craftingSequences.Contains(sequence.ToString());
+    }
 
     public bool Craftable(Inventory inventory)
     {

@@ -29,14 +29,15 @@
             "itemId": 5,
             "itemName": "nunchuck_fixed",
             "craftable": true,
-            "value": 1
+            "value": 1,
+			"prefabPath": "Assets/Prefabs/Item Prefabs/fixed_nunchuck.prefab"
         }
 	], 
 
 	"RecipeData":[
 		{
             "recipeId": 0,
-            "outputID": 5,
+            "outputId": 5,
             "recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
             "ingredients": [
                 {
@@ -47,6 +48,24 @@
 			"craftingSequences":[
 				"Action(Id:4 FA:0) --> ATTACH --> Target(Id:4 FA:0)"
 			]
-        }
+        },
+		{
+			"recipeId": 1,
+			"outputId": 3,
+			"recipeDescription": "An action figure that'll make all the cowboy dolls jealous.",
+			"ingredients":[
+				{
+					"id": 1,
+					"amount": 1
+				},
+				{
+					"id": 2,
+					"amount": 1
+				}
+			],
+			"craftingSequences": [
+				"Action(Id:1 FA:0) --> ATTACH --> Target(Id:2 FA:0)"
+			]
+		}
 	]
 }

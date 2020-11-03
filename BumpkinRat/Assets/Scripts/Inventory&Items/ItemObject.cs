@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using DG.Tweening;
 
 public class ItemObject : MonoBehaviour, IOccupyPositions
 {
     public int itemId;
 
     Item item;
-
     public bool Altered { get; private set; }
-
-    public int numberOfPositions;
-
-    public string[] positionOccupiedBy;
-    
+  
     public bool MouseHoveringOnItemObject { get; private set; }
     Dictionary<int, FocusArea> FocusAreaLookup { get; set; }
     public OccupiedPosition Occupied { get; set; }
@@ -24,21 +20,35 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
 
     Dictionary<CraftingSequence, ItemObjectSnapshot> localItemObjectHistoryCache;
 
+    public KeyValuePair<int, int> AsKeyValue => new KeyValuePair<int, int>(itemId, 1);
+
     private void Start()
     {
-        positionOccupiedBy = Enumerable.Repeat("empty", Math.Max(numberOfPositions, 1)).ToArray();
         localItemObjectHistoryCache = new Dictionary<CraftingSequence, ItemObjectSnapshot>();
         SetFocusAreaDictionary();
     }
 
     private void Update()
     {
-        if(NumberOfInFocusAreas() > 0 && Input.GetKeyDown(KeyCode.Q))
+
+        if(NumberOfInFocusAreas() > 0)
         {
-            Debug.Log("Put item back into inventory!");
-            PlaceItemBackInInventory.BroadcastEvent(this, new ItemEventArgs { ItemToPass = itemId.GetItem() });
-            OccupiedPosition.Release(this);
-            Destroy(gameObject);
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Debug.Log("Put item back into inventory!");
+                PlaceItemBackInInventory.BroadcastEvent(this, new ItemEventArgs { ItemToPass = itemId.GetItem() });
+                OccupiedPosition.Release(this);
+                Destroy(gameObject);
+            }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+
+                //right click, rotate to right, left click rotate left, scroll up/down rotate up/down
+                RotateViaMouseInput();
+                Vector3 rot = new Vector3(MouseManager.delta.y, 0, MouseManager.delta.x);
+                //transform.eulerAngles += rot;
+            }
         }
     }
 
@@ -46,6 +56,23 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
     {
         itemId = item.itemId;
         this.item = item;
+    }
+
+    public static void DestroyItemObjects(params ItemObject[] itemObjects)
+    {
+        foreach(ItemObject i in itemObjects)
+        {
+            if(i != null)
+            {
+                i.DestroyItemObject();
+            }
+        }
+    }
+
+    void DestroyItemObject()
+    {
+        OccupiedPosition.Release(this);
+        Destroy(gameObject);
     }
 
     private void OnMouseEnter()
@@ -57,7 +84,6 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
             return;
         }
 
-        //InteractedWithItemObject.BroadcastEvent(this, new ItemObjectEventArgs { InteractedWith = this });
         MouseHoveringOnItemObject = true;
     }
 
@@ -69,6 +95,36 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
 
             MouseHoveringOnItemObject = false;
         }
+    }
+
+    bool rotating = false;
+    private void RotateViaMouseInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Rotate(Vector3.up * -1);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Rotate(Vector3.up);
+        }
+
+        if(Input.mouseScrollDelta != Vector2.zero)
+        {
+            Rotate(Vector3.right * Input.mouseScrollDelta);
+        }
+   
+    }
+
+    void Rotate(Vector3 direction)
+    {
+        if (rotating)
+        {
+            return;
+        }
+
+        transform.DOBlendableLocalRotateBy(direction * 45, .3f);
     }
 
     public void ConnectFocusAreas(int thisFocusId, FocusArea other)

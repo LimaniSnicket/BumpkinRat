@@ -102,9 +102,7 @@ public class CraftingMenu : UiMenu
 
     void GenerateCraftingActionButtons(GameObject prefab, CraftingUI driver)
     {
-        //Rect dimensions = prefab.GetComponent<RectTransform>().rect;
-
-        for (int i = 0; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
+        for (int i = 1; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
         {
             craftingButtonContainer.SpawnAtAlternatingVerticalPositions(prefab, 100, 150);
             CraftingActionButton craftAction = craftingButtonContainer.GetLastChild().GetComponent<CraftingActionButton>();//CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
@@ -118,6 +116,7 @@ public class CraftingMenu : UiMenu
     public override void CloseMenu()
     {
         Cursor.visible = true;
+        InventoryButton.CanSpawnItems = false;
         craftingButtonContainer.gameObject.SetActive(false);
         itemCrafter.ClearCraftingHistory();
         BroadcastUiEvent(false);
@@ -126,6 +125,7 @@ public class CraftingMenu : UiMenu
     public override void LoadMenu()
     {
         Cursor.visible = false;
+        InventoryButton.CanSpawnItems = true;
         craftingButtonContainer.gameObject.SetActive(true);
         BroadcastUiEvent(true);
     }

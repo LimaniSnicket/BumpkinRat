@@ -73,6 +73,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDataPath: Assets/Resources/Databases/ItemData.json
   plantDataPath: Assets/Resources/Databases/PlantData.json
+  npcDataPath: Assets/Resources/Databases/NpcDatabase.json
+  basicItemPrefab: {fileID: 4283768427672359767, guid: a78a38d48a4767f4d97ff69c35935032,
+    type: 3}
 --- !u!114 &3821557882347245512
 MonoBehaviour:
   m_ObjectHideFlags: 0

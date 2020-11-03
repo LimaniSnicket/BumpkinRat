@@ -13,10 +13,12 @@ public class CursorTrail : MonoBehaviour
     Transform trailTransform;
     Camera thisCamera;
 
+    public Material trailMaterial;
+
     // Start is called before the first frame update
     void Start()
     {
-        thisCamera = GetComponent<Camera>();
+        thisCamera = Camera.main;//GetComponent<Camera>();
 
         GameObject trailObj = new GameObject("Mouse Trail");
         trailTransform = trailObj.transform;
@@ -26,8 +28,8 @@ public class CursorTrail : MonoBehaviour
         trail.time = trailTime;
         trail.startWidth = startWidth;
         trail.endWidth = endWidth;
-        trail.numCapVertices = 2;
-        trail.sharedMaterial = new Material(Shader.Find("Unlit/Color"));
+        trail.numCapVertices = 3;
+        trail.sharedMaterial = trailMaterial ?? new Material(Shader.Find("Unlit/Color"));
         trail.sharedMaterial.color = trailColor;
     }
 

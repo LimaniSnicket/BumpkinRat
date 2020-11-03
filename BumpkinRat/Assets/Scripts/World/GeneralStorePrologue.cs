@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisioner>
+public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisioner>, ILevel
 {
     RealTimeCounter prologueCounter;
 
@@ -30,8 +30,10 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     public ItemProvisioner ItemDistributor { get; set; }
 
     public List<ItemDrop> ItemDropData { get; set; }
+    public string LevelName => "General Store...";
+    public int LevelId => 0;
 
-    public static CustomerCraftingOrder CraftingOrderTest;
+    public static CustomerOrder CraftingOrderTest;
 
     public bool craftingMenuOpened;
 
@@ -49,7 +51,14 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
 
         ItemDistributor.Distribute();
 
-        CraftingOrderTest = new CustomerCraftingOrder { customerName = "Froggert", recipeLookupIds = new int[]{ 0 } };
+        CraftingOrderTest = new CustomerOrder { 
+            npcId = 0,
+            orderDetails = new OrderDetails { 
+                orderType = OrderType.CRAFTING,
+                orderLookupId = 0
+            } ,
+        };
+        CraftingOrderTest.Initialize(this, this);
 
 /*        craftingUi = FindObjectOfType<CraftingUI>();
         craftingUi.enabled = false;*/

@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +18,6 @@ public class ItemCrafter
     Dictionary<CraftingAction, int> CraftingHistory { get; set; }
 
     Dictionary<int, int> activeItemObjects;
-
-    List<Recipe> potentialCraftingCache;
-
     RecipeProgressTracker progressTracker;
     
     public ItemCrafter() 
@@ -31,10 +27,10 @@ public class ItemCrafter
         activeSequence = new CraftingSequence();
         completedCraftingSequences = new Stack<CraftingSequence>();
 
-        potentialCraftingCache = new List<Recipe>();
         activeItemObjects = new Dictionary<int, int>();
 
         progressTracker = new RecipeProgressTracker();
+        RecipeProgressTracker.onRecipeCompleted.AddListener(PrintRecipe);
 
         ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
         ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
@@ -45,7 +41,6 @@ public class ItemCrafter
     {
         KeyValuePair<int, int> altered;
         activeItemObjects.Decrement(e.ItemToPass.itemId, out altered);
-        RefineCraftingCache(altered);
         progressTracker.RemoveFromCache(altered);
     }
 
@@ -57,15 +52,9 @@ public class ItemCrafter
     void OnInventoryButtonPressed(object source, InventoryButtonArgs args)
     {
         activeItemObjects.Increment(args.ItemId);
-        potentialCraftingCache = DatabaseContainer.gameData.GetCraftableRecipes(activeItemObjects);
         progressTracker.AddToCache(activeItemObjects);
     }
 
-    void RefineCraftingCache(KeyValuePair<int, int> altered)
-    {
-        potentialCraftingCache = potentialCraftingCache.Where(p => !p.RenderedUncraftable(altered)).ToList();
-        Debug.Log(potentialCraftingCache.Count);
-    }
 
     public void TakeCraftingAction(MonoBehaviour host, CraftingAction craftingAction)
     {
@@ -102,7 +91,6 @@ public class ItemCrafter
     {
         CraftingHistory.Clear();
         completedCraftingSequences.Clear();
-        activeSequence.ClearSequence();
     }
 
     public static void BeginCraftingSequence()
@@ -113,6 +101,7 @@ public class ItemCrafter
     public static void EndCraftingSequence()
     {
         CraftingSequenceActive = false;
+        CraftingActionButton.ResetCraftingButtonActivation();
     }
 
     public void EndLocalCraftingSequence()
@@ -124,21 +113,15 @@ public class ItemCrafter
             completedCraftingSequences.Push(activeSequence);
 
             activeSequence = new CraftingSequence();
-
-            Debug.Log(RecipeSuccesfullyCompleted());
+            progressTracker.RegisterCraftingSequenceProgress(completedCraftingSequences.Peek(), activeItemObjects);
         }
 
         activeSequence.ClearSequence();
     }
 
-    bool RecipeSuccesfullyCompleted() //check only 1 deep for now!
+    void PrintRecipe(Recipe r)
     {
-        if (!potentialCraftingCache.ValidList())
-        {
-            return false;
-        }
-
-        return potentialCraftingCache[0].craftingSequences.Contains(completedCraftingSequences.Peek().ToString());
+        Debug.Log($"{r.GetOutputItem().DisplayName}:{r.recipeDescription}");
     }
 
     public void UnsubscribeToEvents()
@@ -159,6 +142,13 @@ public struct CraftingSequence
     public static event EventHandler CraftingSequenceCompleted;
     public CraftingSequenceTaken onSequence; 
 
+    public (KeyValuePair<int, int>, KeyValuePair<int, int>) GetKeyValues()
+    {
+        KeyValuePair<int, int> defaultPair = new KeyValuePair<int, int>(-1, -1);
+        return (actionItemObject == null ? defaultPair : actionItemObject.AsKeyValue, 
+            targetItemObject == null ? defaultPair : targetItemObject.AsKeyValue);
+    }
+
     public void SetFromItemObjectEventArgs(ItemObjectEventArgs args)
     {
         if(actionItemObject == null)
@@ -176,6 +166,14 @@ public struct CraftingSequence
             targetItemObject = args.InteractedWith;
             targetItemAtFocusArea = args.AtFocusArea.ToString();
         }
+    }
+
+    public void DemolishObjects(Dictionary<int, int> removeFrom)
+    {
+        if(actionItemObject != null) { removeFrom.Remove(actionItemObject.itemId); }
+        if (targetItemObject != null) { removeFrom.Remove(targetItemObject.itemId); }
+
+        ItemObject.DestroyItemObjects(actionItemObject, targetItemObject);
     }
 
     public void RegisterSuccessfulSequenceConclusion()
@@ -292,5 +290,6 @@ public enum CraftingAction
     PLACE = 1,
     ATTACH = 2,
     HAMMER = 3,
-    THREAD = 4
+    THREAD = 4,
+    GLUE = 5
 }
