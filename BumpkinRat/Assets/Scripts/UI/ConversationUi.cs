@@ -222,6 +222,7 @@ public class ConversationUi : MonoBehaviour
     ConversationSnippet GetSnippet(string message, bool response)
     {
         GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
+        snippet.transform.SetAsFirstSibling();
         ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
         convoSnippet.isResponse = response;
         convoSnippet.SetConversationUi(this);
