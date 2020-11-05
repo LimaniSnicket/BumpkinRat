@@ -2,12 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 
 
 [Serializable]
 public class CustomerOrder
 {
+    public static Queue<CustomerOrder> ActiveOrders { get; private set; } = new Queue<CustomerOrder>();
+    private static List<CustomerOrder> orderBacklog = new List<CustomerOrder>();
+
     public OrderDetails orderDetails;
 
     private CustomerDialogue orderDialogueCache;
@@ -37,13 +41,43 @@ public class CustomerOrder
         CustomerName = entry.NpcName;
 
         orderDialogueCache = entry.GetCustomerDialogue(level.LevelId, 0);
-
-        Debug.Log(orderDialogueCache.ToString());
     }
 
     public static Queue<CustomerOrder> GenerateCustomerQueue()
     {
         return new Queue<CustomerOrder>();
+    }
+
+    public static void QueueCustomers(params CustomerOrder[] orders)
+    {
+        foreach(var order in orders)
+        {
+            ActiveOrders.Enqueue(order);
+        }
+        Debug.Log(VisualizeQueue());
+
+    }
+
+    public static void QueueCustomersIntoFreshQueue(params CustomerOrder[] orders)
+    {
+        SendActiveOrdersToBacklog();
+        QueueCustomers(orders);
+    }
+
+    static void SendActiveOrdersToBacklog()
+    {
+        if(ActiveOrders.Count > 0)
+        {
+            orderBacklog.AddRange(ActiveOrders);
+        }
+
+        ActiveOrders.Clear();
+    }
+
+    static string VisualizeQueue()
+    {
+        int pos = 1;
+        return string.Join($" {pos++}. ", ActiveOrders.Select(o => o.CustomerName));
     }
 
     public override string ToString()

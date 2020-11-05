@@ -69,11 +69,14 @@ public struct NpcDatabaseEntry
     [SerializeField] int npcId;
     [SerializeField] string npcName;
     [SerializeField] string conversationDataPath;
+    [SerializeField] string texturePath;
 
     CustomerDialogueStorage dialogueStorage;
 
     public int? NpcId => npcId;
     public string NpcName => npcName;
+
+    public string TexturePath => texturePath;
 
     public CustomerDialogue GetCustomerDialogue(int levelId, int dialogueId)
     {
@@ -89,7 +92,6 @@ public struct NpcDatabaseEntry
 
     public CustomerDialogueStorage GetStoredDialogueStorage()
     {
-        Debug.Log(ToString());
         if (dialogueStorage == null && !string.IsNullOrWhiteSpace(conversationDataPath))
         {
             dialogueStorage = conversationDataPath.InitializeFromJSON<CustomerDialogueStorage>();

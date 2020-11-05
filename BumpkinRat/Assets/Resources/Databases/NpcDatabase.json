@@ -3,7 +3,8 @@
 		{
 			"npcId": 0,
 			"npcName": "Froggert",
-			"conversationDataPath": "Assets/Resources/Froggert.json"
+			"conversationDataPath": "Assets/Resources/Froggert.json",
+			"texturePath": "Assets/Visuals/NPCs/FrogFriend.png"
 		},
 		{
 			"npcId": 1,

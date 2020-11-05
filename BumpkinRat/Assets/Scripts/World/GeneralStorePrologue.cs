@@ -60,6 +60,8 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         };
         CraftingOrderTest.Initialize(this, this);
 
+        CustomerOrder.QueueCustomers(CraftingOrderTest, CraftingOrderTest);
+
 /*        craftingUi = FindObjectOfType<CraftingUI>();
         craftingUi.enabled = false;*/
 
