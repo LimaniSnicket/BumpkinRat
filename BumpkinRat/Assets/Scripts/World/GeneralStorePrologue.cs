@@ -49,6 +49,8 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         ItemDistributor = new ItemProvisioner(this);
         ItemDropData = ItemDrop.GetListOfItemsToDrop((4, 2));
 
+        ItemDistributor.Distribute();
+
         CraftingOrderTest = new CustomerOrder { 
             npcId = 0,
             orderDetails = new OrderDetails { 
