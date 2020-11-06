@@ -9,7 +9,20 @@
 		{
 			"npcId": 1,
 			"npcName": "Skeeter",
-			"conversationDataPath": ""
+			"conversationDataPath": "",
+			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
+		},
+		{
+			"npcId": 2,
+			"npcName": "Grandma Squirrel",
+			"conversationDataPath": "",
+			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
+		},
+		{
+			"npcId": 3,
+			"npcName": "Snazzy Racoon Gramps",
+			"conversationDataPath": "",
+			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
 		}
 	]
 }

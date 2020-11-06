@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using System.Collections;
+using DG.Tweening;
 
 public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
 {
@@ -17,6 +19,10 @@ public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
 
     private Color activeColor, inactiveColor;
 
+    private Vector2 originalPosition;
+
+    private RectTransform rect;
+
     private void Start()
     {
         if(craftingActionButtonActivated == null)
@@ -26,8 +32,29 @@ public class CraftingActionButton: MonoBehaviour, IPointerEnterHandler
 
         craftingActionButtonActivated.AddListener(OnButtonActivated);
         image = gameObject.GetOrAddComponent<Image>();
+
+        rect = image.GetComponent<RectTransform>();
+
+        originalPosition = rect.localPosition;
+
         inactiveColor = image.color;
         activeColor = Color.white;
+
+        StartCoroutine(MoveToNewLocationWithinUnitSphere(5));
+    }
+
+    IEnumerator MoveToNewLocationWithinUnitSphere(float duration)
+    {
+        Vector2 randoSpot = originalPosition + UnityEngine.Random.insideUnitCircle * CraftingUI.distraction * 100;
+
+        float distance = Vector2.Distance(randoSpot.normalized, rect.localPosition.normalized);
+
+
+        float timingOffset = UnityEngine.Random.Range(0, 2); 
+
+        rect.DOLocalMove(randoSpot, (duration * distance) + timingOffset);
+        yield return new WaitForSeconds((duration * distance) + timingOffset);
+        yield return StartCoroutine(MoveToNewLocationWithinUnitSphere(duration));
     }
 
     public static CraftingActionButton GetCraftingButtonFromGameObject(GameObject gameObject)

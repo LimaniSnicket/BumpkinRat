@@ -20,9 +20,38 @@ public class CustomerOrder
 
     public string CustomerName { get; private set; }
 
-    public void Initialize(ILevel level, MonoBehaviour host)
+    public void Initialize<T>(T host) where T : MonoBehaviour, ILevel
     {
-        host.StartCoroutine(WaitForNpcDatabase(level));
+        host.StartCoroutine(WaitForNpcDatabase(host));
+    }
+
+    public static CustomerOrder[] CreateCustomerOrders(params (int, OrderType, int)[] orderParams)
+    {
+        return orderParams.Select(o => CreateCustomerOrder(o.Item1, o.Item2, o.Item3)).ToArray();
+    }
+
+    public static CustomerOrder CreateCustomerOrder(int npcId, OrderType orderType, int orderId)
+    {
+        return new CustomerOrder
+        {
+            npcId = npcId,
+            orderDetails = new OrderDetails
+            {
+                orderLookupId = orderId,
+                orderType = orderType
+            }
+        };
+    }
+
+    public static void InitializeAll<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
+    {
+        if (orders.CollectionIsNotNullOrEmpty())
+        {
+            foreach(CustomerOrder order in orders)
+            {
+                order.Initialize(host);
+            }
+        }
     }
 
     public CustomerDialogue GetCustomerDialogue()

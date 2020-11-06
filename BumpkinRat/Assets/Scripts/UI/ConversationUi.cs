@@ -201,7 +201,7 @@ public class ConversationUi : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             } else
             {
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(1.2f);
                 try
                 {
                     active = GetSnippet(lines[tracker + 1], false);
@@ -222,7 +222,7 @@ public class ConversationUi : MonoBehaviour
     ConversationSnippet GetSnippet(string message, bool response)
     {
         GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
-        snippet.transform.SetAsFirstSibling();
+        //snippet.transform.SetAsFirstSibling();
         ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
         convoSnippet.isResponse = response;
         convoSnippet.SetConversationUi(this);
