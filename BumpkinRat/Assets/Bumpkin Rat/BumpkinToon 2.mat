@@ -70,15 +70,15 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Outline: 0
+    - _Outline: 0.000182
     - _Parallax: 0.02
-    - _Shadow: 0.503
+    - _Shadow: 0.339
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.959852, b: 0.6603774, a: 1}
+    - _Color: {r: 1, g: 0.65882355, b: 0.7521272, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
