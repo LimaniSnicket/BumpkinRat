@@ -24,6 +24,8 @@ public class ConversationSnippet : MonoBehaviour
     public bool isResponse;
 
     Vector2 originalPosition;
+    Vector2 defaultResponseTextPos = new Vector2(-55,7); 
+    Vector2 defaultConvoTextPos = new Vector2(15, -14);
 
     static EventHandler DestroySnippet;
 
@@ -100,8 +102,12 @@ public class ConversationSnippet : MonoBehaviour
 
         if (isResponse)
         {
+
             ConversationDisplayTMPro.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, -17);
+            ConversationDisplayTMPro.GetComponent<RectTransform>().localPosition = defaultResponseTextPos;
+
         }
+ 
     }
 
     public void SetPositionAndScale(Vector2 pos, Vector2 scale)

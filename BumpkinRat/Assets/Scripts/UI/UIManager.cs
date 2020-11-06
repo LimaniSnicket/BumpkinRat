@@ -78,6 +78,7 @@ public abstract class UiMenu
 
         Active = load;
     }
+
 }
 
 [Serializable]

@@ -35,9 +35,9 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
 
     public static CustomerOrder CraftingOrderTest;
 
-    public bool craftingMenuOpened;
+    public static CustomerOrder[] prologueCraftingOrders;
 
-    CraftingUI craftingUi;
+    public bool craftingMenuOpened;
 
     private void Start()
     {
@@ -49,8 +49,6 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         ItemDistributor = new ItemProvisioner(this);
         ItemDropData = ItemDrop.GetListOfItemsToDrop((4, 2));
 
-        ItemDistributor.Distribute();
-
         CraftingOrderTest = new CustomerOrder { 
             npcId = 0,
             orderDetails = new OrderDetails { 
@@ -58,12 +56,11 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
                 orderLookupId = 0
             } ,
         };
-        CraftingOrderTest.Initialize(this, this);
+        CraftingOrderTest.Initialize(this);
 
-        CustomerOrder.QueueCustomers(CraftingOrderTest, CraftingOrderTest);
+        prologueCraftingOrders = CustomerOrder.CreateCustomerOrders((0, OrderType.CRAFTING, 0));
 
-/*        craftingUi = FindObjectOfType<CraftingUI>();
-        craftingUi.enabled = false;*/
+        //CraftingUI.SetDisableCraftingMenuEntry(true);
 
         UiMenu.UiEvent += OnUiEvent;
     }
@@ -76,6 +73,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         if (atWork && GlobalFader.IsClear)
         {
             Debug.Log("Actively taking customers");
+            CraftingUI.LockPlayerInCrafting(true);
             //ui display of customer at counter --> crafting ui
         }
     }
@@ -99,7 +97,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     public IEnumerator RunOnBreakChange()
     {
         yield return new WaitForSeconds(1);
-        WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
+        //WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
         ItemDistributor.Distribute();
     }
 

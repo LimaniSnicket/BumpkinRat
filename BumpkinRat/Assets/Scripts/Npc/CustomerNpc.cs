@@ -8,10 +8,11 @@ public class CustomerNpc : MonoBehaviour
 {
 
     const string prefabPath = "Assets/Prefabs/npc prefabs/Customer.prefab";
+    private static Dictionary<int, Texture2D> cacheNpcTextures;
     static GameObject cachedPrefab;
     static bool validCache => cachedPrefab != null;
 
-    MeshRenderer meshFilter;
+    MeshRenderer Renderer => GetComponent<MeshRenderer>();
 
     MaterialPropertyBlock propertyBlock;
 
@@ -33,7 +34,10 @@ public class CustomerNpc : MonoBehaviour
 
     private void Start()
     {
-        meshFilter = GetComponent<MeshRenderer>();
+        if(cacheNpcTextures == null)
+        {
+            cacheNpcTextures = new Dictionary<int, Texture2D>();
+        }
     }
 
 
@@ -41,17 +45,42 @@ public class CustomerNpc : MonoBehaviour
     {
         GameObject toInstantiate = validCache ? cachedPrefab : AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         CustomerNpc instantiatedCustomer = Instantiate(toInstantiate).GetOrAddComponent<CustomerNpc>();
-        instantiatedCustomer.SetCustomerNpcAppearence(npc.TexturePath);
+
+        Texture2D toSet;
+
+        bool inCache = ExistsInCache(npc, out toSet);
+
+        if (!inCache)
+        {
+            toSet = AssetDatabase.LoadAssetAtPath<Texture2D>(npc.TexturePath);
+            CacheTexture(npc.NpcId, toSet);
+        }
+
+        instantiatedCustomer.SetCustomerNpcAppearence(toSet);
         return instantiatedCustomer;
     }
 
-    void SetCustomerNpcAppearence(string texturePath)
+    void SetCustomerNpcAppearence(Texture2D texture)
     {
-        if (!string.IsNullOrWhiteSpace(texturePath))
+        GetPropertyBlock.SetTexture(npcTexture, texture);
+        Renderer.SetPropertyBlock(GetPropertyBlock);
+    }
+
+    static void CacheTexture(int? entry, Texture2D tex)
+    {
+        if (cacheNpcTextures == null)
         {
-            GetPropertyBlock.SetTexture(npcTexture, AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath));
-            meshFilter.SetPropertyBlock(GetPropertyBlock);
+            cacheNpcTextures = new Dictionary<int, Texture2D>();
         }
+
+        cacheNpcTextures.AddOrReplaceKeyValue(entry.Value, tex);
+    }
+
+    static bool ExistsInCache(NpcDatabaseEntry entry, out Texture2D texture)
+    {
+        texture = null;
+        if (!cacheNpcTextures.CollectionIsNotNullOrEmpty()) return false;
+        return cacheNpcTextures.TryGetValue(entry.NpcId.Value, out texture);
     }
 
 }
