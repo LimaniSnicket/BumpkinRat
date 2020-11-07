@@ -16,6 +16,8 @@ public class CustomerOrder
 
     private CustomerDialogue orderDialogueCache;
 
+    static private OrderItemDistributer rewardDistributer;
+
     public int npcId;
 
     public string CustomerName { get; private set; }
@@ -32,15 +34,19 @@ public class CustomerOrder
 
     public static CustomerOrder CreateCustomerOrder(int npcId, OrderType orderType, int orderId)
     {
-        return new CustomerOrder
+        CustomerOrder order = new CustomerOrder
         {
             npcId = npcId,
             orderDetails = new OrderDetails
             {
                 orderLookupId = orderId,
-                orderType = orderType
+                orderType = orderType,
+                cashReward = 10,
+                rewardItemIds = new int[] { 3 }
             }
         };
+
+        return order;
     }
 
     public static void InitializeAll<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
@@ -52,6 +58,29 @@ public class CustomerOrder
                 order.Initialize(host);
             }
         }
+    }
+
+    public static void EvaluateAgainstRecipe(Recipe r)
+    {
+        CustomerOrder order;
+        if (TryGetNextUpOrder(out order))
+        {
+            RewardOnCompletedOrder(order);
+        }
+    }
+
+    static bool TryGetNextUpOrder(out CustomerOrder order)
+    {
+        bool valid = ActiveOrders.CollectionIsNotNullOrEmpty();
+        order = valid ? ActiveOrders.Peek() : null;
+        return valid;
+    }
+
+    static void RewardOnCompletedOrder(CustomerOrder order)
+    {
+        Debug.Log("Rewarding player with items");
+        rewardDistributer = new OrderItemDistributer();
+        rewardDistributer.DistributeOrderRewards(order.orderDetails.rewardItemIds);
     }
 
     public CustomerDialogue GetCustomerDialogue()
@@ -113,6 +142,25 @@ public class CustomerOrder
     {
         return $"{CustomerName}: [{orderDetails.orderType.ToString()}, {orderDetails.orderLookupId}]";
     }
+
+    struct OrderItemDistributer : IDistributeItems<ItemProvisioner>
+    {
+        public ItemProvisioner ItemDistributor { get; set; }
+        public List<ItemDrop> ItemDropData { get; set; }
+
+        public void DistributeOrderRewards(int[] rewards)
+        {
+            if(ItemDistributor == null)
+            {
+                ItemDistributor = new ItemProvisioner(this);
+            }
+            ItemDropData = ItemDrop.GetListOfItemsToDrop(rewards);
+
+            Debug.Log(ItemDropData[0].ItemToDropName);
+
+            //ItemDistributor.Distribute();
+        }
+    }
 }
 
 [Serializable]
@@ -120,6 +168,9 @@ public struct OrderDetails
 {
     public OrderType orderType;
     public int orderLookupId;
+
+    public int[] rewardItemIds;
+    public float cashReward;
 }
 
 public enum OrderType

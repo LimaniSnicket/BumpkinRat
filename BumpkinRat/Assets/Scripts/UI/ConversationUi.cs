@@ -33,11 +33,11 @@ public class ConversationUi : MonoBehaviour
 
     public CustomerDialogueTracker conversationTracker;
 
-    Dictionary<KeyCode, string> keyToResponseLevel = new Dictionary<KeyCode, string>
+    Dictionary<KeyCode, (string, float)> keyToResponseLevel = new Dictionary<KeyCode, (string, float)>
     {
-        { KeyCode.Alpha1, "low" },
-        { KeyCode.Alpha2, "medium" },
-        { KeyCode.Alpha3, "high" }
+        { KeyCode.Alpha1, ("low", 1) },
+        { KeyCode.Alpha2, ("medium", 1.5f) },
+        { KeyCode.Alpha3, ("high", 2) }
     };
 
     private void Start()
@@ -73,7 +73,7 @@ public class ConversationUi : MonoBehaviour
             return;
         }
 
-        foreach(KeyValuePair<KeyCode, string> pairs in keyToResponseLevel)
+        foreach(KeyValuePair<KeyCode, (string, float)> pairs in keyToResponseLevel)
         {
             if (Input.GetKeyDown(pairs.Key))
             {
@@ -101,16 +101,16 @@ public class ConversationUi : MonoBehaviour
 
     IEnumerator TakeResponseFromConversationIntro(KeyCode pressed, CustomerDialogueTracker tracker)
     {
-        string level = string.Empty;
+        (string, float) level = (string.Empty, 1);
         bool valid = keyToResponseLevel.TryGetValue(pressed, out level);
 
         responding = true;
 
         Dictionary<string, string> responseMap = tracker.Tracking.introResponses.ToDictionary(r => r.responseLevel, r => r.displayDialogue);
 
-        if (responseMap.ContainsKey(level) && !tracker.DialogueComplete)
+        if (responseMap.ContainsKey(level.Item1) && !tracker.DialogueComplete)
         {
-            string message = responseMap[level];
+            string message = responseMap[level.Item1];
 
             ConversationResponseDisplay.SetAllInactive();
 
@@ -128,7 +128,7 @@ public class ConversationUi : MonoBehaviour
 
             }
 
-            yield return StartCoroutine(GetCustomerResponse(tracker, level));
+            yield return StartCoroutine(GetCustomerResponse(tracker, level.Item1, level.Item2));
 
         }
 
@@ -137,12 +137,14 @@ public class ConversationUi : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator GetCustomerResponse(CustomerDialogueTracker tracker, string level)
+    IEnumerator GetCustomerResponse(CustomerDialogueTracker tracker, string level, float distraction)
     {
         BroadcastMessageSpawning();
         ConversationSnippet snip;
 
         string message = tracker.Tracking.promptedCustomerDialogue[tracker.DialogueIndex].GetCustomerResponse(level);
+
+        CraftingUI.Distract(distraction);
 
         InstantiateConversationSnippet(message, false, out snip);
 
@@ -222,7 +224,6 @@ public class ConversationUi : MonoBehaviour
     ConversationSnippet GetSnippet(string message, bool response)
     {
         GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
-        //snippet.transform.SetAsFirstSibling();
         ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
         convoSnippet.isResponse = response;
         convoSnippet.SetConversationUi(this);

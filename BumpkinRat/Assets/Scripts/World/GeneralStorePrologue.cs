@@ -61,6 +61,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         CraftingOrderTest.Initialize(this);
 
         prologueCraftingOrders = CustomerOrder.CreateCustomerOrders((0, OrderType.CRAFTING, 0));
+        CustomerOrder.QueueCustomersIntoFreshQueue(prologueCraftingOrders);
 
         //CraftingUI.SetDisableCraftingMenuEntry(true);
 

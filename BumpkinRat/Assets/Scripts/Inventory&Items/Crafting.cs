@@ -121,6 +121,7 @@ public class ItemCrafter
 
     void PrintRecipe(Recipe r)
     {
+        CustomerOrder.EvaluateAgainstRecipe(r);
         Debug.Log($"{r.GetOutputItem().DisplayName}:{r.recipeDescription}");
     }
 
@@ -128,7 +129,7 @@ public class ItemCrafter
     {
         ItemObject.InteractedWithItemObject -= OnInteractedWithItemObject;
         InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
-        ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
+        ItemObject.PlaceItemBackInInventory -= OnItemObjectPlacedBack;
     }
 }
 

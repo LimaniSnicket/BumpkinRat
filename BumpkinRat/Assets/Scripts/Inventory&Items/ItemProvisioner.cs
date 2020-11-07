@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+
 public class ItemProvisioner : ItemDistributor
 {
     IDistributeItems<ItemProvisioner> Provisioner { get; set; }
@@ -13,12 +15,15 @@ public class ItemProvisioner : ItemDistributor
     {
         SetItemsToDrop(Provisioner.ItemDropData);
 
+
         if (!ItemsToDrop.ValidList())
         {
+            Debug.Log("Item Drops aren't valid.");
             return;
         }
 
-        foreach(ItemDrop drop in ItemsToDrop)
+
+        foreach (ItemDrop drop in ItemsToDrop)
         {
             BroadcastItemProvisioning(drop);
         }

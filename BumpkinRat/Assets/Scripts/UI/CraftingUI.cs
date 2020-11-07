@@ -120,6 +120,11 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         }
     }
 
+    public static void Distract(float amount)
+    {
+        distraction *= amount;
+    }
+
     void OnCraftingMenuStatusChange(object source, UiEventArgs args)
     {
         CraftingConversationBehavior.enabled = args.load;

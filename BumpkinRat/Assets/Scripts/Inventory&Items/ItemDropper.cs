@@ -105,6 +105,11 @@ public class ItemDrop {
         return drops.Select(d => new ItemDrop { itemName = d.Item1, amountToDrop = d.Item2 }).ToList();
     }
 
+    public static List<ItemDrop> GetListOfItemsToDrop(int[] drops)
+    {
+        return drops.Select(d => new ItemDrop { itemId = d, amountToDrop = 1 }).ToList();
+    }
+
     public static List<ItemDrop> GetListOfItemsToDrop(params (int, int)[] drops)
     {
         return drops.Select(d => new ItemDrop { itemId = d.Item1, amountToDrop = d.Item2 }).ToList();
