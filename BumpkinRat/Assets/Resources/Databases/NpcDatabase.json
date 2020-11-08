@@ -9,7 +9,7 @@
 		{
 			"npcId": 1,
 			"npcName": "Skeeter",
-			"conversationDataPath": "",
+			"conversationDataPath": "Assets/Resources/Skeeter.json",
 			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
 		},
 		{

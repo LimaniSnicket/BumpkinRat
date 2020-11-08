@@ -42,7 +42,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     private void Start()
     {
         prologueCounter = new RealTimeCounter(1f, TimeUnitToTrack.Minute);
-        startTime = new TimeSpan(12, 14, 27);
+        startTime = new TimeSpan(12, 22, 27);
         addOneSecond = new TimeSpan(0, 0, 1);
         StartCoroutine(AddToTimeSpan());
 
@@ -60,7 +60,8 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         };
         CraftingOrderTest.Initialize(this);
 
-        prologueCraftingOrders = CustomerOrder.CreateCustomerOrders((0, OrderType.CRAFTING, 0));
+        prologueCraftingOrders = CustomerOrder.CreateCustomerOrders((0, OrderType.CRAFTING, 0), (1, OrderType.CRAFTING, 0));
+        CustomerOrder.QueueCustomersIntoFreshQueue(prologueCraftingOrders);
 
         //CraftingUI.SetDisableCraftingMenuEntry(true);
 
@@ -70,7 +71,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     private void Update()
     {
         prologueCounter.DecrementTimerOverTime();
-        PrologueHUD.SetTimerDisplayMessage(startTime.ToString() + $"\n{BreakMessage}");
+        PrologueHUD.SetTimerDisplayMessage(startTime.ToString());//+ $"\n{BreakMessage}");
 
         if (atWork && GlobalFader.IsClear)
         {

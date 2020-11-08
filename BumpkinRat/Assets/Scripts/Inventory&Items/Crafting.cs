@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -71,6 +71,8 @@ public class ItemCrafter
         TakingCraftingAction = true;
 
         activeSequence.actionTaken = craftingAction;
+        activeSequence.Builder.Append(craftingAction + " --> ");
+        activeSequence.actionTakenString = craftingAction + " --> ";
 
         CacheAction(craftingAction);
         yield return new WaitForSeconds(waitTime);
@@ -117,10 +119,12 @@ public class ItemCrafter
         }
 
         activeSequence.ClearSequence();
+        activeSequence.ClearBuilder();
     }
 
     void PrintRecipe(Recipe r)
     {
+        CustomerOrder.EvaluateAgainstRecipe(r);
         Debug.Log($"{r.GetOutputItem().DisplayName}:{r.recipeDescription}");
     }
 
@@ -128,7 +132,7 @@ public class ItemCrafter
     {
         ItemObject.InteractedWithItemObject -= OnInteractedWithItemObject;
         InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
-        ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
+        ItemObject.PlaceItemBackInInventory -= OnItemObjectPlacedBack;
     }
 }
 
@@ -138,6 +142,22 @@ public struct CraftingSequence
     public ItemObject actionItemObject, targetItemObject;
     public string actionItemAtFocusArea, targetItemAtFocusArea;
     public CraftingAction actionTaken;
+    private StringBuilder builder;
+
+    public string actionTakenString;
+    private string actionItemProgress, targetItemProgress;
+
+    public StringBuilder Builder
+    {
+        get
+        {
+            if(builder == null)
+            {
+                builder = new StringBuilder();
+            }
+            return builder;
+        }
+    }
 
     public static event EventHandler CraftingSequenceCompleted;
     public CraftingSequenceTaken onSequence; 
@@ -155,6 +175,8 @@ public struct CraftingSequence
         {
             actionItemObject = args.InteractedWith;
             actionItemAtFocusArea = args.AtFocusArea.ToString();
+            Builder.Append(actionItemObject.ToString() + " --> ");
+            actionItemProgress = args.InteractedWith.TryGetDisplayName() + " --> ";
 
         } else
         {
@@ -165,6 +187,8 @@ public struct CraftingSequence
 
             targetItemObject = args.InteractedWith;
             targetItemAtFocusArea = args.AtFocusArea.ToString();
+            Builder.Append(targetItemObject.ToString());
+            targetItemProgress = args.InteractedWith.TryGetDisplayName();
         }
     }
 
@@ -215,6 +239,15 @@ public struct CraftingSequence
         onSequence.Invoke();
     }
 
+    public void ClearBuilder()
+    {
+        Builder.Clear();
+    }
+
+    public string GetSequenceProgressDisplay()
+    {
+        return $"{actionItemProgress}{actionTakenString}{targetItemProgress}";//Builder.ToString();
+    }
     public override string ToString()
     {
         return $"Action({actionItemAtFocusArea}) --> {actionTaken} --> Target({targetItemAtFocusArea})";

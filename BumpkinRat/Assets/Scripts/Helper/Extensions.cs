@@ -9,6 +9,16 @@ using UnityEngine.Events;
 
 public static class GenericX
 {
+    
+    public static T InitializeStaticInstance<T>(this T instance, T staticVar)
+    {
+        if(staticVar == null)
+        {
+            return instance;
+        }
+
+        return staticVar;
+    }
     public static bool ValidList<T>(this List<T> check)
     {
         if(check == null || check.Count <= 0) { return false; }

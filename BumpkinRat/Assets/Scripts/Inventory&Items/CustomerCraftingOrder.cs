@@ -7,10 +7,11 @@ using UnityEngine;
 
 
 [Serializable]
-public class CustomerOrder
+public class CustomerOrder: IComparable<Recipe>
 {
     public static Queue<CustomerOrder> ActiveOrders { get; private set; } = new Queue<CustomerOrder>();
     private static List<CustomerOrder> orderBacklog = new List<CustomerOrder>();
+    private static RewardProvisioner rewardProvisioner;
 
     public OrderDetails orderDetails;
 
@@ -32,15 +33,24 @@ public class CustomerOrder
 
     public static CustomerOrder CreateCustomerOrder(int npcId, OrderType orderType, int orderId)
     {
-        return new CustomerOrder
+        if(rewardProvisioner == null)
+        {
+            rewardProvisioner = new RewardProvisioner();
+        }
+
+        CustomerOrder order = new CustomerOrder
         {
             npcId = npcId,
             orderDetails = new OrderDetails
             {
                 orderLookupId = orderId,
-                orderType = orderType
+                orderType = orderType,
+                cashReward = 10,
+                rewardItemIds = new int[] { 3 }
             }
         };
+
+        return order;
     }
 
     public static void InitializeAll<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
@@ -52,6 +62,35 @@ public class CustomerOrder
                 order.Initialize(host);
             }
         }
+    }
+
+    public static void EvaluateAgainstRecipe(Recipe r)
+    {
+        CustomerOrder order;
+        if (TryGetNextUpOrder(out order))
+        {
+            if (order.CompareTo(r) == 0)
+            {
+                RewardOnCompletedOrder(order);
+            }
+        }
+    }
+
+    static bool TryGetNextUpOrder(out CustomerOrder order)
+    {
+        bool valid = ActiveOrders.CollectionIsNotNullOrEmpty();
+        order = valid ? ActiveOrders.Peek() : null;
+        return valid;
+    }
+
+    public int CompareTo(Recipe other)
+    {
+        return orderDetails.orderType.Equals(OrderType.CRAFTING) ? orderDetails.orderLookupId.CompareTo(other.recipeId) : -2;
+    }
+
+    static void RewardOnCompletedOrder(CustomerOrder order)
+    {
+        rewardProvisioner.Reward(order.orderDetails);
     }
 
     public CustomerDialogue GetCustomerDialogue()
@@ -115,11 +154,48 @@ public class CustomerOrder
     }
 }
 
+class RewardProvisioner : IDistributeItems<ItemProvisioner>
+{
+    public ItemProvisioner ItemDistributor { get; set; }
+    public List<ItemDrop> ItemDropData { get; set; }
+
+    public RewardProvisioner()
+    {
+        ItemDistributor = new ItemProvisioner(this);
+        ItemDropData = new List<ItemDrop>();
+    }
+    public RewardProvisioner(OrderDetails order)
+    {
+        ItemDistributor = new ItemProvisioner(this);
+        ItemDropData = ItemDrop.GetListOfItemsToDrop(order.rewardItemIds);
+    }
+
+    public void Reward(OrderDetails order)
+    {
+        UpdateRewards(order);
+        ItemDistributor.Distribute();
+    }
+
+    void UpdateRewards(OrderDetails order)
+    {
+        ItemDropData.Clear();
+        ItemDropData = ItemDrop.GetListOfItemsToDrop(order.rewardItemIds);
+    }
+
+    public override string ToString()
+    {
+        return string.Join("-- ", ItemDropData.Select(s => s.ItemToDropName));
+    }
+}
+
 [Serializable]
 public struct OrderDetails
 {
     public OrderType orderType;
     public int orderLookupId;
+
+    public int[] rewardItemIds;
+    public float cashReward;
 }
 
 public enum OrderType
@@ -132,7 +208,7 @@ public enum OrderType
 public class CustomerDialogueTracker
 {
     public CustomerDialogue Tracking { get; private set; }
-    public int DialogueIndex { get; private set; }
+    public int DialogueIndex { get; private set; } = -1;
 
     public bool DialogueComplete { get; private set; }
 
@@ -140,7 +216,7 @@ public class CustomerDialogueTracker
 
     public static CustomerDialogueTracker GetCustomerDialogueTracker(CustomerDialogue dialogueToTrack)
     {
-        return new CustomerDialogueTracker { Tracking = dialogueToTrack, DialogueIndex = 0 };
+        return new CustomerDialogueTracker { Tracking = dialogueToTrack, DialogueIndex = -1 };
     }
 
     public PlayerResponse[] GetResponses()
@@ -148,7 +224,7 @@ public class CustomerDialogueTracker
         try
         {
 
-            return Tracking.promptedCustomerDialogue[DialogueIndex].possibleResponses;
+            return DialogueIndex >= 0 ? Tracking.promptedCustomerDialogue[DialogueIndex].possibleResponses : Tracking.introResponses;
 
         }catch (IndexOutOfRangeException)
         {

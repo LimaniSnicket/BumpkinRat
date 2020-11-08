@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -12,7 +11,7 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     public GameObject craftingActionButtonParent;
 
-    public GameObject ratPointer;
+    public GameObject progressDisplay;
 
     public List<CraftingActionButton> craftingActionButtons;
 
@@ -43,6 +42,7 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
         MenuFunctionObject = new CraftingMenu(gameObject);
         MenuFunctionObject.SetCraftingActionButtons(craftingActionButtonParent, craftingButton, this);
+        MenuFunctionObject.SetCraftingSequenceDisplay(progressDisplay);
 
         CraftingConversationBehavior.enabled = false; //not in conversation by default
 
@@ -51,8 +51,6 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     void Update()
     {
-        Debug.Log(craftingUI.MenuFunctionObject == null);
-
         if (MenuFunctionObject.entryDisabled)
         {
             return;
@@ -68,8 +66,7 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
             return;
         }
 
-        ratPointer.transform.position = Input.mousePosition;
-
+        MenuFunctionObject.UpdateDisplay(MenuFunctionObject.itemCrafter.activeSequence.GetSequenceProgressDisplay());
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -120,6 +117,11 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         }
     }
 
+    public static void Distract(float amount)
+    {
+        distraction *= amount;
+    }
+
     void OnCraftingMenuStatusChange(object source, UiEventArgs args)
     {
         CraftingConversationBehavior.enabled = args.load;
@@ -133,7 +135,6 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     private void OnMouseButtonUpEndCraftingSequence()
     {
-        Debug.Log("End Crafting Sequence");
         ItemCrafter.EndCraftingSequence();
         MenuFunctionObject.itemCrafter.EndLocalCraftingSequence();
     }

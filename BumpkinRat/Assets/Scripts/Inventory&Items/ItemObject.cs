@@ -8,7 +8,7 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
 {
     public int itemId;
 
-    Item item;
+    Item item => itemId.GetItem();
     public bool Altered { get; private set; }
   
     public bool MouseHoveringOnItemObject { get; private set; }
@@ -55,7 +55,12 @@ public class ItemObject : MonoBehaviour, IOccupyPositions
     public void SetFromItem(Item item)
     {
         itemId = item.itemId;
-        this.item = item;
+        //this.item = item;
+    }
+
+    public string TryGetDisplayName()
+    {
+        return item != null ? item.DisplayName : string.Empty;
     }
 
     public static void DestroyItemObjects(params ItemObject[] itemObjects)
