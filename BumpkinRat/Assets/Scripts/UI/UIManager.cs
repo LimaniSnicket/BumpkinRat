@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -88,11 +87,29 @@ public class CraftingMenu : UiMenu
     public override KeyCode ActivateKeyCode => throw new NotImplementedException();
 
     public UiElementContainer craftingButtonContainer;
+
+    public TextMeshProUGUI craftingSequenceDisplay;
+
     public CraftingMenu(GameObject g)
     {
         gameObject = g;
         menuType = MenuType.Crafting;
         itemCrafter = new ItemCrafter();
+    }
+
+    public void SetCraftingSequenceDisplay(GameObject tmpro)
+    {
+        craftingSequenceDisplay = tmpro.GetOrAddComponent<TextMeshProUGUI>();
+    }
+
+    public void UpdateDisplay(string message)
+    {
+        if (craftingSequenceDisplay == null)
+        {
+            return;
+        }
+
+        craftingSequenceDisplay.text = message;
     }
 
     public void SetCraftingActionButtons(GameObject container, GameObject prefab, CraftingUI driver)

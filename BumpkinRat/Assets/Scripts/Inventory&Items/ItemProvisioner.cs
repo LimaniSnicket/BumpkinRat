@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class ItemProvisioner : ItemDistributor
@@ -14,6 +15,8 @@ public class ItemProvisioner : ItemDistributor
     public override void Distribute()
     {
         SetItemsToDrop(Provisioner.ItemDropData);
+
+        Debug.Log(string.Join("-", Provisioner.ItemDropData.Select(s => s.ItemToDropName)));
 
 
         if (!ItemsToDrop.ValidList())

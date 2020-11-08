@@ -15,22 +15,24 @@ public class CursorTrail : MonoBehaviour
 
     public Material trailMaterial;
 
+    public GameObject mouseTrail;
+
     // Start is called before the first frame update
     void Start()
     {
         thisCamera = Camera.main;//GetComponent<Camera>();
 
-        GameObject trailObj = new GameObject("Mouse Trail");
-        trailTransform = trailObj.transform;
-        TrailRenderer trail = trailObj.AddComponent<TrailRenderer>();
-        trail.time = -1f;
+        /*    GameObject trailObj = new GameObject("Mouse Trail");
+            trailTransform = trailObj.transform;
+            TrailRenderer trail = trailObj.AddComponent<TrailRenderer>();
+            trail.time = -1f;*/
         MoveTrailToCursor(Input.mousePosition);
-        trail.time = trailTime;
+    /*    trail.time = trailTime;
         trail.startWidth = startWidth;
         trail.endWidth = endWidth;
         trail.numCapVertices = 3;
         trail.sharedMaterial = trailMaterial ?? new Material(Shader.Find("Unlit/Color"));
-        trail.sharedMaterial.color = trailColor;
+        trail.sharedMaterial.color = trailColor;*/
     }
 
     // Update is called once per frame
@@ -41,6 +43,6 @@ public class CursorTrail : MonoBehaviour
 
     void MoveTrailToCursor(Vector3 screenPosition)
     {
-        trailTransform.position = thisCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distanceFromCamera));
+        mouseTrail.transform.position = thisCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distanceFromCamera));
     }
 }

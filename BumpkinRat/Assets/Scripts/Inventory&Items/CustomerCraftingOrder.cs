@@ -7,16 +7,15 @@ using UnityEngine;
 
 
 [Serializable]
-public class CustomerOrder
+public class CustomerOrder: IComparable<Recipe>
 {
     public static Queue<CustomerOrder> ActiveOrders { get; private set; } = new Queue<CustomerOrder>();
     private static List<CustomerOrder> orderBacklog = new List<CustomerOrder>();
+    private static RewardProvisioner rewardProvisioner;
 
     public OrderDetails orderDetails;
 
     private CustomerDialogue orderDialogueCache;
-
-    static private OrderItemDistributer rewardDistributer;
 
     public int npcId;
 
@@ -34,6 +33,11 @@ public class CustomerOrder
 
     public static CustomerOrder CreateCustomerOrder(int npcId, OrderType orderType, int orderId)
     {
+        if(rewardProvisioner == null)
+        {
+            rewardProvisioner = new RewardProvisioner();
+        }
+
         CustomerOrder order = new CustomerOrder
         {
             npcId = npcId,
@@ -65,7 +69,10 @@ public class CustomerOrder
         CustomerOrder order;
         if (TryGetNextUpOrder(out order))
         {
-            RewardOnCompletedOrder(order);
+            if (order.CompareTo(r) == 0)
+            {
+                RewardOnCompletedOrder(order);
+            }
         }
     }
 
@@ -76,11 +83,14 @@ public class CustomerOrder
         return valid;
     }
 
+    public int CompareTo(Recipe other)
+    {
+        return orderDetails.orderType.Equals(OrderType.CRAFTING) ? orderDetails.orderLookupId.CompareTo(other.recipeId) : -2;
+    }
+
     static void RewardOnCompletedOrder(CustomerOrder order)
     {
-        Debug.Log("Rewarding player with items");
-        rewardDistributer = new OrderItemDistributer();
-        rewardDistributer.DistributeOrderRewards(order.orderDetails.rewardItemIds);
+        rewardProvisioner.Reward(order.orderDetails);
     }
 
     public CustomerDialogue GetCustomerDialogue()
@@ -142,24 +152,39 @@ public class CustomerOrder
     {
         return $"{CustomerName}: [{orderDetails.orderType.ToString()}, {orderDetails.orderLookupId}]";
     }
+}
 
-    struct OrderItemDistributer : IDistributeItems<ItemProvisioner>
+class RewardProvisioner : IDistributeItems<ItemProvisioner>
+{
+    public ItemProvisioner ItemDistributor { get; set; }
+    public List<ItemDrop> ItemDropData { get; set; }
+
+    public RewardProvisioner()
     {
-        public ItemProvisioner ItemDistributor { get; set; }
-        public List<ItemDrop> ItemDropData { get; set; }
+        ItemDistributor = new ItemProvisioner(this);
+        ItemDropData = new List<ItemDrop>();
+    }
+    public RewardProvisioner(OrderDetails order)
+    {
+        ItemDistributor = new ItemProvisioner(this);
+        ItemDropData = ItemDrop.GetListOfItemsToDrop(order.rewardItemIds);
+    }
 
-        public void DistributeOrderRewards(int[] rewards)
-        {
-            if(ItemDistributor == null)
-            {
-                ItemDistributor = new ItemProvisioner(this);
-            }
-            ItemDropData = ItemDrop.GetListOfItemsToDrop(rewards);
+    public void Reward(OrderDetails order)
+    {
+        UpdateRewards(order);
+        ItemDistributor.Distribute();
+    }
 
-            Debug.Log(ItemDropData[0].ItemToDropName);
+    void UpdateRewards(OrderDetails order)
+    {
+        ItemDropData.Clear();
+        ItemDropData = ItemDrop.GetListOfItemsToDrop(order.rewardItemIds);
+    }
 
-            //ItemDistributor.Distribute();
-        }
+    public override string ToString()
+    {
+        return string.Join("-- ", ItemDropData.Select(s => s.ItemToDropName));
     }
 }
 
@@ -183,7 +208,7 @@ public enum OrderType
 public class CustomerDialogueTracker
 {
     public CustomerDialogue Tracking { get; private set; }
-    public int DialogueIndex { get; private set; }
+    public int DialogueIndex { get; private set; } = -1;
 
     public bool DialogueComplete { get; private set; }
 
@@ -191,7 +216,7 @@ public class CustomerDialogueTracker
 
     public static CustomerDialogueTracker GetCustomerDialogueTracker(CustomerDialogue dialogueToTrack)
     {
-        return new CustomerDialogueTracker { Tracking = dialogueToTrack, DialogueIndex = 0 };
+        return new CustomerDialogueTracker { Tracking = dialogueToTrack, DialogueIndex = -1 };
     }
 
     public PlayerResponse[] GetResponses()
@@ -199,7 +224,7 @@ public class CustomerDialogueTracker
         try
         {
 
-            return Tracking.promptedCustomerDialogue[DialogueIndex].possibleResponses;
+            return DialogueIndex >= 0 ? Tracking.promptedCustomerDialogue[DialogueIndex].possibleResponses : Tracking.introResponses;
 
         }catch (IndexOutOfRangeException)
         {

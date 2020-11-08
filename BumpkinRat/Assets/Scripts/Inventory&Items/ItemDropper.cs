@@ -139,7 +139,13 @@ public abstract class ItemDistributor
 
     public void SetItemsToDrop(List<ItemDrop> dropData)
     {
-        ItemsToDrop = new List<ItemDrop>(dropData);
+        try
+        {
+            ItemsToDrop = new List<ItemDrop>(dropData);
+
+        } catch(ArgumentException){
+
+        }
     }
 
     public List<Item> GetItemsToDropFromGameData()

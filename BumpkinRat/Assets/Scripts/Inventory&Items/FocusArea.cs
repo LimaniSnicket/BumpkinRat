@@ -54,7 +54,8 @@ public class FocusArea : MonoBehaviour
     {
         if (!Selected)
         {
-            transform.localScale = originalScale.PulseVector3(1.2f, 0.1f, 2, 3f);
+            CraftingPointer.OnFocusAreaHover(this);
+            //transform.localScale = originalScale.PulseVector3(1.2f, 0.1f, 2, 3f);
 
         } else
         {
@@ -88,6 +89,7 @@ public class FocusArea : MonoBehaviour
     private void OnMouseExit()
     {
         exitProcess = StartCoroutine(StartExitProcess());
+        CraftingPointer.OnHoverEnd();
     }
 
     IEnumerator StartExitProcess()
@@ -101,7 +103,7 @@ public class FocusArea : MonoBehaviour
     {
         try
         {
-            numberDisplay.text = focusAreaId.ToString();
+            numberDisplay.text = "#" + focusAreaId.ToString();
         }
         catch (NullReferenceException)
         {
