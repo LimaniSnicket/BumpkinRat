@@ -210,9 +210,12 @@ public class CustomerDialogueTracker
     public CustomerDialogue Tracking { get; private set; }
     public int DialogueIndex { get; private set; } = -1;
 
+    public bool IntroDialogueActive => DialogueIndex < 0;
+
     public bool DialogueComplete { get; private set; }
 
     public event EventHandler CustomerDialogueExpired;
+    public static event EventHandler IntroDialogueEnded;
 
     public static CustomerDialogueTracker GetCustomerDialogueTracker(CustomerDialogue dialogueToTrack)
     {
@@ -241,6 +244,11 @@ public class CustomerDialogueTracker
 
     public void Advance()
     {
+        if(DialogueIndex == -1)
+        {
+            IntroDialogueEnded.BroadcastEvent(this);
+        }
+
         DialogueIndex++;
         DialogueComplete = Tracking.promptedCustomerDialogue.Length <= DialogueIndex;
 
@@ -277,6 +285,10 @@ public struct CustomerDialogue
 public struct CustomerResponse
 {
     public string low, medium, high;
+
+    public DialogueResponse baseResponse;
+    public DialogueResponse[] additionalResponses;
+
     public PlayerResponse[] possibleResponses;
 
     Dictionary<string, string> GetValidResponses()
@@ -317,5 +329,12 @@ public struct PlayerResponse
     public string responseLevel;
     public string displayDialogue;
 } 
+
+[Serializable]
+public struct DialogueResponse
+{
+    public string displayDialogue;
+    public int qualityThreshold;
+}
 
 

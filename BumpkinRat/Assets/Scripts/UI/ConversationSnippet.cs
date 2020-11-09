@@ -7,9 +7,10 @@ using System.Text;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Image))]
-public class ConversationSnippet : MonoBehaviour
+public class ConversationSnippet : MonoBehaviour, IDragHandler
 {
     public Sprite onLeftBubble, onRightBubble;
 
@@ -31,6 +32,8 @@ public class ConversationSnippet : MonoBehaviour
 
     public bool Typing { get; private set; } = false;
 
+    float dragWeight = 10;
+
     private void OnEnable()
     {
         AssignOrCreateTMPro();
@@ -41,6 +44,7 @@ public class ConversationSnippet : MonoBehaviour
     private void Start()
     {
         DestroySnippet += OnDestroySnippet;
+        BackingImage.raycastTarget = isResponse;
     }
 
     private void Update()
@@ -103,18 +107,15 @@ public class ConversationSnippet : MonoBehaviour
 
         if (isResponse)
         {
-
             ConversationDisplayTMPro.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, -17);
             ConversationDisplayTMPro.GetComponent<RectTransform>().localPosition = defaultResponseTextPos;
-
         }
  
     }
 
-    public void SetPositionAndScale(Vector2 pos, Vector2 scale)
+    public void SetDragWeight(float weight)
     {
-        thisRect.localPosition = pos;
-        thisRect.localScale = scale;
+        dragWeight = weight;
     }
 
     public void MoveToNewPositionAndScale(Vector2 pos, Vector2 scale)
@@ -179,6 +180,10 @@ public class ConversationSnippet : MonoBehaviour
         Typing = false;
     }
 
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.DOMove(Input.mousePosition, Time.fixedDeltaTime * dragWeight);
+    }
 
     public static void DestroyAllSnippets(object source)
     {

@@ -26,6 +26,8 @@ public class FocusArea : MonoBehaviour
         originalScale = transform.localScale;
 
         SetNumberDisplay();
+
+        CraftingUI.HandleFocusAreaInstances(this, true);
     }
     void AssignParentItemObject()
     {
@@ -114,5 +116,10 @@ public class FocusArea : MonoBehaviour
     public override string ToString()
     {
         return $"Id:{parentItemObject.itemId} FA:{focusAreaId}";
+    }
+
+    private void OnDestroy()
+    {
+        CraftingUI.HandleFocusAreaInstances(this, false, true);
     }
 }

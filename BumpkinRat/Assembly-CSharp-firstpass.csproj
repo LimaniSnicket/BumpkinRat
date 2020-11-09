@@ -628,23 +628,23 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Postprocessing.Editor">
+      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Postprocessing.Runtime">
+      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Editor">
-      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>C:/Users/veralimani/Documents/Game Development/BumpkinRat/BumpkinRat/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

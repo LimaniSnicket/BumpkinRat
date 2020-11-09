@@ -147,6 +147,7 @@ public class CraftingMenu : UiMenu
         craftingButtonContainer.gameObject.SetActive(true);
         BroadcastUiEvent(true);
     }
+
 }
 
 [Serializable]
