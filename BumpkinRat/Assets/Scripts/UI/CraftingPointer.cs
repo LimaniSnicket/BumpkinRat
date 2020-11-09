@@ -19,6 +19,7 @@ public class CraftingPointer : MonoBehaviour
         this.InitializeStaticInstance(craftingPointer);
         Cursor.visible = false;
     }
+
     void Start()
     {
         faPointerBase = transform.GetChild(0).GetComponent<Image>();
@@ -37,7 +38,7 @@ public class CraftingPointer : MonoBehaviour
 
     public static void OnFocusAreaHover(FocusArea fa)
     {
-        faPointerBase.gameObject.SetActive(true);
+     //   faPointerBase.gameObject.SetActive(true);
         faPointerText.text = "Grab @: " + fa.focusAreaId.ToString();
     }
 

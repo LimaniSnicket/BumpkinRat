@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver class
 {
@@ -15,7 +16,13 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     public List<CraftingActionButton> craftingActionButtons;
 
+    static Dictionary<FocusArea, GameObject> focusAreaIndicators;
+
+    public GameObject focusAreaIndicatorPrefab;
+
     public static float distraction = 0.25f;
+
+    public bool focusOnCrafting;
 
     public CraftingMenu MenuFunctionObject { get; set; }
 
@@ -29,6 +36,7 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         if (craftingUI == null)
         {
             craftingUI = this;
+            focusAreaIndicators = new Dictionary<FocusArea, GameObject>();
         }
         else
         {
@@ -38,8 +46,6 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
 
     void Start()
     {
-       
-
         MenuFunctionObject = new CraftingMenu(gameObject);
         MenuFunctionObject.SetCraftingActionButtons(craftingActionButtonParent, craftingButton, this);
         MenuFunctionObject.SetCraftingSequenceDisplay(progressDisplay);
@@ -47,10 +53,12 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         CraftingConversationBehavior.enabled = false; //not in conversation by default
 
         MenuFunctionObject.TailoredUiEvent += OnCraftingMenuStatusChange;
+        CustomerDialogueTracker.IntroDialogueEnded += EnterCraftAfterConversationInfoView;
     }
 
     void Update()
     {
+
         if (MenuFunctionObject.entryDisabled)
         {
             return;
@@ -71,6 +79,58 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
         if (Input.GetMouseButtonUp(0))
         {
             OnMouseButtonUpEndCraftingSequence();
+        }
+    }
+
+    void EnterCraftAfterConversationInfoView(object source, EventArgs args)
+    {
+        CameraManager.CraftingFocusView();
+    }
+
+    public static void HandleFocusAreaInstances(FocusArea area, bool add, bool destroy = false)
+    {
+        if (add)
+        {
+            TryAddFocusAreaScreenIndicator(area);
+        } else
+        {
+            TryRemoveFocusAreaScreenIndicator(area, destroy);
+        }
+    }
+
+    static void TryAddFocusAreaScreenIndicator(FocusArea focus)
+    {
+        if (focusAreaIndicators.ContainsKey(focus))
+        {
+            focusAreaIndicators[focus].SetActive(true);
+        } else
+        {
+            GameObject indicatorPrefab = Instantiate(craftingUI.focusAreaIndicatorPrefab);
+            FocusAreaIndicator indicator = new FocusAreaIndicator(indicatorPrefab);
+            indicator.gameObject.transform.SetParent(craftingUI.transform);
+            indicator.gameObject.GetComponent<RectTransform>().position = 
+                RectTransformUtility.WorldToScreenPoint(Camera.main, focus.transform.position);
+
+            indicator.SetTMPMessage(focus.ToString());
+
+            focusAreaIndicators.Add(focus, indicator.gameObject);
+        }
+    }
+
+    static void TryRemoveFocusAreaScreenIndicator(FocusArea focus, bool destroy)
+    {
+        if (focusAreaIndicators.ContainsKey(focus))
+        {
+            GameObject o = focusAreaIndicators[focus];
+
+            if (destroy)
+            {
+                focusAreaIndicators.Remove(focus);
+                Destroy(o);
+            } else
+            {
+                o.SetActive(false);
+            }
         }
     }
 
@@ -142,6 +202,25 @@ public class CraftingUI : MonoBehaviour, IUiFunctionality<CraftingMenu> //driver
     private void OnDestroy()
     {
         MenuFunctionObject.TailoredUiEvent -= OnCraftingMenuStatusChange;
+        CustomerDialogueTracker.IntroDialogueEnded -= EnterCraftAfterConversationInfoView;
+
     }
 
+}
+
+public struct FocusAreaIndicator
+{
+    public GameObject gameObject;
+    public TextMeshProUGUI tmproDisplay;
+
+    public FocusAreaIndicator(GameObject obj)
+    {
+        gameObject = obj;
+        tmproDisplay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    public void SetTMPMessage(string message)
+    {
+        tmproDisplay.text = message;
+    }
 }

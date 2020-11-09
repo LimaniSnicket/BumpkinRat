@@ -12,15 +12,11 @@ public class ConversationUi : MonoBehaviour
 
     public Vector2 conversationSnippetSpawnPoint;
 
-    Stack<string> storedMessages;
-
     private bool responding;
     private bool responseEnabled;
 
     public bool CanRespond => responding && responseEnabled;
-    public string joined;
 
-    StringBuilder stringBuilder;
     LoremIpsum loremIpsum;
 
     public event EventHandler SpawningNewConversationSnippet;
@@ -39,10 +35,8 @@ public class ConversationUi : MonoBehaviour
 
     private void Start()
     {
-        storedMessages = new Stack<string>();
-        stringBuilder = new StringBuilder();
         loremIpsum = new LoremIpsum();
-        currentConversationAesthetic = ConversationAesthetic.RuralAesthetic;//SpookyConversationAesthetic;
+        currentConversationAesthetic = ConversationAesthetic.SpookyConversationAesthetic;
         conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), 
             currentConversationAesthetic);
 
@@ -115,7 +109,8 @@ public class ConversationUi : MonoBehaviour
             {
                 ConversationSnippet snip;
                 InstantiateConversationSnippet(message, true, out snip);
-                BroadcastMessageSpawning();
+                snip.SetDragWeight(Mathf.Pow(10, level.Item2));
+                //BroadcastMessageSpawning();
 
                 while (snip.Typing)
                 {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class CameraManager : MonoBehaviour
 {
@@ -6,7 +7,7 @@ public class CameraManager : MonoBehaviour
 
     private static FollowBehaviorBasic basicCameraFollow;
 
-    public Transform craftingViewPoint;
+    public Transform craftingViewPoint, craftingFocusViewPoint;
 
     private void Awake()
     {
@@ -50,6 +51,12 @@ public class CameraManager : MonoBehaviour
     {
         camManager.transform.position = camManager.craftingViewPoint.position;
         camManager.transform.rotation = camManager.craftingViewPoint.rotation;
+    }
+
+    public static void CraftingFocusView()
+    {
+        camManager.transform.DOMove(camManager.craftingFocusViewPoint.position, 1.2f);
+        camManager.transform.DORotate(camManager.craftingFocusViewPoint.rotation.eulerAngles, 1.4f);
     }
 
     private void OnDestroy()
