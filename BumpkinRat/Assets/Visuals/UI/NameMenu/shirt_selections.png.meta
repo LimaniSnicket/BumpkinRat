@@ -1,0 +1,374 @@
+fileFormatVersion: 2
+guid: 6d30dfd08d4c3664bb6b4dd5d0f03cf9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -9111421527052540003
+    second: shirt_selections_0
+  - first:
+      213: 5198026848830756128
+    second: shirt_selections_1
+  - first:
+      213: -1891167596088339298
+    second: shirt_selections_2
+  - first:
+      213: -5474014985744253287
+    second: shirt_selections_3
+  - first:
+      213: -1745638653988127033
+    second: shirt_selections_4
+  - first:
+      213: 7128761034080276569
+    second: shirt_selections_5
+  - first:
+      213: 8008542924688536021
+    second: shirt_selections_6
+  - first:
+      213: 1948616545449089299
+    second: shirt_selections_7
+  - first:
+      213: 640777292007526450
+    second: shirt_selections_8
+  - first:
+      213: 571590630938255997
+    second: shirt_selections_9
+  - first:
+      213: 2144258647987327017
+    second: shirt_selections_10
+  - first:
+      213: 2480788441989741807
+    second: shirt_selections_11
+  - first:
+      213: 77167746961962993
+    second: shirt_selections_12
+  - first:
+      213: 308686190371384236
+    second: shirt_selections_13
+  - first:
+      213: -3420292950192443592
+    second: shirt_selections_14
+  - first:
+      213: -2332692258553812394
+    second: shirt_selections_15
+  - first:
+      213: 3992425138678044749
+    second: shirt_selections_16
+  - first:
+      213: 3267831872128664218
+    second: shirt_selections_17
+  - first:
+      213: -5262727870541088863
+    second: shirt_selections_18
+  - first:
+      213: 3334643793096896403
+    second: shirt_selections_19
+  - first:
+      213: 316414915099870379
+    second: shirt_selections_20
+  - first:
+      213: -7919992934895812487
+    second: shirt_selections_21
+  - first:
+      213: 2813744162303847858
+    second: shirt_selections_22
+  - first:
+      213: -3291960462801642385
+    second: shirt_selections_23
+  - first:
+      213: 6403264302779019192
+    second: shirt_selections_24
+  - first:
+      213: -7984247727797971465
+    second: shirt_selections_25
+  - first:
+      213: -5443993050676592433
+    second: shirt_selections_26
+  - first:
+      213: -414958802672434471
+    second: shirt_selections_27
+  - first:
+      213: 6433525800231664594
+    second: shirt_selections_28
+  - first:
+      213: 5245450986118188531
+    second: shirt_selections_29
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: shirt_selections_0
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1474
+        width: 470
+        height: 444
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d97af21456abd8180800000000000000
+      internalID: -9111421527052540003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_1
+      rect:
+        serializedVersion: 2
+        x: 837
+        y: 1451
+        width: 472
+        height: 474
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0251081f0e9132840800000000000000
+      internalID: 5198026848830756128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_2
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 1463
+        width: 488
+        height: 478
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e94dc68571931c5e0800000000000000
+      internalID: -1891167596088339298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_3
+      rect:
+        serializedVersion: 2
+        x: 1402
+        y: 914
+        width: 504
+        height: 504
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99e7c8f7f546804b0800000000000000
+      internalID: -5474014985744253287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_4
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 905
+        width: 462
+        height: 478
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ceb8da94ee36c7e0800000000000000
+      internalID: -1745638653988127033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_5
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 905
+        width: 456
+        height: 481
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 950500504627ee260800000000000000
+      internalID: 7128761034080276569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_6
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 392
+        width: 481
+        height: 471
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d13782eb5f042f60800000000000000
+      internalID: 8008542924688536021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shirt_selections_7
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 361
+        width: 465
+        height: 474
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31911f28c60ea0b10800000000000000
+      internalID: 1948616545449089299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: dd2918f46f664a04aa82c4903a8a6f2d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

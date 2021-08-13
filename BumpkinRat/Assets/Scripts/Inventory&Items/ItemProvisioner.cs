@@ -2,29 +2,26 @@
 using System.Linq;
 using UnityEngine;
 
-public class ItemProvisioner : ItemDistributor
+public class ItemProvisioner : ItemDistrubutionSettings
 {
-    IDistributeItems<ItemProvisioner> Provisioner { get; set; }
+    private IDistributeItems<ItemProvisioner> provisioner; 
 
-    public static event EventHandler<CollectableEventArgs> ItemProvisioning;
+    public static event EventHandler<ItemEventArgs> ItemProvisioning;
 
     public ItemProvisioner(IDistributeItems<ItemProvisioner> prov)
     {
-        Provisioner = prov;
+        provisioner = prov;
     }
+
     public override void Distribute()
     {
-        SetItemsToDrop(Provisioner.ItemDropData);
-
-        Debug.Log(string.Join("-", Provisioner.ItemDropData.Select(s => s.ItemToDropName)));
-
+        Debug.Log(string.Join("-", ItemsToDrop.Select(s => s.ItemToDropName)));
 
         if (!ItemsToDrop.ValidList())
         {
             Debug.Log("Item Drops aren't valid.");
             return;
         }
-
 
         foreach (ItemDrop drop in ItemsToDrop)
         {
@@ -37,9 +34,8 @@ public class ItemProvisioner : ItemDistributor
         if(ItemProvisioning != null)
         {
             ItemProvisioning(this,
-                new CollectableEventArgs {
+                new ItemEventArgs {
                     ItemToPass = collecting.ToDrop,
-                    CollectableName = collecting.ItemToDropName,
                     AmountToPass = collecting.AmountToDrop
                 }) ;
         }

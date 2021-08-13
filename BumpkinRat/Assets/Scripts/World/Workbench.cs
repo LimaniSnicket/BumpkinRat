@@ -1,59 +1,47 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Workbench : MonoBehaviour, IDistributeItems<ItemPlacer>
 {
-    public ItemPlacer ItemDistributor { get; set; }
-    public List<ItemDrop> ItemDropData { get; set; } = new List<ItemDrop>();
+    public ItemPlacer Distributor { get; set; }
 
     public Transform[] spawnPositions;
 
     public GameObject spawnPrefab;
 
+    public GameObject customerQueueHeadPosition;
 
     private void Start()
     {
-        ItemDistributor = new ItemPlacer(this);
-        ItemDistributor.spawnPrefab = true;
-        ItemDistributor.SetPlacementPositions(spawnPositions.Select(t => t.position).ToArray());
-
-        InventoryButton.InventoryButtonPressed += OnInventoryButtonPressed;
+        Distributor = new ItemPlacer(this);
+        Distributor.spawnPrefab = true;
 
         SpawnItemObject(spawnPrefab);
     }
 
-    void OnInventoryButtonPressed(object source, InventoryButtonArgs args)
+    void OnInventoryButtonPressed(object source, ItemEventArgs args)
     {
         SpawnOnWorkbench(args.ItemToPass);
     }
 
-    public void AddItemToDrop(Item item)
-    {
-        ItemDropData.Add(ItemDrop.SetFromItem(item));
-    }
-
     public void SpawnOnWorkbench(Item item)
     {
-        AddItemToDrop(item);
+        ItemDrop toDrop = new ItemDrop(item, 1);
 
-        ItemDistributor.SetItemsToDrop(ItemDropData);
+        Distributor.AddItemToDrop(toDrop);
 
-        ItemDistributor.Distribute();
-
-        ItemDropData.Clear();
+        Distributor.Distribute();
     }
 
     public void SpawnItemObject(GameObject obj)
     {
-        ItemDistributor.SetPrefab(obj);
+        Distributor.SetPrefabToPlace(obj);
     }
 
     private void OnDestroy()
     {
-        InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
+        //InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
     }
 
 }
-

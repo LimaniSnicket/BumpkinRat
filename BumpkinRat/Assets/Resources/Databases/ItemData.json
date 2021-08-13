@@ -2,41 +2,62 @@
 	"ItemData":[
 		{
 			"itemId": 1,
-			"itemName": "action_figure_torso",
+			"itemName": "action figure torso",
 			"craftable": false,
 			"value": 0
 		},
 		{
 			"itemId": 2,
-			"itemName": "action_figure_leggies",
+			"itemName": "action figure leggies",
 			"craftable": false,
 			"value": 0
 		},
 		{
 			"itemId": 3,
-			"itemName": "action_figure",
+			"itemName": "action figure",
 			"craftable": true,
 			"value": 10
 		},
 		{
             "itemId": 4,
-            "itemName": "nunchuck_broken_half",
+            "itemName": "nunchuck broken half",
             "craftable": false,
             "value": 0,
-			"prefabPath": "Assets/Prefabs/Item Prefabs/broken_nunchuck.prefab"
+			"prefabPath": "Assets/Prefabs/Item Prefabs/broken_nunchuck.prefab",
+			"focusAreaUiDetails": [
+				{
+					"id": 0,
+					"name": "broken link!",
+					"x": -150,
+					"y": 230
+				}
+			]
         },
         {
             "itemId": 5,
-            "itemName": "nunchuck_fixed",
+            "itemName": "nunchuck fixed",
             "craftable": true,
             "value": 1,
-			"prefabPath": "Assets/Prefabs/Item Prefabs/fixed_nunchuck.prefab"
+			"prefabPath": "Assets/Prefabs/Item Prefabs/fixed_nunchuck.prefab",
+			"craftingRecipe": {
+				"id": 0,
+            	"recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
+            	"ingredients": [
+               	 	{	
+                    	"id": 4,
+                    	"amount":  2
+                	}
+           	 	],
+				"craftingSequences":[
+					"Action(Id:4 FA:0) --> ATTACH --> Target(Id:4 FA:0)"
+				]
+			}
         }
 	], 
 
 	"RecipeData":[
 		{
-            "recipeId": 0,
+            "id": 0,
             "outputId": 5,
             "recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
             "ingredients": [
@@ -50,7 +71,7 @@
 			]
         },
 		{
-			"recipeId": 1,
+			"id": 1,
 			"outputId": 3,
 			"recipeDescription": "An action figure that'll make all the cowboy dolls jealous.",
 			"ingredients":[

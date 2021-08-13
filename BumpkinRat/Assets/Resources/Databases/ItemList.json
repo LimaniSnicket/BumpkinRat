@@ -1,0 +1,60 @@
+{
+    "items": [
+        {
+            "itemId": 1,
+            "itemName": "action figure torso",
+            "craftable": false,
+            "value": 0
+        },
+        {
+            "itemId": 2,
+            "itemName": "action figure leggies",
+            "craftable": false,
+            "value": 0
+        },
+        {
+            "itemId": 3,
+            "itemName": "action figure",
+            "craftable": true,
+            "value": 10
+        },
+        {
+            "itemId": 4,
+            "itemName": "nunchuck broken half",
+            "craftable": false,
+            "value": 0,
+            "prefabPath": "Assets/Prefabs/Item Prefabs/broken_nunchuck.prefab",
+            "focusAreaUiDetails": [
+                {
+                    "id": 0,
+                    "name": "broken link!",
+                    "x": -150,
+                    "y": 230
+                }
+            ]
+        },
+        {
+            "itemId": 5,
+            "itemName": "nunchuck fixed",
+            "craftable": true,
+            "value": 1,
+            "prefabPath": "Assets/Prefabs/Item Prefabs/fixed_nunchuck.prefab",
+            "craftingRecipe": [
+                {
+                    "id": 0,
+                    "outputId": 5,
+                    "recipeDescription": "A fixed up pair of nunchucks, fit for a sewer-dwelling fighter!",
+                    "ingredients": [
+                        {
+                            "id": 4,
+                            "amount": 2
+                        }
+                    ],
+                    "craftingSequences": [
+                        "Act(Id:4 FA:0)>ATTACH>Targ(Id:4 FA:0)"
+                    ]
+                }
+            ]
+        }
+    ]
+}

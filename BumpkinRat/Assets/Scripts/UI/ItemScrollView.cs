@@ -6,16 +6,15 @@ using UnityEngine.UI;
 
 public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 {
-    public InventoryManager inventoryManager;
+    private Inventory activeInventory;
 
     public GameObject inventoryButtonPrefab;
 
-    public InventoryMenu MenuFunctionObject { get; set; }
+    public InventoryMenu UiMenu { get; set; }
 
-    public ScrollRect itemScroller;
+    private ScrollRect itemScroller;
 
-    List<InventoryButton> inventoryButtons;
-    Dictionary<string, InventoryButton> inventoryButtonLookup => inventoryButtons.ToDictionary(k => k.ItemNameToDisplay);
+    private List<InventoryButton> inventoryButtons;
 
     public Transform spawnAtTransform; 
     public GameObject spawnPrefab;
@@ -31,21 +30,22 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
     {
         itemScroller = GetComponentInChildren<ScrollRect>();
 
-        MenuFunctionObject = new InventoryMenu(itemScroller.gameObject);
+        UiMenu = new InventoryMenu(itemScroller.gameObject);
        
 
-        if(inventoryManager == null)
+        if(activeInventory == null)
         {
             try
             {
-                inventoryManager = FindObjectOfType<InventoryManager>();
+                InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+                activeInventory = inventoryManager.ActiveInventory;
             } catch (NullReferenceException)
             {
                 Destroy(this);
             }
         }
 
-        inventoryManager.activeInventory.InventoryAdjusted += OnInventoryAdjustment;
+        activeInventory.InventoryAdjusted += OnInventoryAdjustment;
 
     }
 
@@ -53,31 +53,16 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            MenuFunctionObject.ChangeMenuStatus();
+            UiMenu.ToggleMenu();
         }
     }
 
     void OnInventoryAdjustment(object source, InventoryAdjustmentEventArgs args)
     {
-
-        if (args.Adding)
+        if (args.AdjustmentType.Equals(InventoryAdjustment.ADD))
         {
-            //SpawnButtonForItem(args.Listing.item, args.NewAmountToDisplay);
             SpawnButtonForItemListing(args.Listing);
         }
-    }
-
-    void SpawnButtonForItem(Item i, string amountLabel)
-    {
-        if (inventoryButtons == null)
-        {
-            inventoryButtons = new List<InventoryButton>();
-        }
-
-        InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
-        //inventoryButton.SetInventoryDisplay(i, amountLabel);
-
-        inventoryButtons.Add(inventoryButton);
     }
 
     void SpawnButtonForItemListing(ItemListing i)
@@ -100,6 +85,6 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
     private void OnDestroy()
     {
-        inventoryManager.activeInventory.InventoryAdjusted -= OnInventoryAdjustment;
+        activeInventory.InventoryAdjusted -= OnInventoryAdjustment;
     }
 }

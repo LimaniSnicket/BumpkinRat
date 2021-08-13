@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 public class UiElementContainer : MonoBehaviour
 {
-    public RectTransform RectTransform => GetComponent<RectTransform>();
-
     public Vector2 startPosition;
     public float spacing;
 
@@ -31,7 +28,7 @@ public class UiElementContainer : MonoBehaviour
 
     }
 
-    RectTransform InstantiateAndGetRectTransform(GameObject prefab)
+    private RectTransform SpawnRectTransformObject(GameObject prefab)
     {
         GameObject inst = Instantiate(prefab, transform);
         RectTransform tr = inst.GetOrAddComponent<RectTransform>();
@@ -41,7 +38,7 @@ public class UiElementContainer : MonoBehaviour
 
     public void SpawnAllHorizontally(GameObject spawning, float spacing)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
         float width = rect.rect.width;
 
@@ -51,7 +48,7 @@ public class UiElementContainer : MonoBehaviour
 
     public void SpawnAllVertically(GameObject spawning, float spacing)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
         float height = rect.rect.height;
 
@@ -60,7 +57,7 @@ public class UiElementContainer : MonoBehaviour
 
     public void SpawnAtAlternatingVerticalPositions(GameObject spawning, float spacing, float verticalOffset, int everyOther = 2)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
         Vector2 widthSpacing = Vector2.right * (rect.rect.width + spacing) * (ElementsInContainer - 1);
 

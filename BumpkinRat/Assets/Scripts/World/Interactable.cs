@@ -1,27 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Interactable : MonoBehaviour, IDistributeItems<ItemDropper>
 {
-    public ItemDropper ItemDistributor { get; set; }
-    public List<ItemDrop> ItemDropData { get; set; }
+    public ItemDropper Distributor { get; private set; }
 
-    float DistanceFromPlayer => Vector3.Distance(transform.position, PlayerBehavior.playerPosition);
+    float DistanceFromPlayer => Vector3.Distance(transform.position, PlayerBehavior.PlayerPosition);
 
     void Start()
     {
-        ItemDistributor = new ItemDropper(this);
-        ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
+        Distributor = new ItemDropper(this, this.transform);
+        Distributor.SetItemDropData((1, 1), (2, 1));
     }
 
     void Update()
     {
-        if(DistanceFromPlayer <= 1f && Input.GetKeyDown(KeyCode.Space))
+        if (DistanceFromPlayer <= 1f && Input.GetKeyDown(KeyCode.Space))
         {
-            ItemDistributor.DistributeAtTransform(transform);
+            Distributor.Distribute();
         }
     }
-
-
 }

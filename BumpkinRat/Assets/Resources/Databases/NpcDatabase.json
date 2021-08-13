@@ -14,14 +14,12 @@
 		},
 		{
 			"npcId": 2,
-			"npcName": "Grandma Squirrel",
-			"conversationDataPath": "",
-			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
+			"npcName": "Eunice",
+			"texturePath": "Assets/Visuals/NPCs/granny_squirrel.png"
 		},
 		{
 			"npcId": 3,
-			"npcName": "Snazzy Racoon Gramps",
-			"conversationDataPath": "",
+			"npcName": "Terry",
 			"texturePath": "Assets/Visuals/NPCs/cuzzo.png"
 		}
 	]

@@ -1,49 +1,59 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public class ConversationUi : MonoBehaviour
 {
     public GameObject conversationSnippetPrefab;
-    public GameObject uiContainer, responseContainer;
+    public GameObject uiContainer, responseContainer, focusedPortraitObject;
 
     public Vector2 conversationSnippetSpawnPoint;
+    public Vector2 responseSpawnPoint;
+    public float InactivityThreshold { get; set; } = 10f;
 
     private bool responding;
     private bool responseEnabled;
+    private bool conversationUiBusy;
 
-    public bool CanRespond => responding && responseEnabled;
+    public static int numberOfSnippets;
 
-    LoremIpsum loremIpsum;
-
-    public event EventHandler SpawningNewConversationSnippet;
+    public event EventHandler<ConversationSnippetEventArgs> SpawningNewConversationSnippet;
 
     public ConversationAesthetic currentConversationAesthetic;
-    ConversationResponseDisplay[] conversationResponses;
 
-    public CustomerDialogueTracker conversationTracker;
+    private ConversationSnippet hangingNpcResponse;
 
-    Dictionary<KeyCode, (string, float)> keyToResponseLevel = new Dictionary<KeyCode, (string, float)>
+    private CustomerDialogueTracker conversationTracker;
+
+    private ConversationResponseDisplayManager conversationResponseManager;
+
+    bool playerResponseDraggedSuccess;
+
+    private DialogueTrackerFactory trackerFactory;
+    private ConversationUiElementFactory snippetFactory;
+    private FocusedViewDialogueHub focusedViewDialogueHub;
+    private ResponseTimeTracker responseTimeTracker;
+
+    private KeyCodeToResponseMap keyMap;
+
+    private void Awake()
     {
-        { KeyCode.A, ("low", 1) },
-        { KeyCode.S, ("medium", 1.5f) },
-        { KeyCode.D, ("high", 2) }
-    };
+        trackerFactory = new DialogueTrackerFactory();
+        conversationResponseManager = new ConversationResponseDisplayManager();
+        snippetFactory = new ConversationUiElementFactory(this, conversationResponseManager);
+
+        keyMap = new KeyCodeToResponseMap(KeyCode.A, KeyCode.S, KeyCode.D);
+    }
 
     private void Start()
     {
-        loremIpsum = new LoremIpsum();
         currentConversationAesthetic = ConversationAesthetic.SpookyConversationAesthetic;
-        conversationResponses = ConversationResponseDisplay.GetResponseDisplays(responseContainer.transform.GetChildren(), 
-            currentConversationAesthetic);
 
-        CustomerDialogue activeConversation = GeneralStorePrologue.CraftingOrderTest.GetCustomerDialogue();
-        conversationTracker = CustomerDialogueTracker.GetCustomerDialogueTracker(activeConversation);
+        var conversationResponses = snippetFactory.GetResponseDisplays(responseContainer.transform.GetChildren(), currentConversationAesthetic);
 
-        StartCoroutine(RunCustomerDialogueIntro(activeConversation));
+        focusedViewDialogueHub = GetComponentInChildren<FocusedViewDialogueHub>();
+
+        responseTimeTracker = new ResponseTimeTracker(InactivityThreshold);
     }
 
     private void OnEnable()
@@ -58,120 +68,176 @@ public class ConversationUi : MonoBehaviour
 
     private void Update()
     {
-
         if (!responseEnabled)
         {
             return;
         }
 
-        foreach(KeyValuePair<KeyCode, (string, float)> pairs in keyToResponseLevel)
+        responseTimeTracker.Tick(Time.deltaTime);
+
+        foreach(KeyCode key in keyMap.KeyCodes)
         {
-            if (Input.GetKeyDown(pairs.Key))
+            if (Input.GetKeyDown(key))
             {
-                RespondMessage(pairs.Key);
+                TriggerConversationResponse(key);
             }
         }
 
+        if(!playerResponseDraggedSuccess)
+        {
+            playerResponseDraggedSuccess = focusedViewDialogueHub.MostRecentResponseIsOverlappingDragToRect() && Input.GetMouseButtonUp(0); 
+        }
+
     }
 
-    void BroadcastMessageSpawning()
+    public void SetActiveConversation(CustomerOrder activeOrder)
     {
-        if (SpawningNewConversationSnippet != null)
+        CustomerDialogue active = activeOrder.GetCustomerDialogue();
+        conversationTracker = trackerFactory.CreateCustomerDialogueTracker(active);
+        StartCoroutine(RunCustomerDialogueIntro(active));
+    }
+
+    public void OnRecipeCompleteRunOutro()
+    {
+        ConversationSnippet.DestroyAllSnippets(this);
+
+        DialogueResponse outro = conversationTracker.GetOutroDialogue();
+
+        if (!outro.IsNull)
         {
-            SpawningNewConversationSnippet(this, new EventArgs());
+            StartCoroutine(RunCustomerDialogueOutro(outro));
         }
     }
 
-    public void RespondMessage(KeyCode pressed)
+    private IEnumerator TakeResponseFromConversation(KeyCode pressed)
     {
-        if (!responding)
-        {
-            StartCoroutine(TakeResponseFromConversation(pressed, conversationTracker));
-        }
-    }
-
-    IEnumerator TakeResponseFromConversation(KeyCode pressed, CustomerDialogueTracker tracker)
-    {
-        (string, float) level = (string.Empty, 1);
-        bool valid = keyToResponseLevel.TryGetValue(pressed, out level);
         responding = true;
 
-        Dictionary<string, string> responseMap = tracker.GetResponses().
-            ToDictionary(r => r.responseLevel, r => r.displayDialogue);
+        float distraction = keyMap.CalculateDistractionAmount(pressed);
 
-        if (responseMap.ContainsKey(level.Item1) && !tracker.DialogueComplete)
+        ResponseTier tier = keyMap.GetResponseTierForKey(pressed);
+
+        int levelIndex = (int)tier;
+
+        if (conversationResponseManager.IsActive(tier) && !this.conversationTracker.MainDialogueComplete)
         {
-            string message = responseMap[level.Item1];
 
-            ConversationResponseDisplay.SetAllInactive();
+            DestroyHangingResponse();
+
+            var responseTaken = conversationResponseManager.GetDisplayForResponseTier(tier);
+            string message = responseTaken.DisplayMessage;
 
             if (message != string.Empty)
             {
-                ConversationSnippet snip;
-                InstantiateConversationSnippet(message, true, out snip);
-                snip.SetDragWeight(Mathf.Pow(10, level.Item2));
-                //BroadcastMessageSpawning();
-
-                while (snip.Typing)
-                {
-                    yield return new WaitForEndOfFrame();
-                }
-
-                yield return new WaitForSeconds(0.5f);
-
+                yield return StartCoroutine(CreateConversationSnippetForResponseTaken(responseTaken, distraction));
             }
 
-            yield return StartCoroutine(GetCustomerResponse(tracker, level.Item1, level.Item2));
+            StartCoroutine(focusedViewDialogueHub.ChangeAppearanceWhenOverlapping());
 
+            while (!playerResponseDraggedSuccess)
+            {
+                Debug.Log("Waiting for response to get dragged!");
+
+                // run some other routines for animations
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            focusedViewDialogueHub.ShrinkMostReceptPlayerResponse();
+
+            BroadcastResponseSnippetSpawn();
+
+            yield return new WaitForSeconds(0.15f);
+            
+            yield return StartCoroutine(ShowCustomerResponse(levelIndex, distraction));
         }
 
         responding = false;
-
-        yield return null;
     }
 
-    IEnumerator GetCustomerResponse(CustomerDialogueTracker tracker, string level, float distraction)
+    private IEnumerator CreateConversationSnippetForResponseTaken(ConversationResponseDisplay responseTaken, float distraction)
     {
-        BroadcastMessageSpawning();
-        ConversationSnippet snip;
+        conversationResponseManager.SetAllInactive();
 
-        tracker.Advance();
+        ConversationSnippet snippet = snippetFactory.CreatePlayerSnippetFromResponseDisplay(responseTaken);
 
-        string message = tracker.Tracking.promptedCustomerDialogue[tracker.DialogueIndex].GetCustomerResponse(level);
+        yield return new WaitWhile(() => !CraftingManager.FocusedOnCrafting && CraftingManager.CraftingUiBusy);
 
-        CraftingUI.Distract(distraction);
+        yield return new WaitForSeconds(0.05f);
 
-        InstantiateConversationSnippet(message, false, out snip);
+        snippet.GrowToFullScale(0.1f);
 
-        while (snip.Typing)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        snippet.ApplyLocalJumpAndJitter(Vector3.up);
 
-        yield return new WaitForSeconds(0.2f);
+        snippet.SetDragWeight(distraction);
 
-        ConversationResponseDisplay.SetFromConversationResponses(tracker.GetResponses());
+        focusedViewDialogueHub.SetMostRecentPlayerResponse(snippet);
 
-        if (tracker.DialogueComplete)
+        yield return new WaitWhile(() => snippet.Typing);
+
+        yield return new WaitForSeconds(0.15f);
+    }
+
+    private IEnumerator ShowCustomerResponse(int level, float distraction)
+    {
+        this.conversationTracker.AdvanceDialogueWithQuality(level);
+
+        CraftingManager.IncreaseDistraction(distraction);
+
+        int quality = this.conversationTracker.QualityIndex;
+
+        yield return new WaitForSeconds(0.15f);
+
+        playerResponseDraggedSuccess = false;
+
+        focusedViewDialogueHub.SetMostRecentPlayerResponse(null);
+
+        yield return new WaitForSeconds(0.25f);
+
+        string[] getLines = this.conversationTracker.GetDisplayLinesAtDialogueIndex(quality);
+
+        yield return StartCoroutine(ReadMultiLineConversationSnippet(getLines));
+
+        yield return new WaitWhile(() => conversationUiBusy);
+
+        yield return new WaitForSeconds(0.15f);
+
+        conversationResponseManager.SetActiveInConversation(this.conversationTracker.GetResponses());
+
+        if (this.conversationTracker.MainDialogueComplete)
         {
             ConversationSnippet.DestroyAllSnippets(this);
-        }
+        } 
     }
 
-    public void InstantiateConversationSnippet(string message, bool response, out ConversationSnippet snippet)
-    {
-        ConversationSnippet snip = GetSnippet(message, response);
-        snippet = snip;
-    }
-
-    IEnumerator RunCustomerDialogueIntro(CustomerDialogue dialogue)
+    private IEnumerator RunCustomerDialogueIntro(CustomerDialogue dialogue)
     {
         yield return StartCoroutine(ReadMultiLineConversationSnippet(dialogue.introLines));
-        yield return new WaitForSeconds(0.2f);
-        ConversationResponseDisplay.SetFromConversationResponses(dialogue.introResponses);
+        yield return new WaitForSeconds(0.5f);
+
+        //trigger crafting mode here!
+        conversationTracker.EndIntroDialogue();
+
+        yield return new WaitForSeconds(0.15f);
+        focusedViewDialogueHub.SetFocusedHubConversationActiveWithSnippet(hangingNpcResponse);
+
+        yield return new WaitWhile(() => !CraftingManager.FocusedOnCrafting && CraftingManager.CraftingUiBusy);
+
+        conversationResponseManager.SetActiveInConversation(dialogue.introResponses);
     }
 
-    IEnumerator ReadMultiLineConversationSnippet(string[] lines)
+    private IEnumerator RunCustomerDialogueOutro(DialogueResponse response)
+    {
+        conversationTracker.TriggerOutro();
+
+        yield return StartCoroutine(ReadMultiLineConversationSnippet(response.displayDialogue));
+        yield return new WaitForSeconds(0.15f);
+
+        conversationTracker.AdvanceDialogue();
+        conversationTracker.EndOutroDialogue();
+    }
+
+    private IEnumerator ReadMultiLineConversationSnippet(string[] lines)
     {
         if (!lines.CollectionIsNotNullOrEmpty())
         {
@@ -179,27 +245,38 @@ public class ConversationUi : MonoBehaviour
         }
 
         responseEnabled = false;
+        conversationUiBusy = true;
 
         int tracker = 0;
         int amount = lines.Length;
 
         yield return new WaitForSeconds(0.5f);
 
-        ConversationSnippet active = GetSnippet(lines[tracker], false);
-        BroadcastMessageSpawning();
+        Vector2 spawnPoint = CraftingManager.FocusedOnCrafting ? focusedViewDialogueHub.focusedConversationSnippetSpawnPoint : conversationSnippetSpawnPoint;
 
-        while (tracker < amount)
+        if (tracker < amount)
         {
-            if (active.Typing)
+            string snipLine = lines[tracker];
+
+            ConversationSnippet active = snippetFactory.CreateNpcSnippet(snipLine, spawnPoint);
+
+            BroadcastCustomerSnippetSpawn();
+
+            while (tracker < amount)
             {
-                yield return new WaitForEndOfFrame();
-            } else
-            {
-                yield return new WaitForSeconds(1.2f);
+                yield return new WaitWhile(() => active.Typing);
+
+                yield return new WaitForSeconds(0.15f);
                 try
                 {
-                    active = GetSnippet(lines[tracker + 1], false);
-                    BroadcastMessageSpawning();
+                    active = snippetFactory.CreateNpcSnippet(lines[tracker + 1], spawnPoint);
+
+                    BroadcastCustomerSnippetSpawn();
+
+                    hangingNpcResponse = active;
+
+                    responseTimeTracker.StartTrackingSnippet(hangingNpcResponse);
+
                     tracker++;
                 }
                 catch (IndexOutOfRangeException)
@@ -210,18 +287,44 @@ public class ConversationUi : MonoBehaviour
         }
 
         responseEnabled = true;
-
+        conversationUiBusy = false;
     }
 
-    ConversationSnippet GetSnippet(string message, bool response)
+    private void BroadcastResponseSnippetSpawn()
     {
-        GameObject snippet = Instantiate(conversationSnippetPrefab, transform);
-        ConversationSnippet convoSnippet = snippet.GetComponent<ConversationSnippet>();
-        convoSnippet.isResponse = response;
-        convoSnippet.SetConversationUi(this);
-        convoSnippet.ApplyConversationAesthetic(currentConversationAesthetic);
-        convoSnippet.InitializeSnippet(conversationSnippetSpawnPoint);
-        convoSnippet.ReadLine(message, 0.07f);
-        return convoSnippet;
+        ConversationSnippetEventArgs args = new ConversationSnippetEventArgs
+        {
+            SpawningResponse = true
+        };
+
+        SpawningNewConversationSnippet.BroadcastEvent(this, args);
+    }
+
+    private void BroadcastCustomerSnippetSpawn()
+    {
+        ConversationSnippetEventArgs args = new ConversationSnippetEventArgs
+        {
+            SpawningResponse = false
+        };
+
+        SpawningNewConversationSnippet.BroadcastEvent(this, args);
+    }
+
+    private void TriggerConversationResponse(KeyCode pressed)
+    {
+        if (!responding)
+        {
+            StartCoroutine(TakeResponseFromConversation(pressed));
+        }
+    }
+
+    private void DestroyHangingResponse()
+    {
+        if (hangingNpcResponse != null)
+        {
+            responseTimeTracker.StopTracking();
+            ConversationSnippet.DestroyAllCustomerResponseSnippets(this);
+            hangingNpcResponse = null;
+        }
     }
 }

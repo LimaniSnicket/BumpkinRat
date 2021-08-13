@@ -23,6 +23,18 @@ TextureImporter:
   - first:
       213: 7905886361859624102
     second: wood_panel
+  - first:
+      213: 6727290005489564032
+    second: Scribble_BG
+  - first:
+      213: 8618993663937828241
+    second: Skeeter_Focused
+  - first:
+      213: 6065954026153353378
+    second: Froggert_Focused
+  - first:
+      213: -756826573158674332
+    second: Pointer_Grabbed
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -249,7 +261,7 @@ TextureImporter:
       name: wood_panel
       rect:
         serializedVersion: 2
-        x: 685
+        x: 879
         y: 638
         width: 400
         height: 175
@@ -262,6 +274,90 @@ TextureImporter:
       bones: []
       spriteID: 6ac8f3942c957bd60800000000000000
       internalID: 7905886361859624102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scribble_BG
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 236
+        width: 337
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 089bd360e922c5d50800000000000000
+      internalID: 6727290005489564032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeeter_Focused
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 250
+        width: 272
+        height: 313
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1955b5c6211dc9770800000000000000
+      internalID: 8618993663937828241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Froggert_Focused
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 265
+        width: 275
+        height: 238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a0a8b84c099e2450800000000000000
+      internalID: 6065954026153353378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pointer_Grabbed
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 653
+        width: 145
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4601d46dd363f75f0800000000000000
+      internalID: -756826573158674332
       vertices: []
       indices: 
       edges: []

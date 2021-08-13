@@ -12,32 +12,44 @@
 
 			"introResponses":[
 				{
-					"responseLevel": "medium",
+					"responseLevel": 1,
 					"displayDialogue": "Sure man, I'm beat too"
 				}
 			],
 
+
 			"promptedCustomerDialogue":[
-				{
-					"medium": "Aw thanks cuzzo! You're the greatest!",
+				{					
+					"baseResponse":{
+						"displayDialogue": [
+							"Sweet, let's go", 
+							"I wanna run somethin' by ya"
+						],
+						"qualityIndex": 0
+					},
 
 					"possibleResponses":[
 						{
-							"responseLevel": "low",
+							"responseLevel": 0,
 							"displayDialogue": "Don't mention it bud"
 						},
 						{
-							"responseLevel": "medium",
+							"responseLevel": 1,
 							"displayDialogue": "Anytime sport, it's no problem!"
 						},
 						{
-							"responseLevel": "high",
+							"responseLevel": 2,
 							"displayDialogue": "No problem buddy, I know you love Halloween!"
 						}
 					]
 				},
 				{
-					"high": "some response idk"
+					"baseResponse":{
+						"displayDialogue": [
+							"fuck yeah dawg"
+						],
+						"qualityIndex": 0
+					}
 				}
 			]
 		}

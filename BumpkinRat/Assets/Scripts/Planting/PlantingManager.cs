@@ -6,21 +6,34 @@ using System.Collections.Generic;
 public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
 {
     private static PlantingManager plantGod;
-    private static List<PlantingSpace> planting_spaces;
+    private static List<PlantingSpace> plantingSpaces;
 
-    public static List<PlantingSpace> PlantingSpaces { get {
-            if (planting_spaces == null) { planting_spaces = new List<PlantingSpace>(); }
-            return planting_spaces;
-        } }
-    public static List<PlantingSpace> NearbyPlantingSpaces;
+    // change to available planting spaces?
+    public static List<PlantingSpace> PlantingSpaces {
+        get 
+        {
+            if (plantingSpaces == null) 
+            { 
+                plantingSpaces = new List<PlantingSpace>(); 
+            }
+            return plantingSpaces;
+        } 
+    }
+
+    public static List<PlantingSpace> NearbyPlantingSpaces { get; private set; } = new List<PlantingSpace>();
 
     public static List<string> plantNames = new List<string> { "plant a", "plant b" };
 
     private void Awake()
     {
         Debug.Log("Initialize Plant Manager. Bow down to your plant god, peasant");
-        if(plantGod == null) { plantGod = this; } else { Destroy(this); }
-        NearbyPlantingSpaces = new List<PlantingSpace>();
+        if (plantGod == null) { 
+            plantGod = this; 
+        } 
+        else 
+        { 
+            Destroy(this); 
+        }
     }
 
     public static PlantingSpace NearestPlantingSpace
@@ -40,22 +53,25 @@ public class PlantingManager : MonoBehaviour, IComparer<PlantingSpace>
         if (x == null && y == null) { return 0; }
         if (x == null && y != null) { return 1; }
         if (x != null && y == null) { return -1; }
-        if (Mathf.Abs(Vector3.Distance(x.transform.position, PlayerBehavior.playerPosition))
-            <= Mathf.Abs(Vector3.Distance(y.transform.position, PlayerBehavior.playerPosition)))
+        if (Mathf.Abs(Vector3.Distance(x.transform.position, PlayerBehavior.PlayerPosition))
+            <= Mathf.Abs(Vector3.Distance(y.transform.position, PlayerBehavior.PlayerPosition)))
         { return -1; }
         return 1;
     }
 
     public static void RegisterPlantingSpace(PlantingSpace space, bool add)
     {
-        if(planting_spaces == null) { planting_spaces = new List<PlantingSpace>(); }
-        planting_spaces.HandleInstanceObjectInList(space, add);
+        plantingSpaces.HandleInstanceObjectInList(space, add);
     }
 
-    public static void RegisterNearbyPlantingSpace(PlantingSpace space, bool add)
+    public static void RegisterNearbyPlantingSpace(PlantingSpace space)
     {
-        if(NearbyPlantingSpaces == null) { NearbyPlantingSpaces = new List<PlantingSpace>(); }
-        NearbyPlantingSpaces.HandleInstanceObjectInList(space, add);
+        NearbyPlantingSpaces.HandleInstanceObjectInList(space, true);
+    }
+
+    public static void RemovePlantingSpaceFromNearbySpaces(PlantingSpace space)
+    {
+        NearbyPlantingSpaces.HandleInstanceObjectInList(space, false);
     }
 
     public static string GetRandomPlant()

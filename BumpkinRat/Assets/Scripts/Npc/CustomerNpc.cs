@@ -1,86 +1,52 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
-public class CustomerNpc : MonoBehaviour
+public class CustomerNpc : OverworldNpc
 {
-
     const string prefabPath = "Assets/Prefabs/npc prefabs/Customer.prefab";
-    private static Dictionary<int, Texture2D> cacheNpcTextures;
     static GameObject cachedPrefab;
-    static bool validCache => cachedPrefab != null;
+    static bool CacheExists => cachedPrefab != null;
 
-    MeshRenderer Renderer => GetComponent<MeshRenderer>();
-
-    MaterialPropertyBlock propertyBlock;
-
-    MaterialPropertyBlock GetPropertyBlock
+    private void Update()
     {
-        get
-        {
-            if(propertyBlock == null)
-            {
-                propertyBlock = new MaterialPropertyBlock();
-            }
-
-            return propertyBlock;
-        }
+        transform.eulerAngles = Camera.main.transform.eulerAngles.GetAxesOfVector3("y");
     }
 
-    static readonly int npcTexture = Shader.PropertyToID("_MainTex");
-
-
-    private void Start()
+    public static CustomerNpc GetCustomerNpc(int npc)
     {
-        if(cacheNpcTextures == null)
-        {
-            cacheNpcTextures = new Dictionary<int, Texture2D>();
-        }
-    }
+        GameObject toInstantiate = GetPrefabToInstantiate();
 
-
-    public static CustomerNpc GenerateCustomerNpc(NpcDatabaseEntry npc)
-    {
-        GameObject toInstantiate = validCache ? cachedPrefab : AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         CustomerNpc instantiatedCustomer = Instantiate(toInstantiate).GetOrAddComponent<CustomerNpc>();
 
         Texture2D toSet;
-
-        bool inCache = ExistsInCache(npc, out toSet);
+        bool inCache = NpcTextureCache.TryGetTexture(npc, out toSet);
 
         if (!inCache)
         {
-            toSet = AssetDatabase.LoadAssetAtPath<Texture2D>(npc.TexturePath);
-            CacheTexture(npc.NpcId, toSet);
+            toSet = GetTextureForNpc(npc);
+            NpcTextureCache.CacheTexture(npc, toSet);
         }
 
-        instantiatedCustomer.SetCustomerNpcAppearence(toSet);
+        instantiatedCustomer.SetNpcAppearence(toSet);
         return instantiatedCustomer;
     }
 
-    void SetCustomerNpcAppearence(Texture2D texture)
+    private static GameObject GetPrefabToInstantiate()
     {
-        GetPropertyBlock.SetTexture(npcTexture, texture);
-        Renderer.SetPropertyBlock(GetPropertyBlock);
-    }
-
-    static void CacheTexture(int? entry, Texture2D tex)
-    {
-        if (cacheNpcTextures == null)
+        if (!CacheExists)
         {
-            cacheNpcTextures = new Dictionary<int, Texture2D>();
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            cachedPrefab = prefab;
         }
 
-        cacheNpcTextures.AddOrReplaceKeyValue(entry.Value, tex);
+        return cachedPrefab;
     }
 
-    static bool ExistsInCache(NpcDatabaseEntry entry, out Texture2D texture)
+    private static Texture2D GetTextureForNpc(int npc)
     {
-        texture = null;
-        if (!cacheNpcTextures.CollectionIsNotNullOrEmpty()) return false;
-        return cacheNpcTextures.TryGetValue(entry.NpcId.Value, out texture);
+        string texturePath = NpcData.GetTexturePath(npc);
+        return AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
     }
-
 }
+

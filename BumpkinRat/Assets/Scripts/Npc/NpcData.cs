@@ -8,6 +8,7 @@ using UnityEngine;
 public class NpcData 
 {
     public static NpcData npcData;
+    const string GenericConversationPath = "";
 
     public static bool CanRead => npcEntryLookup.CollectionIsNotNullOrEmpty();
 
@@ -43,6 +44,19 @@ public class NpcData
         return npcEntryLookup;
     }
 
+    public static string GetTexturePath(int id)
+    {
+        if (npcEntryLookup.CollectionIsNotNullOrEmpty())
+        {
+            if (npcEntryLookup.ContainsKey(id))
+            {
+                return npcEntryLookup[id].TexturePath;
+            }
+        }
+
+        return string.Empty;
+    }
+
     public static NpcDatabaseEntry GetDatabaseEntry(int npcId)
     {
         if (npcEntryLookup.CollectionIsNotNullOrEmpty())
@@ -68,10 +82,11 @@ public struct NpcDatabaseEntry
 {
     [SerializeField] int npcId;
     [SerializeField] string npcName;
+    [SerializeField] bool fromGenericConversations;
     [SerializeField] string conversationDataPath;
     [SerializeField] string texturePath;
 
-    CustomerDialogueStorage dialogueStorage;
+    NpcDialogueStorage dialogueStorage;
 
     public int? NpcId => npcId;
     public string NpcName => npcName;
@@ -90,11 +105,11 @@ public struct NpcDatabaseEntry
         }
     }
 
-    public CustomerDialogueStorage GetStoredDialogueStorage()
+    public NpcDialogueStorage GetStoredDialogueStorage()
     {
         if (dialogueStorage == null && !string.IsNullOrWhiteSpace(conversationDataPath))
         {
-            dialogueStorage = conversationDataPath.InitializeFromJSON<CustomerDialogueStorage>();
+            dialogueStorage = conversationDataPath.InitializeFromJSON<NpcDialogueStorage>();
         }
         return dialogueStorage;
     }
@@ -112,12 +127,11 @@ public struct NpcDatabaseEntry
 }
 
 [Serializable]
-public class CustomerDialogueStorage
+public class NpcDialogueStorage
 {
     [SerializeField] CustomerDialogue[] associatedDialogue;
 
     Dictionary<int, Dictionary<int, CustomerDialogue>> DialogueToIds;
-
     public CustomerDialogue GetCustomerDialogue(int level, int dialogueId)
     {
         Dictionary<int, CustomerDialogue> levelLookup = GetCustomerDialogueForLevel(level);

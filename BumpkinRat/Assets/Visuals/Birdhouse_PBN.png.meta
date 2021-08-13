@@ -1,0 +1,860 @@
+fileFormatVersion: 2
+guid: 3ac08cfaf2555ff479a1ec1b405892a0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 350262867006237971
+    second: birdhouse_outline
+  - first:
+      213: 3063187578273651854
+    second: birdhouse_interactionMap
+  - first:
+      213: -232029493843678625
+    second: Birdhouse_PBN_2
+  - first:
+      213: -7141142508647023398
+    second: birdhouseColorKey
+  - first:
+      213: 5302193181489001899
+    second: Birdhouse_PBN_4
+  - first:
+      213: 9088051094011344163
+    second: Birdhouse_PBN_5
+  - first:
+      213: 7700648387358204525
+    second: Birdhouse_PBN_6
+  - first:
+      213: -1888874681202503877
+    second: Birdhouse_PBN_7
+  - first:
+      213: 3388851245146568446
+    second: Birdhouse_PBN_8
+  - first:
+      213: -229600261468895475
+    second: Birdhouse_PBN_9
+  - first:
+      213: 5382037297968559237
+    second: Birdhouse_PBN_10
+  - first:
+      213: -1760901503969828470
+    second: Birdhouse_PBN_11
+  - first:
+      213: 1064876813845404185
+    second: Birdhouse_PBN_12
+  - first:
+      213: -472118002863622239
+    second: Birdhouse_PBN_13
+  - first:
+      213: -4275831798089749580
+    second: Birdhouse_PBN_14
+  - first:
+      213: 8190310030365825746
+    second: Birdhouse_PBN_15
+  - first:
+      213: 5497471171589003916
+    second: Birdhouse_PBN_16
+  - first:
+      213: 8264172523130601930
+    second: Birdhouse_PBN_17
+  - first:
+      213: -2757874252274419131
+    second: Birdhouse_PBN_18
+  - first:
+      213: -5295443201594075671
+    second: Birdhouse_PBN_19
+  - first:
+      213: -166242106592266957
+    second: Birdhouse_PBN_20
+  - first:
+      213: -2159461004430080664
+    second: Birdhouse_PBN_21
+  - first:
+      213: -1759891444525016024
+    second: Birdhouse_PBN_22
+  - first:
+      213: -3754639053343240364
+    second: Birdhouse_PBN_23
+  - first:
+      213: 4566993865092531879
+    second: Birdhouse_PBN_24
+  - first:
+      213: 2878683387102610919
+    second: Birdhouse_PBN_25
+  - first:
+      213: -2899609486572376687
+    second: Birdhouse_PBN_26
+  - first:
+      213: 5433888027122900645
+    second: Birdhouse_PBN_27
+  - first:
+      213: 5461952624120563620
+    second: Birdhouse_PBN_28
+  - first:
+      213: 2537689655959951768
+    second: Birdhouse_PBN_29
+  - first:
+      213: -3860395886446870065
+    second: Birdhouse_PBN_30
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: birdhouse_outline
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 1203
+        width: 897
+        height: 825
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31daae5c8326cd400800000000000000
+      internalID: 350262867006237971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: birdhouse_interactionMap
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 1203
+        width: 897
+        height: 825
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8cd36b7fd0a28a20800000000000000
+      internalID: 3063187578273651854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_2
+      rect:
+        serializedVersion: 2
+        x: 1788
+        y: 841
+        width: 257
+        height: 379
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5aa80a976aa7ccf0800000000000000
+      internalID: -232029493843678625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: birdhouseColorKey
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1080
+        width: 259
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adcf6a949b095ec90800000000000000
+      internalID: -7141142508647023398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_4
+      rect:
+        serializedVersion: 2
+        x: 1578
+        y: 1061
+        width: 67
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba576293b9c259940800000000000000
+      internalID: 5302193181489001899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_5
+      rect:
+        serializedVersion: 2
+        x: 1657
+        y: 1028
+        width: 71
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3257527c15e3f1e70800000000000000
+      internalID: 9088051094011344163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_6
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 218
+        width: 897
+        height: 824
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d62aba498e23eda60800000000000000
+      internalID: 7700648387358204525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 965
+        width: 38
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3f02b13c7e59c5e0800000000000000
+      internalID: -1888874681202503877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_8
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 899
+        width: 191
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef6f997a04e970f20800000000000000
+      internalID: 3388851245146568446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_9
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 914
+        width: 245
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d074fc657cb40dcf0800000000000000
+      internalID: -229600261468895475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_10
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 869
+        width: 108
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 584b1514866d0ba40800000000000000
+      internalID: 5382037297968559237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_11
+      rect:
+        serializedVersion: 2
+        x: 1458
+        y: 742
+        width: 203
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a816d6b69650097e0800000000000000
+      internalID: -1760901503969828470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_12
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 694
+        width: 98
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91a1ecaf1d337ce00800000000000000
+      internalID: 1064876813845404185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_13
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 616
+        width: 300
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a73f338d23b279f0800000000000000
+      internalID: -472118002863622239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_14
+      rect:
+        serializedVersion: 2
+        x: 1443
+        y: 481
+        width: 305
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bb6a8b42a139a4c0800000000000000
+      internalID: -4275831798089749580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_15
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 622
+        width: 152
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2da16481493d9a170800000000000000
+      internalID: 8190310030365825746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_16
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 567
+        width: 114
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8a538957e0fa4c40800000000000000
+      internalID: 5497471171589003916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_17
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 457
+        width: 311
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac14eb3df1d30b270800000000000000
+      internalID: 8264172523130601930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_18
+      rect:
+        serializedVersion: 2
+        x: 941
+        y: 444
+        width: 110
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54abcf9baff0ab9d0800000000000000
+      internalID: -2757874252274419131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_19
+      rect:
+        serializedVersion: 2
+        x: 1110
+        y: 325
+        width: 195
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e55ab0f67ec286b0800000000000000
+      internalID: -5295443201594075671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_20
+      rect:
+        serializedVersion: 2
+        x: 1699
+        y: 310
+        width: 318
+        height: 238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 335fad15fa361bdf0800000000000000
+      internalID: -166242106592266957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_21
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 253
+        width: 242
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86503a468ad0802e0800000000000000
+      internalID: -2159461004430080664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_22
+      rect:
+        serializedVersion: 2
+        x: 1303
+        y: 179
+        width: 139
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82c56d53e0c9397e0800000000000000
+      internalID: -1759891444525016024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_23
+      rect:
+        serializedVersion: 2
+        x: 1451
+        y: 336
+        width: 178
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45fcaa58ca7d4ebc0800000000000000
+      internalID: -3754639053343240364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_24
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 0
+        width: 192
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a68a3c29b8316f30800000000000000
+      internalID: 4566993865092531879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_25
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 191
+        width: 119
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e5c115e94323f720800000000000000
+      internalID: 2878683387102610919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_26
+      rect:
+        serializedVersion: 2
+        x: 1492
+        y: 194
+        width: 165
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19d2085e88482c7d0800000000000000
+      internalID: -2899609486572376687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_27
+      rect:
+        serializedVersion: 2
+        x: 1706
+        y: 21
+        width: 313
+        height: 289
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ae98e5ee5c096b40800000000000000
+      internalID: 5433888027122900645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_28
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 21
+        width: 41
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a708b419f0cccb40800000000000000
+      internalID: 5461952624120563620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_29
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 21
+        width: 244
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8991dadfb4fa73320800000000000000
+      internalID: 2537689655959951768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Birdhouse_PBN_30
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 21
+        width: 325
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc184fff46e1d6ac0800000000000000
+      internalID: -3860395886446870065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

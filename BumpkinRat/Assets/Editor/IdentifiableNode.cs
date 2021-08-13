@@ -180,7 +180,7 @@ public class RecipeNode
 
     public void DrawNode(GameData data, NodeData nData)
     {
-        bool valid = data.ValidItem(id.ToID()) || nData.ActiveNodeIDs.Contains(id);
+        bool valid = data.ItemExists(id.ToID()) || nData.ActiveNodeIDs.Contains(id);
         Color c = valid ? Color.black : Color.red;
         using (new GUILayout.VerticalScope())
         {

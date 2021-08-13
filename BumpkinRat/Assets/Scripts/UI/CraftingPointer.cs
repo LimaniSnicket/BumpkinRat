@@ -11,12 +11,20 @@ public class CraftingPointer : MonoBehaviour
     private static Image faPointerBase;
     private static TextMeshProUGUI faPointerText;
 
+    public Sprite grabbedSprite, openSprite;
+
     public static bool Grabbing => ItemCrafter.CraftingSequenceActive;
+
+    LineRenderer line;
 
 
     private void Awake()
     {
         this.InitializeStaticInstance(craftingPointer);
+    }
+
+    private void OnEnable()
+    {
         Cursor.visible = false;
     }
 
@@ -27,16 +35,17 @@ public class CraftingPointer : MonoBehaviour
         thisImage = GetComponent<Image>();
 
         faPointerBase.gameObject.SetActive(false);
+        line = GetComponent<LineRenderer>();
     }
 
     private void Update()
     {
         transform.position = Input.mousePosition;
 
-        thisImage.color = Grabbing ? Color.blue : Color.white;
+        thisImage.sprite = Grabbing ? grabbedSprite : openSprite;
     }
 
-    public static void OnFocusAreaHover(FocusArea fa)
+    public static void OnFocusAreaHover(FocusAreaObject fa)
     {
      //   faPointerBase.gameObject.SetActive(true);
         faPointerText.text = "Grab @: " + fa.focusAreaId.ToString();

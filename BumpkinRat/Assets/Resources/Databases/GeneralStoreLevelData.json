@@ -1,0 +1,40 @@
+{
+	"levelId":0,
+	"levelName": "...General Store",
+	"ordersInLevel":[
+		{
+			"orderDetails": {
+				"orderType": 0,
+				"orderLookupById": 0,
+				"orderTitle": "",
+				"orderPrompt": "",
+				"rewardItemIds":[]
+			}
+		}
+	],
+	"genericLevelDialogue": [
+		{
+			"npcId": 2,
+			"genericDialogue":{
+				"dialogueId": 0,
+				"genericNpcDialogue": {
+					"baseResponse": {
+						"displayDialogue":[
+							"Oh I quite enjoy gardening. My grandson gets it from me y'know, many of his friends even buy some of his plants! They always look so happy and giggly, I love that they're so supportive of his hobby!"
+						],
+						"qualityThreshold": 0
+					}, 
+					"additionalResponses": [
+						{
+							"displayDialogue": [
+								"Y'know I think you'd get along great with my grandson! He must stop by here sometimes for gardening supplies, maybe you've met him before?"
+							],
+							"qualityThreshold": 1
+
+						}
+					]
+				}
+			}
+		}
+	]
+}

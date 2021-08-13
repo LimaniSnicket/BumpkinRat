@@ -61,7 +61,6 @@ public class InventoryDatabaseWindow : EditorWindow
         so = new SerializedObject(this);
         rowCap = Mathf.Clamp(rowCap, 3, 10);
         SaveToJSON = jsonPath.InitializeFromJSON<GameData>();
-        SaveToJSON.InitializeLookupTables();
         sessionData = sessionDataPath.InitializeFromJSON<NodeData>();
         sessionData.rowCapacity = RowCapacity;
         sessionData.InitializeData();
@@ -188,13 +187,13 @@ public class InventoryDatabaseWindow : EditorWindow
                     if (GUILayout.Button("Append From JSON"))
                     {
                         if (SaveToJSON == null) { SaveToJSON = jsonPath.InitializeFromJSON<GameData>(); }
-                        if (SaveToJSON.GetItemData().ValidList())
+                        /*if (SaveToJSON.GetItemData().ValidList())
                         {
                             foreach (Item i in SaveToJSON.GetItemData())
                             {
                                 sessionData.AddNode(new IdentifiableNode(i, SaveToJSON));
                             }
-                        }
+                        }*/
                     }
 
                     if (GUILayout.Button("Update Game Data"))

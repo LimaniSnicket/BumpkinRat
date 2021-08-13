@@ -7,38 +7,68 @@
 				"Hey cuzz I...*sniff*",
 				"fell while trick or treatin' and...*sniff*",
 				"<b>B-b-broke my nunchuck!</b>", 
-				"I can't fight crime without it!",
+				"|SET:PrologueManager (GeneralStorePrologue):setCustomerName:Froggert|I can't fight crime without it!",
 				"Can you fix it...?"
 			],
 
 			"introResponses":[
 				{
-					"responseLevel": "medium",
+					"responseLevel": 1,
 					"displayDialogue": "No worries buddy, I can fix that up"
 				}
 			],
 
 			"promptedCustomerDialogue":[
 				{
-					"medium": "Aw thanks cuzzo! You're the greatest!",
+					"npcBaseResponse":{
+						"displayDialogue": [
+							"Aw thanks cuzz,",
+							"you're the best!"
+						],
+						"qualityThreshold": 0
+					},
 
-					"possibleResponses":[
+					"playerResponses":[
 						{
-							"responseLevel": "low",
+							"responseLevel": 0,
 							"displayDialogue": "Don't mention it bud"
 						},
 						{
-							"responseLevel": "medium",
+							"responseLevel": 1,
 							"displayDialogue": "Anytime sport, it's no problem!"
 						},
 						{
-							"responseLevel": "high",
+							"responseLevel": 2,
 							"displayDialogue": "No problem buddy, I know you love Halloween!"
 						}
 					]
 				},
 				{
-					"high": "some response idk"
+					"npcBaseResponse":{
+						"displayDialogue": [
+							"Cowabunga binch"
+						],
+						"qualityThreshold": 0
+					},
+
+					"additionalNpcResponses": [
+						{
+							"displayDialogue": [
+								"YERRRR"
+							],
+							"qualityThreshold": 2
+						}
+					]
+				}
+			],
+
+			"outroDialogue":[
+				{
+					"displayDialogue":[
+					"You fixed it!",
+					"Aw man cuzz, thank you!"
+					],
+					"qualityThreshold": 0
 				}
 			]
 		}

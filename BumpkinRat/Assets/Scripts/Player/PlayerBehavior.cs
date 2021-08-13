@@ -6,19 +6,27 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour, IWarpTo
 {
     private static PlayerBehavior player;
-    public PlayerData playerData { get; set; }
-    static MovementController PlayerMovementController { get; set; }
+    private static MovementController PlayerMovementController { get; set; }
 
-    public static Vector3 playerPosition => player.transform.position;
+    public static Vector3 PlayerPosition => player.transform.position;
+    public static Vector3 DeltaPosition { get; private set; }
+
+    private static Vector3 previousPosition;
 
     public static GameObject PlayerGameObject => player.gameObject;
 
     void OnEnable()
     {
-        if (player == null) { player = this; } else { Destroy(this); }
-        if (playerData == null) { playerData = new PlayerData(); }
+        if (player == null) 
+        { 
+            player = this; 
+        } 
+        else 
+        { 
+            Destroy(this); 
+        }
 
-        GetOrAddMovementController();
+        SetPlayerMovementController();
 
         DialogueRunner.DialogueEventIndicated += OnDialogueEvent;
         UiMenu.UiEvent += OnUiEvent;
@@ -26,11 +34,12 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
 
     private void Update()
     {
+        previousPosition = PlayerPosition;
         if (Input.GetKeyDown(KeyCode.T))
         {
         //    this.SetValue("playerData.playerName", "Billy-Bob");
-            bool nestedEval = this.EvaluateValue("playerData.playerName", "Billy", true);
-            if (nestedEval) { Debug.Log(playerData.playerName + ": " + nestedEval); }
+           // bool nestedEval = this.EvaluateValue("playerData.playerName", "Billy", true);
+          //  if (nestedEval) { Debug.Log(playerData.playerName + ": " + nestedEval); }
             
             if (PlantingManager.NearestPlantingSpace != null)
             {
@@ -38,6 +47,11 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
                 space.Plant(PlantingManager.GetRandomPlant());
             }
         }
+    }
+
+    void LateUpdate()
+    {
+        DeltaPosition = previousPosition - PlayerPosition;
     }
 
     void OnDialogueEvent(object source, IndicatorArgs args)
@@ -49,7 +63,7 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
 
     void OnUiEvent(object source, UiEventArgs args)
     {
-        SetFreezePlayerMovementController(args.load);
+        FreezePlayerMovementController(args.Load);
     }
 
     void OnDisable()
@@ -57,12 +71,12 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
         DialogueRunner.DialogueEventIndicated -= OnDialogueEvent;
     }
 
-    public static void SetFreezePlayerMovementController(bool freeze)
+    public static void FreezePlayerMovementController(bool isFrozen)
     {
-        PlayerMovementController.SetFreezePlayerMovement(freeze);
+        PlayerMovementController.SetFreezePlayerMovement(isFrozen);
     }
 
-    void GetOrAddMovementController()
+    void SetPlayerMovementController()
     {
         if (PlayerMovementController != null)
         {
@@ -80,24 +94,11 @@ public class PlayerBehavior : MonoBehaviour, IWarpTo
 
     public void OnWarpBegin()
     {
-        SetFreezePlayerMovementController(true);
+        FreezePlayerMovementController(true);
     }
 
     public void OnWarpEnd()
     {
-        SetFreezePlayerMovementController(false);
-    }
-}
-
-[Serializable]
-public class PlayerData
-{
-    [SerializeField] string player_name;
-    public PlayerData() { }
-
-    public void SetPlayerName(string name) { player_name = name; }
-    public string playerName {
-        get => player_name;
-        set => player_name = value;
+        FreezePlayerMovementController(false);
     }
 }

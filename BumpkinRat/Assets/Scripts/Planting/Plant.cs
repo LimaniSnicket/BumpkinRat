@@ -4,14 +4,14 @@ using UnityEngine;
 [Serializable]
 public class Plant: Identifiable
 {
-    [SerializeField] string name;
-    Vector3 Position;
+    [SerializeField] 
+    private string name;
+    private Vector3 pos;
 
-    public string identifier => name;
+    public string IdentifiableName => name;
 
-    [SerializeField]float[] position;
-
-    public Plant() { }
+    [SerializeField]
+    private float[] position;
 
     public Plant(string s)
     {
@@ -21,18 +21,7 @@ public class Plant: Identifiable
     public Plant(string s, Vector3 v)
     {
         name = s;
-        Position = v;
+        pos = v;
         position = new float[] { v.x, v.y, v.z };
-    }
-}
-
-[Serializable]
-public class Seed : Identifiable {
-    public string plantPointer;
-    public string identifier => string.Format("{0}_seed", plantPointer);
-
-    public Seed(string pointer)
-    {
-        plantPointer = pointer;
     }
 }

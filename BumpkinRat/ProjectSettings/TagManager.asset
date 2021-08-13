@@ -45,3 +45,9 @@ TagManager:
   - name: UI
     uniqueID: 3472183161
     locked: 0
+  - name: Tabs
+    uniqueID: 1680240935
+    locked: 0
+  - name: PBN
+    uniqueID: 120597617
+    locked: 0

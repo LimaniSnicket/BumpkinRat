@@ -2,14 +2,13 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using System.Text;
 using System.Linq;
-using UnityEngine.Events;
 
 public static class GenericX
 {
-    
     public static T InitializeStaticInstance<T>(this T instance, T staticVar)
     {
         if(staticVar == null)
@@ -21,8 +20,7 @@ public static class GenericX
     }
     public static bool ValidList<T>(this List<T> check)
     {
-        if(check == null || check.Count <= 0) { return false; }
-        return true;
+        return !(check == null || check.Count <= 0);
     }
 
     public static bool CollectionIsNotNullOrEmpty<T>(this IEnumerable<T> collection)
@@ -51,15 +49,20 @@ public static class GenericX
         if(list != null) {
             if (add)
             {
-                if (!list.Contains(instance)) { list.Add(instance); }
+                if (!list.Contains(instance)) 
+                { 
+                    list.Add(instance); 
+                }
             } else
             {
-                if (list.Contains(instance)) { list.Remove(instance); }
+                if (list.Contains(instance)) { 
+                    list.Remove(instance); 
+                }
             }
         }
     }
 
-    public static T GetOrAddComponent<T>(this GameObject gameObject) where T: UnityEngine.Component
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T: Component
     {
         try
         {
@@ -122,17 +125,26 @@ public static class GenericX
         return JsonUtility.FromJson<T>(json);
     }
 
-    public static void IncrementIfTrue(this int i, bool evaluate, int amount = 1)
-    {
-        if (evaluate)
-        {
-            i += amount;
-        }
-    }
-
     public static void DebugTuple<T, U>(this (T, U) tuple)
     {
         Debug.LogFormat("{0}, {1}", tuple.Item1.ToString(), tuple.Item2.ToString());
+    }
+
+    public static object GetPropertyOrField(this object t, string desired)
+    {
+        if (t.isField(desired))
+        {
+            FieldInfo fieldInfo = t.GetType().GetField(desired);
+            return fieldInfo.GetValue(t);
+        }
+
+        if (t.isProperty(desired))
+        {
+            PropertyInfo property = t.GetType().GetProperty(desired);
+            return property.GetValue(t);
+        }
+
+        return null;
     }
 
     static bool EvaluatePropertyOrField(this object t, string evaluate, string desired)
@@ -271,7 +283,7 @@ public static class GenericX
         }
     }
 
-    public static void Decrement<T>(this Dictionary<T, int> dict, T key, out KeyValuePair<T, int> altered, bool removeLessThanEqualToZero = true)
+    public static int Decrement<T>(this Dictionary<T, int> dict, T key, bool removeLessThanEqualToZero = true)
     {
         int outValue = 0;
 
@@ -288,7 +300,7 @@ public static class GenericX
             }
         }
 
-        altered = new KeyValuePair<T, int>(key, outValue);
+        return outValue;
     }
 
     public static void AddMany<T, U>(this Dictionary<T, U> dict, IEnumerable<KeyValuePair<T, U>> adding)
@@ -492,6 +504,52 @@ public static class VizX
         float col_2_mult = f - a; float col_1_mult = b - f;
         return (a_c * col_1_mult + b_c * col_2_mult) / RangeThreshold;
     }
+
+    public static bool OverlappingWorldSpace(this RectTransform rectA, RectTransform rectB)
+    {
+        Vector2 sizeBuffer = rectA.rect.size / 2;
+        Vector2 pos = rectA.position;
+
+        Vector2 lowBound = pos - sizeBuffer;
+        Vector2 highBound = pos + sizeBuffer;
+
+        if (rectB.localPosition.x < lowBound.x || rectB.position.y < lowBound.y)
+        {
+            return false;
+        }
+
+        return rectB.position.x < highBound.x && rectB.position.y < highBound.y;
+    }
+
+    public static bool OverlappingLocalSpace(this RectTransform rectA, RectTransform rectB)
+    {
+        Vector2 sizeBuffer = rectA.rect.size/2;
+        Vector2 pos = rectA.localPosition;
+
+        Vector2 lowBound = pos - sizeBuffer;
+        Vector2 highBound = pos + sizeBuffer;
+
+        if(rectB.localPosition.x < lowBound.x || rectB.localPosition.y < lowBound.y)
+        {
+            return false;
+        }
+
+        return rectB.localPosition.x < highBound.x && rectB.localPosition.y < highBound.y;
+    }
+
+    public static Texture2D CreateTexture2D(this Sprite s)
+    {
+        int w = (int)s.rect.width;// Mathf.Max(1024, (int)s.rect.width);
+        int h = (int)s.rect.height;// Mathf.Max(1024, (int)s.rect.height);
+        Texture2D t = new Texture2D(w, h);
+        var pixels = s.texture.GetPixels((int)s.rect.x,
+                                         (int)s.rect.y,
+                                         (int)s.rect.width,
+                                         (int)s.rect.height);
+        t.SetPixels(pixels);
+        t.Apply();
+        return t;
+    }
 }
 
 public struct Vect2Delta: IDelta<Vector2>
@@ -518,16 +576,10 @@ public static class CraftX
 {
     public static void InstantiateItemInWorld(this string itemName, Vector3 spawnPosition, int amnt = 1)
     {
-        Collectable collect = DatabaseContainer.InstantiateItem(spawnPosition).GetComponent<Collectable>();
+        Collectable collect = GameDataManager.InstantiateItem(spawnPosition).GetComponent<Collectable>();
         collect.SetItemName(itemName);
         collect.amount = amnt;
     }
-
-    public static Item GetItem(this int id)
-    {
-        return DatabaseContainer.gameData.GetItem(id);
-    }
-
 
    public static string ToID(this string display)
     {
@@ -560,7 +612,7 @@ public static class CraftX
 
     public static bool Plantable(this Identifiable i)
     {
-        return i.identifier.Contains("_seed");
+        return i.IdentifiableName.Contains("_seed");
     }
 
     public static int CompareItem(this Item i, Item other, bool byID = true, bool byValue = false)
@@ -585,13 +637,10 @@ public static class CraftX
 
 }
 
-public static class TagX
-{
-    public static string ItemObject => "ItemObject";
-}
 
 public static class PhysicsX
 {
+    const string axes = "xyzw";
     public static void CancelRigidBodyVelocity(this GameObject g)
     {
         try
@@ -604,10 +653,74 @@ public static class PhysicsX
         }
     }
 
+    static float GetAxis(this Vector3 vect, char a)
+    {
+        switch (a)
+        {
+            case 'x':
+                return vect.x;
+            case 'y':
+                return vect.y;
+            case 'z':
+                return vect.z;
+        }
+
+        return 0;
+    }
+
+    static float GetAxis(this Vector4 vect, char a)
+    {
+        if(a == 'w')
+        {
+            return vect.w;
+        }
+        Vector3 v = vect;
+        return v.GetAxis(a);
+    }
+
+    public static Vector3 GetAxesOfPosition(this Transform t, bool local, string axes)
+    {
+        Vector3 pos = local ? t.localPosition : t.position;
+        return pos.GetAxesOfVector3(axes);
+    }
+
+    public static Vector3 GetAxesOfVector3(this Vector3 t, string a)
+    {
+        float[] getAxes = new float[3];
+        int track = 0;
+        for (int i = 0; i < getAxes.Length; i++)
+        {
+            if (track >= a.Length)
+            {
+                break;
+            }
+            //xyzw vs y
+            char at = axes[i];
+
+            if (a[track] == at)
+            {
+                getAxes[i] = t.GetAxis(at);
+                track++;
+            } else
+            {
+                getAxes[i] = 0;
+            }
+        }
+
+        return new Vector3(getAxes[0], getAxes[1], getAxes[2]);
+
+    }
+
     public static bool RaycastOnComponentOf<T>(this RaycastHit rh, out T raycastedComponent)
     {
         raycastedComponent = rh.transform.GetComponent<T>();
         return raycastedComponent != null;
+    }
+
+    public static void TurnToMainCamera(this Transform t)
+    {
+        Transform cam = Camera.main.transform;
+        t.forward = cam.forward * -1;
     }
 }
 

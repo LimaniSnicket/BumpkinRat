@@ -7,7 +7,7 @@ using UnityEngine;
 public class NpcBehavior : MonoBehaviour
 {
     public NpcMood npcMood;
-    public NpcDialogue npcDialogue;
+    public NpcDialogueTest npcDialogue;
     public string dialoguePath;
     public Dialogue dialogueStorage { get; set; }
     MaterialPropertyBlock propBlock;
@@ -28,7 +28,7 @@ public class NpcBehavior : MonoBehaviour
     private void Start()
     {
         npcMood = new NpcMood();
-        npcDialogue = new NpcDialogue();
+        npcDialogue = new NpcDialogueTest();
         dialogueStorage = new Dialogue(dialoguePath);
         dialogueStorage.ActiveTreeID = "tree_1";
         dialogueStorage.activeTree.InitializeDialogueTree();
@@ -76,14 +76,14 @@ public class NpcBehavior : MonoBehaviour
 }
 
 [Serializable]
-public class NpcDialogue
+public class NpcDialogueTest
 {
     public bool readyForDialogue;
     public string defaultLine = "Hey, do you need something?";
     public string annoyedLine = "Hey, watch where you're going!";
     public DialogueTree nextTree;
 
-    public NpcDialogue()
+    public NpcDialogueTest()
     {
         InstantiateInitialDialogue();
     }

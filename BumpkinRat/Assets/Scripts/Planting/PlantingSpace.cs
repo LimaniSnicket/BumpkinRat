@@ -7,22 +7,23 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
 {
-    Mesh mesh;
-    Bounds bounds;
+    private Mesh mesh;
+    private Bounds bounds;
 
     public float tileDimension = 0.25f;
-    [SerializeField] List<PlanterTile> planterTileList;
+    [SerializeField] 
+    private List<PlanterTile> planterTiles;
 
     private void OnEnable()
     {
         PlantingManager.RegisterPlantingSpace(this, true);
         mesh = GetComponent<MeshFilter>().mesh;
         bounds = mesh.bounds;
-        planterTileList = new List<PlanterTile>();
+        planterTiles = new List<PlanterTile>();
         GeneratePlanterTiles();
     }
     
-    (int, int) planterDimensions
+    private (int, int) PlanterDimensions
     {
         get
         {
@@ -33,11 +34,11 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
         }
     }
 
-    (int, int, Vector3) PreparePlantGeneration()
+    private (int, int, Vector3) PreparePlantGeneration()
     {
         Vector3 s = transform.worldToLocalMatrix * bounds.min;
         Vector3 spawnStart = new Vector3(s.x + tileDimension/2, transform.position.y, s.z - tileDimension/2);
-        return (planterDimensions.Item1, planterDimensions.Item2, spawnStart);
+        return (PlanterDimensions.Item1, PlanterDimensions.Item2, spawnStart);
     }
 
     void GeneratePlanterTiles()
@@ -53,7 +54,7 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
                 t.SetBounds(sp);
                 GameObject who_is_she = new GameObject("Who Is She");
                 who_is_she.transform.position = sp;
-                planterTileList.Add(t);
+                planterTiles.Add(t);
             }
         }
     }
@@ -64,10 +65,10 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
 
         foreach (PlanterTile tile in savedTiles)
         {
-            if (tile.ValidTile(planterDimensions))
+            if (tile.ValidTile(PlanterDimensions))
             {
                 tile.SetBounds(dimensions.Item3, true);
-                planterTileList.Add(tile);
+                planterTiles.Add(tile);
             }
             else
             {
@@ -80,7 +81,7 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
     {
         if (other.GetComponent<PlayerBehavior>())
         {
-            PlantingManager.RegisterNearbyPlantingSpace(this, true);
+            PlantingManager.RegisterNearbyPlantingSpace(this);
         }
     }
 
@@ -88,7 +89,7 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
     {
         if (other.GetComponent<PlayerBehavior>())
         {
-            PlantingManager.RegisterNearbyPlantingSpace(this, false);
+            PlantingManager.RemovePlantingSpaceFromNearbySpaces(this);
         }
     }
 
@@ -99,9 +100,9 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
 
     void SortPlanterTiles()
     {
-        if (planterTileList.ValidList())
+        if (planterTiles.ValidList())
         {
-            planterTileList.Sort(Compare);
+            planterTiles.Sort(Compare);
         }
     }
 
@@ -118,7 +119,7 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
     public void Plant(string name)
     {
         SortPlanterTiles();
-        planterTileList[0].Plant(name);
+        planterTiles[0].Plant(name);
     }
 }
 
@@ -126,20 +127,14 @@ public class PlantingSpace : MonoBehaviour, IComparer<PlanterTile>
 public class PlanterTile
 {
     [SerializeField] float length, width = 0.25f;
+    [SerializeField] int row, column;
+
     public bool occupied;
     public Plant planted;
-    public (float, float) tileDimensions => (length, width);
-    [SerializeField] int row, column;
-    public (int, int) rowColumnIndex => (row, column);
+    public (float, float) TileDimensions => (length, width);
+    public (int, int) RowColumnPosition => (row, column);
 
-    public Bounds tileBounds { get; private set; }
-
-    public PlanterTile() { }
-    public PlanterTile(int r, int c)
-    {
-        row = r;
-        column = c;
-    }
+    public Bounds TileBounds { get; private set; }
 
     public PlanterTile((int, int) pos, (float, float) dimensions)
     {
@@ -157,7 +152,7 @@ public class PlanterTile
     public void SetBounds(Vector3 center, bool calculate = false)
     {
         Vector3 set = calculate ? center + new Vector3(width * row, 0, -length * column) : center;
-        tileBounds = new Bounds(set, new Vector3(width, 1, length));
+        TileBounds = new Bounds(set, new Vector3(width, 1, length));
     }
 
     public void Plant(string plantName)
