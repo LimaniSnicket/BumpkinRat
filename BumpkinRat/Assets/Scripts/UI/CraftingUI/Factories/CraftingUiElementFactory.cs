@@ -34,6 +34,7 @@ public class CraftingUiElementFactory
             container.SpawnAtAlternatingVerticalPositions(prefab, 100, 150);
             CraftingActionWidget craftAction = container.GetLastChild().GetComponent<CraftingActionWidget>();
             craftAction.SetCraftingActionButton(i, craftingManager);
+            craftAction.EnableFidgeting();
         }
 
         container.gameObject.SetActive(false);

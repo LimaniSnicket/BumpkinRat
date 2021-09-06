@@ -1,35 +1,46 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 
-public class ItemProvisioner : ItemDistrubutionSettings
+public class ItemProvisioner : ItemDistributionBase, IItemDistribution
 {
-    private IDistributeItems<ItemProvisioner> provisioner; 
-
     public static event EventHandler<ItemEventArgs> ItemProvisioning;
 
-    public ItemProvisioner(IDistributeItems<ItemProvisioner> prov)
+    public ItemProvisioner()
     {
-        provisioner = prov;
+        this.itemDistributionSettings = new ItemDistributionSettings();
     }
 
-    public override void Distribute()
+    public void AddItemsToDrop(params (int, int)[] dropData)
     {
-        Debug.Log(string.Join("-", ItemsToDrop.Select(s => s.ItemToDropName)));
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
 
-        if (!ItemsToDrop.ValidList())
+    public void AddItemsToDrop(params int[] dropData)
+    {
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
+
+    public void AddItemToDrop(ItemDrop toDrop)
+    {
+        this.AddItemDropToItemDistributionSettings(toDrop);
+    }
+
+    public void Distribute()
+    {
+        if (!itemDistributionSettings.CanDistribute)
         {
             Debug.Log("Item Drops aren't valid.");
             return;
         }
 
-        foreach (ItemDrop drop in ItemsToDrop)
+        foreach (ItemDrop drop in itemDistributionSettings.ItemsToDrop)
         {
+            Debug.Log(drop.ItemToDropName);
             BroadcastItemProvisioning(drop);
         }
     }
 
-    void BroadcastItemProvisioning(ItemDrop collecting)
+    private void BroadcastItemProvisioning(ItemDrop collecting)
     {
         if(ItemProvisioning != null)
         {

@@ -47,8 +47,9 @@ public class RecipeProgressTracker
     {
         if (sequence.IsValid())
         {
-            int actionId = sequence.actionItemObject.itemObject.Item.itemId;
-            int targetId = sequence.targetItemObject.itemObject.Item.itemId;
+            int actionId = sequence.actionItemObject.Item.itemId;
+            int targetId = sequence.targetItemObject.Item.itemId;
+
             recipeStepsTaken.FilterOut(r => !r.CraftableWithItemAmount(actionId, 1) || !r.CraftableWithItemAmount(targetId, 1));
         }
     }

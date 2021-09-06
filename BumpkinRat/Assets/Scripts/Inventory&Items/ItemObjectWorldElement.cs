@@ -2,7 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions<Transform>
+public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions
 {  
     public bool MouseHoveringOnItemObject { get; private set; }
 
@@ -31,18 +31,12 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions<Tran
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 Debug.Log("Put item back into inventory!");
-                itemObject.BroadcastPlaceBack();
-                OccupiablePosition.Release(this);
+                this.BroadcastPlaceBack();
+                Occupied.ReleaseOccupier(this);
                 Destroy(gameObject);
             }
         }
     }
-
-    public string TryGetDisplayName()
-    {
-        return itemObject.Item != null ? itemObject.Item.DisplayName : string.Empty;
-    }
-
     private void OnMouseEnter()
     {
         Debug.Log("Hover Over Item Object");
@@ -99,7 +93,7 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions<Tran
     internal void BroadcastInteractionWithFocusArea(FocusAreaObject focus)
     {
         ItemCrafter.BeginCraftingSequence(focus, this);
-        itemObject.BroadcastInteractedWith(focus, this);
+        this.BroadcastInteractedWith(focus);
     }
 
     public override void ForceDestroy()

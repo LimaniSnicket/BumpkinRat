@@ -134,6 +134,7 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\CraftingSequence.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\CustomerCraftingOrder.cs" />
+    <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\CustomerOrderManager.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\FocusAreaIndicator.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\ItemIdToAmountMap.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Events\InventoryAdjustmentEventArgs.cs" />

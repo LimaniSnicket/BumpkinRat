@@ -17,7 +17,7 @@ public class InventoryManager : MonoBehaviour
         ItemProvisioner.ItemProvisioning += OnCollectedItem;
         InventoryButton.FinalPossiblePress += OnInventoryButtonPressed;
 
-        ItemObject.PlaceItemBackInInventory += OnPlaceItemObjectBack;
+        ItemObjectBehaviour.PlaceItemBackInInventory += OnPlaceItemObjectBack;
 
         activeInventory = new Inventory();
     }
@@ -57,7 +57,7 @@ public class InventoryManager : MonoBehaviour
         ItemProvisioner.ItemProvisioning -= OnCollectedItem;
         InventoryButton.FinalPossiblePress -= OnInventoryButtonPressed;
 
-        ItemObject.PlaceItemBackInInventory -= OnPlaceItemObjectBack;
+        ItemObjectBehaviour.PlaceItemBackInInventory -= OnPlaceItemObjectBack;
 
     }
 }

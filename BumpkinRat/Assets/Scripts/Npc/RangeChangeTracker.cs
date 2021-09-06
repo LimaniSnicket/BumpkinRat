@@ -15,6 +15,7 @@ public struct RangeChangeTracker
         maxRange = max;
         transform = t;
     }
+
     public bool InRange(float distance)
     {
         return distance <= maxRange;

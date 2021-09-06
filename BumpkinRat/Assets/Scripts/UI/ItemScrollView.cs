@@ -65,7 +65,7 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
         }
     }
 
-    void SpawnButtonForItemListing(ItemListing i)
+    private void SpawnButtonForItemListing(ItemListing i)
     {
         if (inventoryButtons == null)
         {
@@ -73,7 +73,7 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
         }
 
         InventoryButton inventoryButton = SpawnInventoryButtonFromPrefab();
-        inventoryButton.SetItemListing(i);
+        inventoryButton.SetFromItemListing(i);
 
         inventoryButtons.Add(inventoryButton);
     }

@@ -22,7 +22,7 @@ namespace Items
         public  ItemObjectUiElement CreateItemObjectUiElement(Transform parent, Item item)
         {
             ItemObjectUiElement element = Object.Instantiate(uiElementPrefab).GetOrAddComponent<ItemObjectUiElement>();
-            element.name = $"Item Object #{spawnCount}";
+            element.name = $"{item.DisplayName}: Obj #{spawnCount}";
             spawnCount++;
 
             SetFromItem(element, item);
@@ -32,7 +32,7 @@ namespace Items
 
         private void SetFromItem(ItemObjectUiElement itemObj, Item item)
         {
-            itemObj.itemObject = new ItemObject(item.itemId);
+            itemObj.SetItemFromId(item.itemId);
 
             Sprite itemSprite = ItemDataManager.GetDisplaySprite(item.itemName);
 

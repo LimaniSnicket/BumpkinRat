@@ -166,7 +166,7 @@ namespace Items
         {
             ItemObjectWorldElement itemObj = GameObject.Instantiate(toClone).GetOrAddComponent<ItemObjectWorldElement>();
 
-            itemObj.itemObject = new ItemObject(id);
+            itemObj.SetItemFromId(id);
 
             return itemObj;
         }

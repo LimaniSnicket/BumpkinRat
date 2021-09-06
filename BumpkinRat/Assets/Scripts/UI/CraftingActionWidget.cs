@@ -17,13 +17,16 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
 
     private static CraftingActionWidgetActive craftingActionButtonActivated;
 
-    private Color activeColor, inactiveColor;
+    private ActivityColorSet colorSet;
 
+    [SerializeField] 
     private Vector2 originalPosition;
 
     private RectTransform rect;
 
     private TextMeshProUGUI widgetText;
+
+    private bool fidgetEnabled;
 
     private const float InactiveScaleFactor = 1;
 
@@ -44,17 +47,23 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
 
         widgetText = GetComponentInChildren<TextMeshProUGUI>();
 
-        originalPosition = rect.localPosition;
+        colorSet = new ActivityColorSet(Color.white, image.color);
+    }
 
-        inactiveColor = image.color;
-        activeColor = Color.white;
-
+    private void Start()
+    {
         StartCoroutine(MoveToNewLocationWithinUnitSphere(5));
     }
 
     public static void ResetAll()
     {
         craftingActionButtonActivated.Invoke(CraftingAction.NONE);
+    }
+
+    public void EnableFidgeting()
+    {
+        this.originalPosition = rect.localPosition;
+        fidgetEnabled = true;
     }
 
     public void SetCraftingActionButton(int craftAction, CraftingManager crafter)
@@ -86,14 +95,16 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
     {
         bool thisButtonActive = action == craftingAction;
 
-        image.color = thisButtonActive ? activeColor : inactiveColor; 
+        this.colorSet.ApplyColorSetToImage(image, thisButtonActive);
 
-        float scaleModifier = thisButtonActive ? InactiveScaleFactor : ActiveScaleFactor;
+        float scaleModifier = thisButtonActive ? ActiveScaleFactor : InactiveScaleFactor;
         transform.localScale = Vector3.one * scaleModifier;
     }
 
     private IEnumerator MoveToNewLocationWithinUnitSphere(float duration)
     {
+        yield return new WaitUntil(() => fidgetEnabled);
+
         Vector2 randoSpot = originalPosition + UnityEngine.Random.insideUnitCircle * CraftingManager.DistractionJitter * 100;
 
         float distance = Vector2.Distance(randoSpot.normalized, rect.localPosition.normalized);

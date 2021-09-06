@@ -90,6 +90,11 @@ public class ConversationUi : MonoBehaviour
 
     }
 
+    public void InvokeOutroDialogue(float delayTime)
+    {
+        this.Invoke("OnRecipeCompleteRunOutro", delayTime);
+    }
+
     public void SetActiveConversation(CustomerOrder activeOrder)
     {
         CustomerDialogue active = activeOrder.GetCustomerDialogue();
@@ -97,7 +102,7 @@ public class ConversationUi : MonoBehaviour
         StartCoroutine(RunCustomerDialogueIntro(active));
     }
 
-    public void OnRecipeCompleteRunOutro()
+    private void OnRecipeCompleteRunOutro()
     {
         ConversationSnippet.DestroyAllSnippets(this);
 

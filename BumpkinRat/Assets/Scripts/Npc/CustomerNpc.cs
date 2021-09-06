@@ -4,49 +4,48 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class CustomerNpc : OverworldNpc
 {
-    const string prefabPath = "Assets/Prefabs/npc prefabs/Customer.prefab";
-    static GameObject cachedPrefab;
-    static bool CacheExists => cachedPrefab != null;
-
     private void Update()
     {
-        transform.eulerAngles = Camera.main.transform.eulerAngles.GetAxesOfVector3("y");
+        transform.eulerAngles = CameraManager.GetEulersOfAxes("y");
     }
 
-    public static CustomerNpc GetCustomerNpc(int npc)
+    public void SetCustomerAppearence(int npcId)
     {
-        GameObject toInstantiate = GetPrefabToInstantiate();
-
-        CustomerNpc instantiatedCustomer = Instantiate(toInstantiate).GetOrAddComponent<CustomerNpc>();
-
-        Texture2D toSet;
-        bool inCache = NpcTextureCache.TryGetTexture(npc, out toSet);
+        bool inCache = npcTextureCache.TryGetTexture(npcId, out Texture2D toSet);
 
         if (!inCache)
         {
-            toSet = GetTextureForNpc(npc);
-            NpcTextureCache.CacheTexture(npc, toSet);
+            toSet = GetTextureForNpc(npcId);
+            npcTextureCache.CacheTexture(npcId, toSet);
         }
 
-        instantiatedCustomer.SetNpcAppearence(toSet);
-        return instantiatedCustomer;
+        this.SetNpcTexture(toSet);
     }
 
-    private static GameObject GetPrefabToInstantiate()
-    {
-        if (!CacheExists)
-        {
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-            cachedPrefab = prefab;
-        }
-
-        return cachedPrefab;
-    }
-
-    private static Texture2D GetTextureForNpc(int npc)
+    private Texture2D GetTextureForNpc(int npc)
     {
         string texturePath = NpcData.GetTexturePath(npc);
         return AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
+    }
+}
+
+public struct CustomerNpcSpawner
+{
+    const string prefabPath = "Assets/Prefabs/npc prefabs/Customer.prefab";
+
+    private static GameObject prefab;
+
+    public static bool PrefabValid => prefab != null;
+
+    public static CustomerNpc GetCustomerNpcPrefab()
+    {
+        if (!PrefabValid)
+        {
+            prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        }
+
+        CustomerNpc instantiatedCustomer = GameObject.Instantiate(prefab).GetOrAddComponent<CustomerNpc>();
+        return instantiatedCustomer;
     }
 }
 

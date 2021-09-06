@@ -1,26 +1,21 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Items;
 
 [RequireComponent(typeof(Image))]
-public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccupyPositions<RectTransform>
+public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccupyPositions
 {
     private Image itemObjectImage;
 
     private  RectTransform rectTransform;
 
-    private bool mouseOver;
-
-    private readonly static GameObject  focusAreaCache;
-
-    public RectTransform OccupierTransform => rectTransform;
+    public Transform OccupierTransform => rectTransform;
 
     public OccupiablePosition Occupied { get; set; }
 
     public Vector3 PositionOffset { get; private set; } = Vector3.zero;
 
-    void OnEnable()
+    void Awake()
     {
         itemObjectImage = gameObject.GetOrAddComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
@@ -28,7 +23,16 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
 
     void Update()
     {
-        if (!mouseOver)
+        Debug.Log(Occupied == null);
+
+        if (Input.GetMouseButton(0))
+        {
+            return;
+        }
+
+        Vector2 localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
+
+        if (!rectTransform.rect.Contains(localMousePosition))
         {
             return;
         }
@@ -54,32 +58,6 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
         rectTransform.localPosition = rectPosition;
         rectTransform.localScale = Vector2.one;
     }
-
-    private void SetFromItem(Item item)
-    {
-        itemObject = new ItemObject(item.itemId);
-
-        Sprite itemSprite = ItemDataManager.GetDisplaySprite(item.itemName);
-
-        this.itemObjectImage.sprite = itemSprite;
-        int focusAreas = item.FocusAreaCount;
-        if(focusAreas > 0)
-        {
-            for(int i = 0; i < focusAreas; i++)
-            {
-                FocusAreaUI uiElement = Instantiate(focusAreaCache).GetOrAddComponent<FocusAreaUI>();
-               
-                uiElement.transform.SetParent(transform);
-
-                FocusAreaUiDetails details = item.GetFocusAreaUiDetailsAtIndex(i);
-
-                uiElement.SetDetails(details);
-            }
-        }
-
-        FocusAreaHandler.RegisterFocusAreaUiInChildren(transform, this);
-    }
-
     public void RegisterFocusHandlerAreas()
     {
         FocusAreaHandler.RegisterFocusAreaUiInChildren(transform, this);
@@ -88,5 +66,14 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
     public override void ForceDestroy()
     {
         this.ForceDestroy(this);
+    }
+
+    public void OnReleaseAllDestroyObject(object source, EventArgs args)
+    {
+        if (Occupied != null)
+        {
+            Occupied.ReleaseOccupier(this);
+            Destroy(gameObject);
+        }
     }
 }

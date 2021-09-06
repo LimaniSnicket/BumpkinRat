@@ -2,6 +2,7 @@
 using TMPro;
 using System;
 using UnityEngine;
+using System.Collections;
 
 public class InventoryButton : Button
 {
@@ -42,27 +43,33 @@ public class InventoryButton : Button
         CanSpawnItems = false;
     }
 
-    public void SetItemListing(ItemListing listing)
+    public void SetFromItemListing(ItemListing listing)
     {
         listing.ItemListingChanged += OnItemListingChange;
         associatedItemListing = listing;
-        UpdateDisplay();
+        this.UpdateDisplay();
     }
 
     private void OnItemListingChange(object source, EventArgs args)
     {
-        UpdateDisplay();
+        this.UpdateDisplay();
     }
 
     private void UpdateDisplay()
     {
-        if(textMesh == null)
+        try
         {
-            Debug.Log("Text Mesh is null");
-        } else
-        {
-            textMesh.text = associatedItemListing.ToString();
+            if (textMesh == null)
+            {
+                textMesh = this.GetComponentInChildren<TextMeshProUGUI>();
+            }
         }
+        catch (NullReferenceException)
+        {
+            return;
+        }
+
+        textMesh.text = associatedItemListing.ToString();
     }
 
     private void OnClickBroadcastButtonPress()
@@ -97,9 +104,3 @@ public class InventoryButton : Button
         onClick.RemoveAllListeners();
     }
 }
-/*
-public class InventoryButtonArgs: ItemEventArgs
-{
-    public int ItemId { get; set; }
-
-}*/

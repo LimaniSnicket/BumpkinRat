@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BumpkinRat.Crafting;
 using Items;
 using UnityEngine;
 
@@ -31,8 +32,8 @@ public class ItemCrafter
         progressTracker = new RecipeProgressTracker();
         RecipeProgressTracker.onRecipeCompleted.AddListener(PrintRecipe);
 
-        ItemObject.InteractedWithItemObject += OnInteractedWithItemObject;
-        ItemObject.PlaceItemBackInInventory += OnItemObjectPlacedBack;
+        ItemObjectBehaviour.InteractedWithItemObject += OnInteractedWithItemObject;
+        ItemObjectBehaviour.PlaceItemBackInInventory += OnItemObjectPlacedBack;
         InventoryButton.InventoryButtonPressed += OnInventoryButtonPressed;
     }
 
@@ -103,16 +104,17 @@ public class ItemCrafter
 
     void PrintRecipe(Recipe r)
     {
-        CustomerOrder.EvaluateAgainstRecipe(r);
+        // CustomerOrder.EvaluateAgainstRecipe(r);
+        CustomerOrderManager.EvaluateRecipeBasedOnCustomerOrder(r);
         string itemName = ItemDataManager.GetItemById(r.outputId).DisplayName;
         Debug.Log($"{itemName}:{r.recipeDescription}");
     }
 
     public void UnsubscribeToEvents()
     {
-        ItemObject.InteractedWithItemObject -= OnInteractedWithItemObject;
+        ItemObjectBehaviour.InteractedWithItemObject -= OnInteractedWithItemObject;
         InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
-        ItemObject.PlaceItemBackInInventory -= OnItemObjectPlacedBack;
+        ItemObjectBehaviour.PlaceItemBackInInventory -= OnItemObjectPlacedBack;
     }
 }
 

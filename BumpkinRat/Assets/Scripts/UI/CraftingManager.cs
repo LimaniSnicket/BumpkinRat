@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using BumpkinRat.Crafting;
 using Items;
 
 public class CraftingManager : MonoBehaviour
@@ -94,7 +95,7 @@ public class CraftingManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && !craftingUiMenu.exitDisabled)
         {
             craftingUiMenu.ToggleMenu();
         }
@@ -113,6 +114,8 @@ public class CraftingManager : MonoBehaviour
         {
             EndCraftingSequence();
         }
+
+        // craftingUiMenu.occupiablePositionContainer.Print();
     }
 
     public void SubmitCraftingActionToItemCrafter(CraftingAction action)
@@ -124,17 +127,19 @@ public class CraftingManager : MonoBehaviour
     {
         bool placedSuccessfully = craftingUiMenu.occupiablePositionContainer.TryPlaceObjectInOccupiablePosition(element);
 
+        element.OccupierTransform.ToUnitScaleLocal();
+
         if (!placedSuccessfully)
         {
             element.SetPositionAndUnitScale(Vector3.zero);
-        }
+        } 
     }
 
     private void OnInventoryButtonPressed(object source, ItemEventArgs args)
     {
         ItemObjectUiElement newItemUi = ItemDataManager.CreateItemObjectUiElement(transform, args.ItemToPass.itemId);
 
-        PlaceObjects(newItemUi);
+        this.PlaceObjects(newItemUi);
     }
 
     private void EndCraftingSequence()
@@ -149,7 +154,7 @@ public class CraftingManager : MonoBehaviour
         craftingConversationBehavior.enabled = args.Load;
         try
         {
-            craftingConversationBehavior.SetActiveConversation(CustomerOrder.ActiveOrders.Peek());
+            craftingConversationBehavior.SetActiveConversation(CustomerOrderManager.GetActiveOrder());
         }
         catch (InvalidOperationException)
         {
@@ -161,9 +166,13 @@ public class CraftingManager : MonoBehaviour
     {
         ItemObjectUiElement completed = ItemDataManager.CreateItemObjectUiElement(transform, recipe.outputId);
 
-        PlaceObjects(completed);
+        this.PlaceObjects(completed);
 
-        craftingConversationBehavior.OnRecipeCompleteRunOutro();
+        float outroDelay = 1f;
+
+        craftingConversationBehavior.InvokeOutroDialogue(outroDelay * 0.75f);
+
+        craftingUiMenu.occupiablePositionContainer.ReleaseAll(this, outroDelay);
     }
 
     private void OnDialogueOutroExitFocusedView(object source, EventArgs args)
@@ -177,7 +186,7 @@ public class CraftingManager : MonoBehaviour
 
     private void OnCustomerIntroEndMoveToCraftingView(object source, EventArgs args)
     {
-        string orderMessage = CustomerOrder.GetActiveOrderPromptDetails();
+        string orderMessage = CustomerOrderManager.ActiveOrderDetails;
 
         CameraManager.CraftingFocusView();
 

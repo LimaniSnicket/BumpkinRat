@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 
-public class Interactable : MonoBehaviour, IDistributeItems<ItemDropper>
+public class Interactable : MonoBehaviour, IDistributeItems, ITrackDistanceToPlayer
 {
-    public ItemDropper Distributor { get; private set; }
+    public IItemDistribution ItemDistributor { get; private set; }
+    public RangeChangeTracker DistanceTracker { get; private set; }
 
-    float DistanceFromPlayer => Vector3.Distance(transform.position, PlayerBehavior.PlayerPosition);
-
+    [SerializeField]
+    private float interactionRadius = 1;
     void Start()
     {
-        Distributor = new ItemDropper(this, this.transform);
-        Distributor.SetItemDropData((1, 1), (2, 1));
+        ItemDistributor = new ItemDropper(this, this.transform);
+        ItemDistributor.AddItemsToDrop((1, 1), (2, 1));
+
+        this.DistanceTracker = new RangeChangeTracker(this.transform, interactionRadius);
     }
 
     void Update()
     {
-        if (DistanceFromPlayer <= 1f && Input.GetKeyDown(KeyCode.Space))
+        if (DistanceTracker.PlayerInRange && Input.GetKeyDown(KeyCode.Space))
         {
-            Distributor.Distribute();
+            ItemDistributor.Distribute();
         }
     }
 }

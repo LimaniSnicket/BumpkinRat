@@ -247,19 +247,6 @@ public static class GenericX
 
     public static bool isField<T>(this T t, string f) => t.GetType().GetField(f) != null;
 
-    public static List<int> IndicesOf(this string s, char search)
-    {
-        List<int> indices = new List<int>();
-        int start = 0;
-        while(start >= 0)
-        {
-            start = s.IndexOf(search, start);
-            indices.Add(start);
-            start += 1;
-        }
-        return indices;
-    }
-
     public static string GetCapitalizedString(this string toCap)
     {
         StringBuilder builder = new StringBuilder(toCap);
@@ -349,42 +336,6 @@ public static class GenericX
         }
     }
 
-    public static void RemoveKeys<T, U, K>(this Dictionary<T, U> dict, Func<K, bool> predicate, Func<K, T> output, params K[] keys)
-    {
-        if (!dict.CollectionIsNotNullOrEmpty() || !keys.CollectionIsNotNullOrEmpty())
-        {
-            return;
-        }
-
-        for(int i = 0; i < keys.Length; i++)
-        {
-            if (predicate(keys[i])) {
-            
-            }
-        }
-
-     /*   foreach(T key in keys)
-        {
-            if (dict.ContainsKey(key))
-            {
-                dict.Remove(key);
-            }
-        }*/
-    }
-
-/*    public static void FilterOutRemoveListeners<TKey, TValue, T>(this Dictionary<TKey, TValue> dict, Func<TKey, bool> predicate, UnityEvent<T> eventCall, string callback)
-    {
-        if (dict.CollectionIsNotNullOrEmpty())
-        {
-            foreach(var kp in dict)
-            {
-                if (predicate(kp.Key))
-                {
-                }
-            }
-        }
-    }*/
-
     public static void BroadcastEvent<T>(this EventHandler<T> handler, object source, T eventArgs) where T: EventArgs
     {
         if(handler != null)
@@ -471,6 +422,11 @@ public static class MathfX
     public static bool SqueezeBetween(this int f, int lowerBound, int upperBound)
     {
         return f >= lowerBound && f <= upperBound;
+    }
+
+    public static void ToUnitScaleLocal<T>(this T transform) where T: Transform
+    {
+        transform.localScale = Vector3.one;
     }
 }
 

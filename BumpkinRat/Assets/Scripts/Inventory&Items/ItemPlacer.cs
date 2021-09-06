@@ -1,56 +1,66 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Items;
 
-public class ItemPlacer : ItemDistrubutionSettings
+public class ItemPlacer : ItemDistributionBase, IItemDistribution
 {
-    private readonly IDistributeItems<ItemPlacer> placer;
+    private readonly IDistributeItems placer;
 
     private Vector3[] placementPositions = new Vector3[0];
 
     private OccupiablePositionContainer occupiablePositionContainer;
 
-    public bool spawnPrefab;
-
-    GameObject prefab;
-
-    public ItemPlacer(IDistributeItems<ItemPlacer> placer)
+    public ItemPlacer(IDistributeItems placer)
     {
         this.placer = placer;
-        clearOnDistribute = true;
         occupiablePositionContainer = new OccupiablePositionContainer(placementPositions);
+
+        this.itemDistributionSettings = new ItemDistributionSettings();
         //RecipeProgressTracker.onRecipeCompleted.AddListener(PlaceFromRecipe);
     }
 
-    public void SetPrefabToPlace(GameObject p)
+    public void AddItemsToDrop(params (int, int)[] dropData)
     {
-        prefab = p;
+        this.AddItemsToDropToItemDistributionSettings(dropData);
     }
 
-    public override void Distribute()
+    public void AddItemsToDrop(params int[] dropData)
     {
-        if (!CanDistribute)
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
+
+    public void AddItemToDrop(ItemDrop toDrop)
+    {
+        this.AddItemDropToItemDistributionSettings(toDrop);
+    }
+
+    public void Distribute()
+    {
+        if (!this.itemDistributionSettings.CanDistribute)
         {
             return;
         }
 
-        for(int i = 0; i < ItemsToDrop.Count; i++)
-        {
-            var position = occupiablePositionContainer.GetNext();
-            if (position != null)
-            {
-                ItemObjectWorldElement itemObject = ItemDataManager.SpawnFromPrefabPath(ItemsToDrop[i].ToDrop);//ItemsToDrop[i].ToDrop.SpawnFromPrefabPath();
-                position.Occupy(itemObject);
-            } else
-            {
-                Debug.LogWarning("Can no longer spawn items here!");
-                break;
-            }
-        }
+        this.IterateOverItemDropDataUntil(PlaceItem, NextPositionInvalid);
 
-        if (clearOnDistribute)
+        itemDistributionSettings.Cleanup();
+    }
+
+    private void PlaceItem(ItemDrop itemDrop)
+    {
+        var position = occupiablePositionContainer.GetNext();
+        if (position != null)
         {
-            ItemsToDrop.Clear();
+            var itemObject = ItemDataManager.SpawnFromPrefabPath(itemDrop.ToDrop);
+            position.Occupy(itemObject);
         }
+        else
+        {
+            Debug.LogWarning("Can no longer spawn items here!");
+        }
+    }
+
+    private bool NextPositionInvalid()
+    {
+        return !occupiablePositionContainer.HasNext();
     }
 }

@@ -46,7 +46,7 @@ public class FocusAreaUI : MonoBehaviour, IFocusArea, IPointerEnterHandler, IPoi
         hovering = true;
         if (ItemCrafter.CraftingSequenceActive)
         {
-            parent.itemObject.BroadcastInteractedWith(this, parent);
+            parent.BroadcastInteractedWith(this);
         }
     }
 

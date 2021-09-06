@@ -10,9 +10,9 @@ public class CraftingSequence
     public CraftingAction actionTaken;
 
     public bool InProgress => actionItemObject != null;
-    private string ActionItemProgress => actionItemObject != null ? $"{actionItemObject.itemObject.Item.DisplayName} --> " : string.Empty;
+    private string ActionItemProgress => actionItemObject != null ? $"{actionItemObject.Item.DisplayName} --> " : string.Empty;
     private string ActionTakenString => actionTaken.Equals(CraftingAction.NONE) ? string.Empty : $"{actionTaken.ToString()} --> ";
-    private string TargetItemProgress => targetItemObject != null ? targetItemObject.itemObject.Item.DisplayName : string.Empty;
+    private string TargetItemProgress => targetItemObject != null ? targetItemObject.Item.DisplayName : string.Empty;
 
     public static event EventHandler CraftingSequenceCompleted;
     public CraftingSequenceTaken onSequence;
@@ -33,12 +33,12 @@ public class CraftingSequence
 
     public void DemolishObjects(Dictionary<int, int> removeFrom)
     {
-        DemolishItemObject(removeFrom, actionItemObject);
-        DemolishItemObject(removeFrom, targetItemObject);
+        RemoveItemObject(removeFrom, actionItemObject);
+        RemoveItemObject(removeFrom, targetItemObject);
         ClearSequence();
     }
 
-    void DemolishItemObject(Dictionary<int, int> removingFrom, ItemObjectBehaviour toDestroy)
+    private void RemoveItemObject(Dictionary<int, int> removingFrom, ItemObjectBehaviour toDestroy)
     {
         if (toDestroy != null)
         {

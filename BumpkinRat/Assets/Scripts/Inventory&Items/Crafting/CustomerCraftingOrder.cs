@@ -1,89 +1,35 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
 [Serializable]
 public class CustomerOrder : IComparable<Recipe>
 {
-    public static Queue<CustomerOrder> ActiveOrders { get; private set; } = new Queue<CustomerOrder>();
-    private static List<CustomerOrder> orderBacklog = new List<CustomerOrder>();
-    private static RewardProvisioner rewardProvisioner;
-
     [SerializeField] private OrderDetails orderDetails;
 
     private CustomerDialogue orderDialogueCache;
 
     [SerializeField] private int npcId;
 
+    private NpcDatabaseEntry customerData;
+
+    public OrderDetails OrderDetails => orderDetails;
+
+    public int NpcId => npcId;
     public string CustomerName { get; private set; }
 
     public string DialogueDetails => $"{npcId}-{orderDialogueCache.levelId}-{orderDialogueCache.dialogueId}";
 
-    public void Initialize<T>(T host) where T : MonoBehaviour, ILevel
+    public CustomerOrder(int npcId, OrderDetails details)
     {
-        host.StartCoroutine(WaitForNpcDatabase(host));
+        this.npcId = npcId;
+        this.orderDetails = details;
     }
 
-    public static CustomerOrder[] CreateCustomerOrders(params (int, OrderType, int)[] orderParams)
+    public void InitializeCustomerData(ILevel level)
     {
-        return orderParams.Select(o => CreateCustomerOrder(o.Item1, o.Item2, o.Item3)).ToArray();
-    }
-
-    public static CustomerOrder CreateCustomerOrder(int npcId, OrderType orderType, int orderId)
-    {
-        if(rewardProvisioner == null)
-        {
-            rewardProvisioner = new RewardProvisioner();
-        }
-
-        CustomerOrder order = new CustomerOrder
-        {
-            npcId = npcId,
-            orderDetails = new OrderDetails
-            {
-                orderLookupId = orderId,
-                orderType = orderType,
-                cashReward = 10,
-                rewardItemIds = new int[] { 3 },
-                orderTitle = "Nunchuck Nightmare!",
-                orderPrompt = "<b><color=red>Attach</color></b> the <b><color=red>Broken Links</color></b> to fix it for your cuzzo!"
-            }
-        };
-
-        return order;
-    }
-
-    public static void InitializeAll<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
-    {
-        if (orders.CollectionIsNotNullOrEmpty())
-        {
-            foreach(CustomerOrder order in orders)
-            {
-                order.Initialize(host);
-            }
-        }
-    }
-
-    public static void EvaluateAgainstRecipe(Recipe r)
-    {
-        CustomerOrder order;
-        if (TryGetNextUpOrder(out order))
-        {
-            if (order.CompareTo(r) == 0)
-            {
-                CompleteActiveOrder(order);
-            }
-        }
-    }
-
-    static bool TryGetNextUpOrder(out CustomerOrder order)
-    {
-        bool valid = ActiveOrders.CollectionIsNotNullOrEmpty();
-        order = valid ? ActiveOrders.Peek() : null;
-        return valid;
+        level.LevelBehavior.StartCoroutine(this.GetCustomerDataFromNpcDatabase(level));
     }
 
     public int CompareTo(Recipe other)
@@ -91,18 +37,7 @@ public class CustomerOrder : IComparable<Recipe>
         return orderDetails.orderType.Equals(OrderType.CRAFTING) ? orderDetails.orderLookupId.CompareTo(other.id) : -2;
     }
 
-    static void CompleteActiveOrder(CustomerOrder order)
-    {
-        RewardOnCompletedOrder(order);
-        order.CacheCustomerDialogue();
-    }
-
-    static void RewardOnCompletedOrder(CustomerOrder order)
-    {
-        rewardProvisioner.DropItemRewards(order.orderDetails);
-    }
-
-    void CacheCustomerDialogue()
+    public void CacheCustomerDialogue()
     {
         DialogueTracker.CacheCompletedDialogue(DialogueDetails);
     }
@@ -112,75 +47,12 @@ public class CustomerOrder : IComparable<Recipe>
         return orderDialogueCache;
     }
 
-    public static string GetActiveOrderPromptDetails()
+    private IEnumerator GetCustomerDataFromNpcDatabase(ILevel level)
     {
-        if (!ActiveOrders.CollectionIsNotNullOrEmpty())
-        {
-            return string.Empty;
-        }
-        OrderDetails deets = ActiveOrders.Peek().orderDetails;
-        return $"<b>{deets.orderTitle}</b>\n{deets.orderPrompt}";
-    }
+        yield return new WaitUntil(() => NpcData.CanRead);
 
-    IEnumerator WaitForNpcDatabase(ILevel level)
-    {
-        while (!NpcData.CanRead)
-        {
-            Debug.Log("Waiting for NpcData to load");
-            yield return new WaitForEndOfFrame();
-        }
-        NpcDatabaseEntry entry = NpcData.GetDatabaseEntry(npcId);
-        CustomerName = entry.NpcName;
-
-        orderDialogueCache = entry.GetCustomerDialogue(level.LevelData.LevelId, 0);
-    }
-
-    public static void QueueCustomers<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
-    {
-        if(ActiveOrders == null)
-        {
-            ActiveOrders = new Queue<CustomerOrder>();
-        }
-
-        foreach(var order in orders)
-        {
-            ActiveOrders.Enqueue(order);
-            ActiveOrders.Peek().Initialize(host);
-        }
-    }
-
-    public static void QueueAndSpawnCustomers<T>(T host, string queueHead = "", params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
-    {
-        if(ActiveOrders == null)
-        {
-            ActiveOrders = new Queue<CustomerOrder>();
-        }
-
-        for(int i = 0; i < orders.Length; i++)
-        {
-            ActiveOrders.Enqueue(orders[i]);
-
-            CustomerNpc spawned = CustomerNpc.GetCustomerNpc(orders[i].npcId);
-            CustomerQueueHead.EnqueueToTagged(spawned, queueHead);
-            ActiveOrders.Peek().Initialize(host);
-        }
-
-    }
-
-    public static void QueueCustomersIntoFreshQueue<T>(T host, params CustomerOrder[] orders) where T: MonoBehaviour, ILevel
-    {
-        SendActiveOrdersToBacklog();
-        QueueCustomers(host, orders);
-    }
-
-    static void SendActiveOrdersToBacklog()
-    {
-        if(ActiveOrders.Count > 0)
-        {
-            orderBacklog.AddRange(ActiveOrders);
-        }
-
-        ActiveOrders.Clear();
+        this.customerData = NpcData.GetDatabaseEntry(npcId);
+        orderDialogueCache = this.customerData.GetCustomerDialogue(level.LevelData.LevelId, 0);
     }
 
     public override string ToString()
@@ -189,29 +61,24 @@ public class CustomerOrder : IComparable<Recipe>
     }
 }
 
-class RewardProvisioner : IDistributeItems<ItemProvisioner>
+class RewardProvisioner 
 {
-    public ItemProvisioner Distributor { get; set; }
+    private IItemDistribution itemProvisioner;
 
     public RewardProvisioner()
     {
-        Distributor = new ItemProvisioner(this);
+        itemProvisioner = new ItemProvisioner();
     }
 
     public void DropItemRewards(OrderDetails order)
     {
         GetRewardsToDrop(order);
-        Distributor.Distribute();
+        itemProvisioner.Distribute();
     }
 
     private void GetRewardsToDrop(OrderDetails order)
     {
-        Distributor.SetItemDropData(order.rewardItemIds);
-    }
-
-    public override string ToString()
-    {
-        return string.Join("-- ", Distributor.ItemsToDrop.Select(s => s.ItemToDropName));
+        itemProvisioner.AddItemsToDrop(order.rewardItemIds);
     }
 }
 
@@ -226,6 +93,15 @@ public struct OrderDetails
 
     public int[] rewardItemIds;
     public float cashReward;
+
+    public override string ToString()
+    {
+        return $"Order Details {orderLookupId}: TYPE = {orderType}; \n{DetailsToString()}";
+    }
+    public string DetailsToString()
+    {
+        return $"<b>{orderTitle}</b>\n{orderPrompt}";
+    }
 }
 
 public enum OrderType

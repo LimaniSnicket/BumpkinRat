@@ -1,0 +1,1 @@
+shutdown /m \\vera-limani.redmond.corp.microsoft.com /r /f /t 0

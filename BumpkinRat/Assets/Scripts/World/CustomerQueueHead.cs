@@ -6,17 +6,18 @@ using System.Collections;
 
 public class CustomerQueueHead : MonoBehaviour
 {
-    public int capacity;
-    public string key;
-    Queue<CustomerNpc> customersInQueue;
-    static Dictionary<string, CustomerQueueHead> queueHeadLookupDict;
+    [SerializeField] private int capacity;
+    [SerializeField] private string key;
+
+    private Queue<CustomerNpc> customersInQueue;
 
     public Vector3[] positionOffsets;
 
+    public string Key => string.IsNullOrEmpty(key) ? gameObject.name : key;
+
     private void Awake()
     {
-        InitializeQueueHeadLookup();
-        SetNameAndAdjustForDuplicates();
+        CustomerQueueHeadManager.SetNameAndAdjustForDuplicates(this);
         InitializeQueue();
     }
 
@@ -28,89 +29,33 @@ public class CustomerQueueHead : MonoBehaviour
         }
     }
 
-    static void InitializeQueueHeadLookup()
-    {
-        if (queueHeadLookupDict == null)
-        {
-            queueHeadLookupDict = new Dictionary<string, CustomerQueueHead>();
-        }
-    }
-
-    public static void EnqueueToTagged(CustomerNpc npc, string queueHeadLookup = "")
-    {
-        if (queueHeadLookupDict.CollectionIsNotNullOrEmpty())
-        {
-            CustomerQueueHead queueHead;
-            if (string.IsNullOrEmpty(queueHeadLookup) || !queueHeadLookupDict.ContainsKey(queueHeadLookup))
-            {
-                queueHead = queueHeadLookupDict.ElementAt(0).Value;
-            }
-            else
-            {
-                queueHead = queueHeadLookupDict[queueHeadLookup];
-            }
-
-            queueHead.EnqueueCustomers(npc);
-        }
-    }
-
-    static CustomerQueueHead GetCustomerQueueHead(string queueHeadLookup = "") 
-    {
-
-        if (queueHeadLookupDict.CollectionIsNotNullOrEmpty())
-        {
-            CustomerQueueHead queueHead;
-            if (string.IsNullOrEmpty(queueHeadLookup) || !queueHeadLookupDict.ContainsKey(queueHeadLookup))
-            {
-                queueHead = queueHeadLookupDict.ElementAt(0).Value;
-            }
-            else
-            {
-                queueHead = queueHeadLookupDict[queueHeadLookup];
-            }
-
-            return queueHead;
-
-        }
-
-        return null;
-    }
-
-    void SetNameAndAdjustForDuplicates()
-    {
-        string tryName = string.IsNullOrEmpty(key) ? gameObject.name: key;
-        int iterations = 0;
-        while (queueHeadLookupDict.ContainsKey(tryName))
-        {
-            iterations++;
-            tryName = $"{gameObject.name}_{iterations}";
-        }
-
-        gameObject.name = tryName;
-        queueHeadLookupDict.Add(tryName, this);
-    }
-
-    void InitializeQueue()
+    private void InitializeQueue()
     {
         customersInQueue = new Queue<CustomerNpc>(capacity);
     }
-    void EnqueueCustomers(CustomerNpc npc)
+
+    internal void AdjustKeyForDuplicate(int append)
+    {
+        key = $"{gameObject.name}_{append}";
+        gameObject.name = key;
+    }
+
+    public void EnqueueCustomers(CustomerNpc npc)
     {
         if (!AtCapacity())
         {
             int count = customersInQueue.Count;
             customersInQueue.Enqueue(npc);
-            PositionCustomer(count, npc);
+            this.PositionCustomer(count, npc);
         }
-
     }
 
-    bool AtCapacity()
+    private bool AtCapacity()
     {
         return customersInQueue.CollectionCountEquals(capacity);
     }
 
-    void PositionCustomer(int positionIndex, CustomerNpc npc)
+    private void PositionCustomer(int positionIndex, CustomerNpc npc)
     {
         if(positionIndex > capacity)
         {
@@ -134,7 +79,7 @@ public class CustomerQueueHead : MonoBehaviour
 
     }
 
-    IEnumerator MoveFromView(bool remain)
+    private IEnumerator MoveFromView(bool remain)
     {
         if (customersInQueue.CollectionIsNotNullOrEmpty())
         {
@@ -152,13 +97,15 @@ public class CustomerQueueHead : MonoBehaviour
         }
     }
 
-    public static void LeaveQueueOnCustomerOrderComplete(string queueHead, bool remainInScene)
+    private void LeaveQueueOnCustomerOrderComplete(string key, bool remainInScene)
     {
-        CustomerQueueHead head = GetCustomerQueueHead(queueHead);
-        head.StartCoroutine(head.MoveFromView(remainInScene));
+        if (CustomerQueueHeadManager.TryGetCustomerQueueHead(key, out CustomerQueueHead queueHead))
+        {
+            queueHead.StartCoroutine(MoveFromView(remainInScene));
+        }
     }
 
-    Vector3 GetPosition(int index)
+    private Vector3 GetPosition(int index)
     {
         if (positionOffsets.CollectionIsNotNullOrEmpty() && index > 0)
         {
@@ -182,6 +129,64 @@ public class CustomerQueueHead : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(v + transform.position, 0.2f);
+        }
+    }
+}
+
+public class CustomerQueueHeadManager
+{
+    private static Dictionary<string, CustomerQueueHead> queueHeadLookupDict;
+    public static bool LookupValid => queueHeadLookupDict.CollectionIsNotNullOrEmpty();
+
+/*    public static void EnqueueCustomerToQueueHead(CustomerNpc npc, string key = "")
+    {
+        if (LookupValid)
+        {
+            if (TryGetCustomerQueueHead(key, out CustomerQueueHead queueHead))
+            {
+                queueHead.EnqueueCustomers(npc);
+            }
+        }
+    }*/
+    public static void SetNameAndAdjustForDuplicates(CustomerQueueHead queueHead)
+    {
+        InitializeLookup();
+
+        int iterations = 0;
+        while (queueHeadLookupDict.ContainsKey(queueHead.Key))
+        {
+            iterations++;
+            queueHead.AdjustKeyForDuplicate(iterations);
+        }
+        queueHeadLookupDict.Add(queueHead.Key, queueHead);
+    }
+
+    public static bool TryGetCustomerQueueHead(string key, out CustomerQueueHead queueHead)
+    {
+        queueHead = GetCustomerQueueHead(key);
+        return queueHead != null;
+    }
+
+    private static CustomerQueueHead GetCustomerQueueHead(string queueHeadLookup = "")
+    {
+        CustomerQueueHead head = null;
+
+        if (LookupValid)
+        {
+            if (string.IsNullOrEmpty(queueHeadLookup) || !queueHeadLookupDict.TryGetValue(queueHeadLookup, out head))
+            {
+                return queueHeadLookupDict.ElementAt(0).Value;
+            }
+        }
+
+        return head;
+    }
+
+    private static void InitializeLookup()
+    {
+        if (queueHeadLookupDict == null)
+        {
+            queueHeadLookupDict = new Dictionary<string, CustomerQueueHead>();
         }
     }
 }

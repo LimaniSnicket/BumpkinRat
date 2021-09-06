@@ -1,5 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
+
+public struct ActivityColorSet
+{
+    private Color activeColor;
+
+    private Color inactiveColor;
+
+    public static ActivityColorSet PlainWhite => new ActivityColorSet(Color.white, Color.white.ToOpacity());
+
+    public ActivityColorSet(Color active, Color inactive)
+    {
+        activeColor = active;
+        inactiveColor = inactive;
+    }
+
+    public void ApplyColorSetToImage(Image image, bool isActive)
+    {
+        image.color = isActive ? activeColor : inactiveColor;
+    }
+}
 
 public static class ColorX 
 {
@@ -11,6 +32,11 @@ public static class ColorX
         }
 
         return new Color(col.r, col.g, col.b, 1);
+    }
+
+    public static Color ToOpacity(this Color color, float opacity = 0.5f)
+    {
+        return new Color(color.r, color.g, color.b, opacity);
     }
 
     public static bool Approximately(Color a, Color b, float threshold = 0.1f)

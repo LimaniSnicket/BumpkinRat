@@ -47,6 +47,11 @@ public struct LevelData
         dialogue = null;
         return false;
     }
+
+    public static bool IsActiveLevel(ILevel level)
+    {
+        return level.LevelData.levelId == ActiveLevel.levelId;
+    }
 }
 
 [Serializable]

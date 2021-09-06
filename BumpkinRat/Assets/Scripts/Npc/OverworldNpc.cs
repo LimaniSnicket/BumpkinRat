@@ -6,7 +6,8 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
     public int npcIndex;
 
     public string npcName;
-    public static NpcTextureCache NpcTextureCache { get; private set; }
+
+    protected static NpcTextureCache npcTextureCache;
 
     public static event EventHandler<EvaluateEventArgs<(bool, OverworldNpc)>> OverworldNpcEvent; 
 
@@ -49,9 +50,9 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
 
     void Awake()
     {
-        if(NpcTextureCache == null)
+        if(npcTextureCache == null)
         {
-            NpcTextureCache = new NpcTextureCache();
+            npcTextureCache = new NpcTextureCache();
         }
     }
 
@@ -65,20 +66,20 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
         CanInteractWith = DistanceTracker.PlayerInRange;
     }
 
-    void InitializeNpc()
+    private void InitializeNpc()
     {
-        GetNpcData();
-        GetNpcDialogue();
+        this.SetNpcDataFromDatabaseEntry();
+        this.GetNpcDialogue();
         DistanceTracker = new RangeChangeTracker(transform, 2f);
     }
 
-    void GetNpcData()
+    private void SetNpcDataFromDatabaseEntry()
     {
         NpcDatabaseEntry npc = NpcData.GetDatabaseEntry(npcIndex);
         npcName = npc.NpcName;
     }
 
-    void GetNpcDialogue()
+    private void GetNpcDialogue()
     {
         tracker.GetDialogueFromLevelData(npcIndex);
     }
@@ -114,7 +115,7 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
         return Mathf.Abs(a.DistanceTracker.DistanceFromPlayer) <= Mathf.Abs(b.DistanceTracker.DistanceFromPlayer) ? -1 : 1;
     }
 
-    void OnRangeChange(bool withinRange)
+    private void OnRangeChange(bool withinRange)
     {
         OverworldNpcEvent.BroadcastEvent(this, new EvaluateEventArgs<(bool, OverworldNpc)> 
         { 
@@ -124,11 +125,11 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
         Debug.Log("Within Range: " + withinRange);
     }
 
-    protected void SetNpcAppearence(Texture2D texture)
+    protected void SetNpcTexture(Texture2D texture)
     {
         if(texture == null)
         {
-            Debug.Log("Texture is null?");
+            Debug.Log("Texture is null");
             return;
         }
 
@@ -139,6 +140,6 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
 
 public interface ITrackDistanceToPlayer
 {
-    RangeChangeTracker DistanceTracker { get; set; }
+    RangeChangeTracker DistanceTracker { get; }
 }
 

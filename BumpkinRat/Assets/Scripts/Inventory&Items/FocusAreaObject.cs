@@ -106,7 +106,7 @@ public class FocusAreaObject : MonoBehaviour, IFocusArea
 
     public override string ToString()
     {
-        return $"Id:{parentFocusAreaContainer.itemObject.Item.itemId} FA:{focusAreaId}";
+        return $"Id:{parentFocusAreaContainer.Item.itemId} FA:{focusAreaId}";
     }
 
     private void OnDestroy()

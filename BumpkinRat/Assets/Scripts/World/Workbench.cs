@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Workbench : MonoBehaviour, IDistributeItems<ItemPlacer>
+public class Workbench : MonoBehaviour, IDistributeItems
 {
-    public ItemPlacer Distributor { get; set; }
+    public IItemDistribution ItemDistributor { get; set; }
 
     public Transform[] spawnPositions;
 
@@ -14,10 +14,8 @@ public class Workbench : MonoBehaviour, IDistributeItems<ItemPlacer>
 
     private void Start()
     {
-        Distributor = new ItemPlacer(this);
-        Distributor.spawnPrefab = true;
-
-        SpawnItemObject(spawnPrefab);
+        ItemDistributor = new ItemPlacer(this);
+        //Distributor.spawnPrefab = true;
     }
 
     void OnInventoryButtonPressed(object source, ItemEventArgs args)
@@ -29,14 +27,9 @@ public class Workbench : MonoBehaviour, IDistributeItems<ItemPlacer>
     {
         ItemDrop toDrop = new ItemDrop(item, 1);
 
-        Distributor.AddItemToDrop(toDrop);
+        ItemDistributor.AddItemToDrop(toDrop);
 
-        Distributor.Distribute();
-    }
-
-    public void SpawnItemObject(GameObject obj)
-    {
-        Distributor.SetPrefabToPlace(obj);
+        ItemDistributor.Distribute();
     }
 
     private void OnDestroy()

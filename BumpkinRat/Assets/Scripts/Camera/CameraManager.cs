@@ -58,6 +58,11 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    public static Vector3 GetEulersOfAxes(string axes)
+    {
+        return camManager.transform.eulerAngles.GetAxesOfVector3(axes);
+    }
+
     public static void LookAt(Transform t)
     {
         camManager.transform.DOLookAt(t.position, 1f);

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using BumpkinRat.Crafting;
 using UnityEngine;
 
-public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisioner>, ILevel, IDialogueCommandReceiver
+public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandReceiver
 {
     RealTimeCounter prologueCounter;
 
@@ -24,12 +24,16 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         }
     }
     public bool atWork;
-    public ItemProvisioner Distributor { get; private set; }
+    public ItemProvisioner ItemProvisioner { get; private set; }
     public string LevelDataPath => "Assets/Resources/Databases/GeneralStoreLevelData.json";
 
     public LevelData LevelData => LevelData.GetFromPath(LevelDataPath);
 
+    public MonoBehaviour LevelBehavior => this;
+
     public static CustomerOrder[] prologueCraftingOrders;
+
+    private CustomerOrderManager customerOrderManager;
 
     public Transform queueHead;
 
@@ -45,13 +49,15 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
         startTime = new TimeSpan(12, 22, 27);
         StartCoroutine(IncrementTimeSpan(1));
 
-        Distributor = new ItemProvisioner(this);
-        Distributor.SetItemDropData((4, 2));
+        ItemProvisioner = new ItemProvisioner();
+        ItemProvisioner.AddItemsToDrop((4, 2));
 
-        Distributor.Distribute();
+        ItemProvisioner.Distribute();
 
-        prologueCraftingOrders = CustomerOrder.CreateCustomerOrders((0, OrderType.CRAFTING, 0), (1, OrderType.CRAFTING, 0));
-        CustomerOrder.QueueAndSpawnCustomers(this, "WorkbenchQueueHead", prologueCraftingOrders);
+        this.customerOrderManager = new CustomerOrderManager(this);
+
+        prologueCraftingOrders = customerOrderManager.CreateCustomerOrders((0, OrderType.CRAFTING, 0), (1, OrderType.CRAFTING, 0));
+        customerOrderManager.SpawnCustomersAtQueueHead("WorkbenchQueueHead", prologueCraftingOrders);
 
         //CraftingUI.SetDisableCraftingMenuEntry(true);
 
@@ -94,7 +100,7 @@ public class GeneralStorePrologue : MonoBehaviour, IDistributeItems<ItemProvisio
     {
         yield return new WaitForSeconds(1);
         //WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
-        Distributor.Distribute();
+        ItemProvisioner.Distribute();
     }
 
     void OnUiEvent(object source, UiEventArgs args)

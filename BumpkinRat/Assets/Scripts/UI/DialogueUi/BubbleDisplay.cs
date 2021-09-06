@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 public class BubbleDisplay
 {
-    private Image backing;
+    private readonly Image backing;
+
+    private readonly RectTransform rectTransform;
+
     public TextMeshProUGUI TextMesh { get; set; }
 
-    private RectTransform rectTransform;
-
-    private Color activeColor, inactiveColor;
+    private ActivityColorSet activeColorSet;
 
     public Vector3 LocalPosition => rectTransform.localPosition;
 
@@ -28,7 +29,7 @@ public class BubbleDisplay
         backing = prefab.GetOrAddComponent<Image>();
         TextMesh = backing.GetComponentInChildren<TextMeshProUGUI>();
         rectTransform = backing.GetComponent<RectTransform>();
-        activeColor = Color.white;
+        activeColorSet = ActivityColorSet.PlainWhite;
     }
 
     public BubbleDisplay(GameObject prefab, bool raycastTarget) : this (prefab)
@@ -55,16 +56,11 @@ public class BubbleDisplay
 
     public void ApplyConversationAesthetic(ConversationAesthetic aesthetic, bool isResponse = true, bool setInactive = true)
     {
-        activeColor = aesthetic.GetBubbleColor(isResponse);
-        inactiveColor = new Color(activeColor.r, activeColor.g, activeColor.b, 0.5f);
+        Color active = aesthetic.GetBubbleColor(isResponse);
 
-        if (setInactive)
-        {
-            backing.color = inactiveColor;
-        } else
-        {
-            backing.color = activeColor;
-        }
+        activeColorSet = new ActivityColorSet(active, active.ToOpacity());
+
+        activeColorSet.ApplyColorSetToImage(backing, !setInactive);
 
         TextMesh.color = aesthetic.GetTextColor(isResponse);
 
@@ -84,13 +80,13 @@ public class BubbleDisplay
     {
         Vector3 scaleVect = Vector3.one * scale;
 
-        SwapBackingColors(isActive);
+        SetBackingColor(isActive);
         ScaleRectTransform(scaleVect, tweenSpeed);
     }
 
-    private void SwapBackingColors(bool isActive)
+    private void SetBackingColor(bool isActive)
     {
-        backing.color = isActive ? activeColor : inactiveColor;
+        this.activeColorSet.ApplyColorSetToImage(backing, isActive);
     }
 
     public void SetFromOrientation(ConversationBubbleOrientation orientation)
