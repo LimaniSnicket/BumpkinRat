@@ -1,0 +1,916 @@
+S2021-10-06 09:47:36,372 [1] INFO  FocusInVstsService FocusInVstsService.CreateHandlerFactory - Environment: Azure
+2021-10-06 09:47:36,450 [1] INFO  FocusInVstsService FocusInVstsService.CreateHandlerFactory - Authentication Type: UserMSI
+2021-10-06 09:47:36,450 [1] INFO  FocusInVstsService FocusInVstsService.CreateHandlerFactory - Application(MSI) ID: 13ca485d-f70f-41bc-be81-665afb580981
+2021-10-06 09:47:36,466 [1] INFO  FocusInVstsService FocusInVstsService.CreateHandlerFactory - KeyVault URI: https://mw2fcsppeivm.vault.azure.net
+2021-10-06 09:47:59,259 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'focusstageupdates_cloudppe'.
+2021-10-06 09:47:59,322 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'associateprtofocus_cloudppe'.
+2021-10-06 09:48:01,167 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'createsmokejob_cloudppe'.
+2021-10-06 09:48:02,323 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'createRollingJob_cloudppe'.
+2021-10-06 09:48:02,354 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'resubmitfocusjob_cloudppe'.
+2021-10-06 09:48:02,385 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'createFocusToTDS_cloudppe'.
+2021-10-06 09:48:02,401 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'createOfficialTestPassJob_cloudppe'.
+2021-10-06 09:48:02,432 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'submitfocusjob_cloudppe'.
+2021-10-06 09:48:02,464 [17] INFO  FocusInVstsService MessageTransceiverFactory.CreateTransceiver - Getting Receiver for Queue 'createpostcheckinjob_cloudppe'.
+2021-10-06 11:48:00,383 [22] INFO  FocusInVstsService PullRequestFocusJobDataFactory.DeserializeCreateFocusJobMessage - Creating Focus Job with the following details: {"OwnerUsername":"veralimani@microsoft.com","Alias":"veralimani","JobTitle":"Branch: users/etjohnso/TestQTestOverride | Commit: 0d73686ae2 | Pull Request: 1527392","Platforms":"amd64:Debug","Tests":"","TestSelection":"Default","AdditionalToplogies":"","UseLkg":false,"TestCategoriesDelimited":"","TestCategories":[],"ApplyFastTrain":false,"RerunFailures":false,"SkipTopologyAddition":false,"SkipTestCaseDetection":false,"QtestOnlyJustification":"","FocusId":9478271,"PullRequestId":1527392,"FocusStack":"A","PostCheckinJob":false,"EnableTestCategory":true,"QtestApproval":false}
+2021-10-06 11:48:01,508 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:01,586 [20] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 11:48:01,743 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 11:48:01,852 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 11:48:01,914 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:01,946 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestWorkItemsAsync>b__0
+2021-10-06 11:48:06,055 [22] INFO  FocusClient SetTempStorageCommand.StorageManagerConnectRetry - StorageManager URIs: MW2FCSPPEAPP06, MW2FCSPPEAPP06
+2021-10-06 11:48:07,534 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:07,628 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <UpdatePullRequestAsync>b__0
+2021-10-06 11:48:07,659 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:08,690 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:09,753 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:10,799 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:11,831 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:12,909 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:12,956 [22] NOTICE FocusClient SetBuildOptionsCommand.UpdateProperties - Smoke Log: C:\windows\system32\config\systemprofile\AppData\Local\FocusClient\FocusClient-20211006184805914.log
+2021-10-06 11:48:13,237 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:48:17,201 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetChangesAsync>b__0
+2021-10-06 11:48:17,201 [27] DEBUG FocusClient SetBuildOptionsCommand+<SetSourceDropPropertiesAsync>d__140.MoveNext - Begin Build Selection...
+2021-10-06 11:48:17,342 [29] DEBUG FocusClient SetBuildOptionsCommand+<SetSourceDropPropertiesAsync>d__140.MoveNext - Retrieved platforms for branch.
+2021-10-06 11:48:17,591 [28] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 11:48:17,638 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetCommitDiffsAsync>b__0
+2021-10-06 11:48:17,654 [29] DEBUG FocusClient FlavorPlatformRule.ProcessRule - Retrieved file and change types for commit id 263a180e52670167535c78d690bd58c65baff662 on branch master
+2021-10-06 11:48:17,654 [29] DEBUG FocusClient FlavorPlatformRule.ProcessRule - Selecting flavor and platform for non-MsBuild conversion git files.
+2021-10-06 11:48:17,873 [28] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 11:48:18,201 [28] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 11:48:18,232 [29] DEBUG GitAccessorLogger GitAccessor.GetFile - Attempting to get file contents for /sources/dev/Common/src/AuthAwareSqlAdapterCore/AuthInjector.cs from git.
+2021-10-06 11:48:18,279 [28] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemContentAsync>b__0
+2021-10-06 11:48:18,279 [29] DEBUG FocusClient BuildSelectionRuleProcessor.Process - Finished selecting flavor and platform for non-MsBuild conversion project.
+2021-10-06 11:48:18,295 [29] DEBUG FocusClient LocalizationRule.ProcessRule - Retrieved changes from job dpk.
+2021-10-06 11:48:18,295 [29] DEBUG FocusClient BuildSelectionRuleProcessor.Process - Finished retrieving updated build selections for any localized files.
+2021-10-06 11:48:18,326 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.ScheduleGitBuild: Queue: OSS_bothell_ReleaseOnly_Drops_Git
+2021-10-06 11:48:18,326 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.ScheduleBuild: https://cloudbuild.microsoft.com/Coordinator/RequestRegularBuild?queue=OSS_bothell_ReleaseOnly_Drops_Git&requester=veralimani&cl=263a180e52670167535c78d690bd58c65baff662&sourceControlServerUri=https%3a%2f%2fo365exchange.visualstudio.com%2fdefaultcollection%2fO365+Core%2f_git%2fbothell&description=Branch%3a+users%2fetjohnso%2fTestQTestOverride+%7c+Commit%3a+0d73686ae2+%7c+Pull+Request%3a+1527392&branch=master&isBuddyBuild=True&additionalFlags=-ChangelistCCBase none&appendAdditionalFlags=true 
+2021-10-06 11:48:18,341 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Begin
+2021-10-06 11:48:18,357 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Attempt to get certificate from key vault.
+2021-10-06 11:48:18,357 [29] DEBUG FocusClient EventHandler`1.Invoke - Found auth certificate from store
+2021-10-06 11:48:18,404 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Attempt to get acquire token with cert (may come from token cache).
+2021-10-06 11:48:18,466 [29] DEBUG FocusClient EventHandler`1.Invoke - MSALFileTokenCache.BeforeAccessNotification: Attempt to aquire token from: C:\windows\system32\config\systemprofile\AppData\Local\FocusInVstsService\.msalcache.bin3
+2021-10-06 11:48:19,342 [36] DEBUG FocusClient EventHandler`1.Invoke - MSALFileTokenCache.BeforeAccessNotification: Attempt to aquire token from: C:\windows\system32\config\systemprofile\AppData\Local\FocusInVstsService\.msalcache.bin3
+2021-10-06 11:48:19,357 [36] DEBUG FocusClient EventHandler`1.Invoke - MSALFileTokenCache.AfterAccessNotification writing cache to: C:\windows\system32\config\systemprofile\AppData\Local\FocusInVstsService\.msalcache.bin3
+2021-10-06 11:48:19,420 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: End: Token expires on: 10/7/2021 6:48:18 PM +00:00 UTC.
+2021-10-06 11:48:19,998 [29] DEBUG FocusClient EventHandler`1.Invoke - StatusCode: OK
+2021-10-06 11:48:20,029 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Begin
+2021-10-06 11:48:20,029 [29] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: End - Using cached token, expires on: 10/7/2021 6:48:18 PM +00:00 UTC
+2021-10-06 11:48:20,029 [29] DEBUG FocusClient EventHandler`1.Invoke - Requesting JSON for URL: 'https://cloudbuild.microsoft.com/batmon/build?id=47d6b89d-aa7a-44bb-9652-3ca332d6ea46&bq='
+2021-10-06 11:48:20,420 [29] DEBUG FocusClient EventHandler`1.Invoke - buildArguments: ''
+2021-10-06 11:48:20,921 [22] DEBUG GitAccessorLogger GitAccessor.GetFile - Attempting to get file contents for .gitClient from git.
+2021-10-06 11:48:21,046 [36] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemContentAsync>b__0
+2021-10-06 11:48:21,046 [22] DEBUG GitAccessorLogger GitAccessor.GetItemMetadata - Attempting to get file sources\test\dynamicprofiles\src\TestSelection\Mapping.xml from git.
+2021-10-06 11:48:21,077 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemAsync>b__0
+2021-10-06 11:48:21,077 [22] DEBUG GitAccessorLogger GitAccessor.GetFile - Attempting to get file contents for /sources/test/DynamicProfiles/src/TestSelection/Mapping.xml from git.
+2021-10-06 11:48:21,108 [29] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemContentAsync>b__0
+2021-10-06 11:48:22,124 [22] INFO  FocusInVstsService FocusCmdletsHelper.SubmitFocusJobFromPullRequest - PowerShell Submission: New-Job -JobTypeName 'DTA Smoke Job O365 CB' | Set-TemporaryStorage | Set-JobProperty -Title 'Branch: users/etjohnso/TestQTestOverride | Commit: 0d73686ae2 | Pull Request: 1527392' | Set-EmailOption -EmailTo 'veralimani' | New-SourceDrop -PullRequestId 1527392 | Set-BuildOption -Branch bothell -FlavorsAndPlatforms amd64:Debug | Set-TopologyOptions -FlavorsAndPlatforms amd64:Debug | Set-TestProperty -HoldTime 0 -OverrideCheckinType Default -ApplyFastTrain:$False | Add-Job
+2021-10-06 11:48:32,669 [29] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 1
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 11:48:35,716 [27] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 2
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 11:48:40,629 [33] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 3
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 11:48:49,568 [33] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 4
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 11:49:06,550 [13] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 5
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 11:48:31,414 [22] INFO  ExBuildTelemetry AddJobCommand.LogFocusJobEvent - FocusJobEvent
+2021-10-06 11:49:39,459 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - Focus job [200000027](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000027) successfully created.
+2021-10-06 11:49:39,522 [20] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 11:49:39,585 [20] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 11:49:39,585 [22] INFO  FocusInVstsService PrStatusHelper.SetPrIterationStatus - Updating pull request 1527392 iteration 5 status to Focus job [200000027](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000027) successfully created.
+2021-10-06 11:49:39,679 [20] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreatePullRequestIterationStatusAsync>b__0
+2021-10-06 11:49:39,679 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - <details>
+<summary>Profiles to run</summary>
+
+- **Infra_Focus**
+-- Full FocusClientFunctionalTest
+-- Full utilityproviderfunctionaltests
+-- Full StorageManagerFunctionalTests
+---
+- **Infra_TDS**
+-- Full Infra_TDS_All_P0
+---
+
+</details>
+2021-10-06 11:49:39,742 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 11:49:39,789 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 11:49:39,789 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - Updated PR (1527392)  status with state: "Pending", description: "Focus job [200000027](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000027) successfully created." from focus job: https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000027
+2021-10-06 11:49:39,820 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 11:49:39,889 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateOrUpdateIterationPropertiesAsync>b__0
+2021-10-06 11:49:44,963 [20] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 11:49:45,151 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:49:45,182 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 11:49:45,197 [20] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 11:49:45,213 [20] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 11:54:44,937 [20] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 11:54:45,172 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:54:45,219 [30] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 11:54:45,219 [20] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 11:54:45,219 [20] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 11:59:44,964 [19] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 11:59:45,229 [31] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 11:59:45,245 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 11:59:45,261 [19] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 11:59:45,261 [19] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:04:44,916 [23] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:04:45,088 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:04:45,119 [19] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:04:45,119 [23] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:04:45,135 [23] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:09:44,899 [8] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:09:45,071 [21] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:09:45,102 [31] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:09:45,102 [8] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:09:45,164 [8] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:14:44,873 [30] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:14:45,044 [14] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:14:45,091 [22] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:14:45,091 [30] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:14:45,091 [30] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:19:44,776 [21] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:19:44,963 [22] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:19:45,010 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:19:45,010 [21] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:19:45,010 [21] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:24:44,768 [22] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:24:45,097 [8] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:24:45,128 [8] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:24:45,128 [22] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:24:45,128 [22] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:29:44,759 [13] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:29:44,916 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:29:44,947 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:29:44,947 [13] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:29:44,947 [13] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 12:34:44,765 [30] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 12:34:45,015 [21] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 12:34:45,062 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 12:34:45,062 [30] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000027.
+2021-10-06 12:34:45,062 [30] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 14:12:01,837 [22] INFO  FocusInVstsService PullRequestFocusJobDataFactory.DeserializeCreateFocusJobMessage - Creating Focus Job with the following details: {"OwnerUsername":"AllenA@microsoft.com","Alias":"AllenA","JobTitle":"Branch: users/allena/testbadguy | Commit: d3783436d1 | Pull Request: 1579373","Platforms":"amd64:Debug","Tests":"","TestSelection":"Default","AdditionalToplogies":"","UseLkg":false,"TestCategoriesDelimited":"","TestCategories":[],"ApplyFastTrain":false,"RerunFailures":false,"SkipTopologyAddition":false,"SkipTestCaseDetection":false,"QtestOnlyJustification":"","FocusId":9063976,"PullRequestId":1579373,"FocusStack":"A","PostCheckinJob":false,"EnableTestCategory":true,"QtestApproval":false}
+2021-10-06 14:12:02,103 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:02,134 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:12:02,181 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 14:12:02,228 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 14:12:02,291 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:02,306 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestWorkItemsAsync>b__0
+2021-10-06 14:12:04,759 [22] INFO  FocusClient SetTempStorageCommand.StorageManagerConnectRetry - StorageManager URIs: MW2FCSPPEAPP06, MW2FCSPPEAPP06
+2021-10-06 14:12:06,322 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:06,619 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <UpdatePullRequestAsync>b__0
+2021-10-06 14:12:06,666 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:07,686 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:08,724 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:09,794 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:09,794 [22] NOTICE FocusClient SetBuildOptionsCommand.UpdateProperties - Smoke Log: C:\windows\system32\config\systemprofile\AppData\Local\FocusClient\FocusClient-20211006184805914.log
+2021-10-06 14:12:09,950 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:12:11,481 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetChangesAsync>b__0
+2021-10-06 14:12:11,497 [23] DEBUG FocusClient SetBuildOptionsCommand+<SetSourceDropPropertiesAsync>d__140.MoveNext - Begin Build Selection...
+2021-10-06 14:12:11,575 [33] DEBUG FocusClient SetBuildOptionsCommand+<SetSourceDropPropertiesAsync>d__140.MoveNext - Retrieved platforms for branch.
+2021-10-06 14:12:11,856 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 14:12:11,888 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetCommitDiffsAsync>b__0
+2021-10-06 14:12:11,888 [33] DEBUG FocusClient FlavorPlatformRule.ProcessRule - Retrieved file and change types for commit id af2ce07c3fd1fb3b41dadaca35ea26cd88296cc4 on branch master
+2021-10-06 14:12:11,888 [33] DEBUG FocusClient FlavorPlatformRule.ProcessRule - Selecting flavor and platform for non-MsBuild conversion git files.
+2021-10-06 14:12:12,153 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 14:12:12,341 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetRepositoriesAsync>b__0
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient BuildSelectionRuleProcessor.Process - Finished selecting flavor and platform for non-MsBuild conversion project.
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient LocalizationRule.ProcessRule - Retrieved changes from job dpk.
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient BuildSelectionRuleProcessor.Process - Finished retrieving updated build selections for any localized files.
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.ScheduleGitBuild: Queue: OSS_bothell_ReleaseOnly_Drops_Git
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.ScheduleBuild: https://cloudbuild.microsoft.com/Coordinator/RequestRegularBuild?queue=OSS_bothell_ReleaseOnly_Drops_Git&requester=AllenA&cl=af2ce07c3fd1fb3b41dadaca35ea26cd88296cc4&sourceControlServerUri=https%3a%2f%2fo365exchange.visualstudio.com%2fdefaultcollection%2fO365+Core%2f_git%2fbothell&description=Branch%3a+users%2fallena%2ftestbadguy+%7c+Commit%3a+d3783436d1+%7c+Pull+Request%3a+1579373&branch=master&isBuddyBuild=True&additionalFlags=-ChangelistCCBase none&appendAdditionalFlags=true 
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Begin
+2021-10-06 14:12:12,341 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Attempt to get certificate from key vault.
+2021-10-06 14:12:12,356 [33] DEBUG FocusClient EventHandler`1.Invoke - Found auth certificate from store
+2021-10-06 14:12:12,356 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Attempt to get acquire token with cert (may come from token cache).
+2021-10-06 14:12:12,356 [33] DEBUG FocusClient EventHandler`1.Invoke - MSALFileTokenCache.BeforeAccessNotification: Attempt to aquire token from: C:\windows\system32\config\systemprofile\AppData\Local\FocusInVstsService\.msalcache.bin3
+2021-10-06 14:12:12,388 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: End: Token expires on: 10/7/2021 6:48:18 PM +00:00 UTC.
+2021-10-06 14:12:12,872 [33] DEBUG FocusClient EventHandler`1.Invoke - StatusCode: OK
+2021-10-06 14:12:12,872 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: Begin
+2021-10-06 14:12:12,872 [33] DEBUG FocusClient EventHandler`1.Invoke - CloudBuildAdapter.GetAuthenticationToken: End - Using cached token, expires on: 10/7/2021 6:48:18 PM +00:00 UTC
+2021-10-06 14:12:12,872 [33] DEBUG FocusClient EventHandler`1.Invoke - Requesting JSON for URL: 'https://cloudbuild.microsoft.com/batmon/build?id=f57c74d5-d343-4b54-a68f-c1b1a930b10d&bq='
+2021-10-06 14:12:12,903 [33] DEBUG FocusClient EventHandler`1.Invoke - buildArguments: ''
+2021-10-06 14:12:13,263 [22] DEBUG GitAccessorLogger GitAccessor.GetFile - Attempting to get file contents for .gitClient from git.
+2021-10-06 14:12:13,294 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemContentAsync>b__0
+2021-10-06 14:12:13,310 [22] DEBUG GitAccessorLogger GitAccessor.GetItemMetadata - Attempting to get file sources\test\dynamicprofiles\src\TestSelection\Mapping.xml from git.
+2021-10-06 14:12:13,356 [35] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemAsync>b__0
+2021-10-06 14:12:13,356 [22] DEBUG GitAccessorLogger GitAccessor.GetFile - Attempting to get file contents for /sources/test/DynamicProfiles/src/TestSelection/Mapping.xml from git.
+2021-10-06 14:12:13,419 [33] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetItemContentAsync>b__0
+2021-10-06 14:12:14,124 [22] INFO  FocusInVstsService FocusCmdletsHelper.SubmitFocusJobFromPullRequest - PowerShell Submission: New-Job -JobTypeName 'DTA Smoke Job O365 CB' | Set-TemporaryStorage | Set-JobProperty -Title 'Branch: users/allena/testbadguy | Commit: d3783436d1 | Pull Request: 1579373' | Set-EmailOption -EmailTo 'AllenA' | New-SourceDrop -PullRequestId 1579373 | Set-BuildOption -Branch bothell -FlavorsAndPlatforms amd64:Debug | Set-TopologyOptions -FlavorsAndPlatforms amd64:Debug | Set-TestProperty -HoldTime 0 -OverrideCheckinType Default -ApplyFastTrain:$False | Add-Job
+2021-10-06 14:12:24,594 [33] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 1
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 14:12:29,030 [33] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 2
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 14:12:35,514 [21] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 3
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 14:12:45,924 [19] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 4
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 14:13:04,361 [19] ERROR KeyVaultLogger AdTokenProvider.<GetRetryPolicy>b__4_1 - TokenProvider for 1950a258-227b-4e31-a9cf-717495945fc2: Failed to get authentication token. Will retry after 5
+Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error:  ---> Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: Federated service at https://msft.sts.microsoft.com/adfs/services/trust/13/windowstransport returned error: 
+   at Microsoft.Identity.Core.WsTrust.WsTrustWebRequestManager.<GetWsTrustResponseAsync>d__3.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\WsTrustWebRequestManager.cs:line 110
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 154
+   --- End of inner exception stack trace ---
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<GetWsTrustResponseAsync>d__7.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 162
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.Identity.Core.WsTrust.CommonNonInteractiveHandler.<PerformWsTrustMexExchangeAsync>d__6.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Core\WsTrust\CommonNonInteractiveHandler.cs:line 126
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenIWAHandler.<PreTokenRequestAsync>d__5.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\NonInteractive\AcquireTokenIWAHandler.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows.AcquireTokenHandlerBase.<RunAsync>d__60.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Internal\Flows\AcquireTokenHandlerBase.cs:line 241
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.<AcquireTokenCommonAsync>d__40.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\AuthenticationContext.cs:line 560
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContextIntegratedAuthExtensions.<AcquireTokenAsync>d__0.MoveNext() in D:\a\1\s\src\Microsoft.IdentityModel.Clients.ActiveDirectory\Features\WinCommon\AuthenticationContextIntegratedAuthExtensions.cs:line 65
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ActiveDirectoryWrappers.AuthenticationContextWrapper.<AcquireTokenAsync>d__3.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\k\sources\dev\common\src\activedirectorywrappers\AuthenticationContextWrapper.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.AdTokenProvider.<GetTokenInternal>d__5.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\AdTokenProvider.cs:line 83
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Internal.OSS.AzureTokenProvider.TokenProviderBase.<>c__DisplayClass11_0.<<GetToken>b__0>d.MoveNext() in d:\dbs\sh\8a01\1006_073550_0\cmd\a\sources\dev\common\src\azuretokenprovider\TokenProviderBase.cs:line 71
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Policy.<>c__DisplayClass241_0`1.<<ExecuteAsyncInternal>b__0>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Policy.Async.cs:line 0
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.RetrySyntaxAsync.<>c__DisplayClass21_1.<<WaitAndRetryAsync>b__1>d.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetrySyntaxAsync.cs:line 467
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Polly.Retry.RetryEngine.<ImplementationAsync>d__1`1.MoveNext() in C:\projects\polly\src\Polly.Shared\Retry\RetryEngineAsync.cs:line 33
+	ErrorCode: parsing_wstrust_response_failed
+2021-10-06 14:12:21,851 [22] INFO  ExBuildTelemetry AddJobCommand.LogFocusJobEvent - FocusJobEvent
+2021-10-06 14:13:38,803 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - Focus job [200000028](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000028) successfully created.
+2021-10-06 14:13:38,865 [21] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 14:13:38,928 [21] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 14:13:38,928 [22] INFO  FocusInVstsService PrStatusHelper.SetPrIterationStatus - Updating pull request 1579373 iteration 1 status to Focus job [200000028](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000028) successfully created.
+2021-10-06 14:13:39,006 [21] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreatePullRequestIterationStatusAsync>b__0
+2021-10-06 14:13:39,006 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - Profiles to run: QTest only
+2021-10-06 14:13:39,038 [14] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestThreadAsync>b__0
+2021-10-06 14:13:39,116 [14] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateCommentAsync>b__0
+2021-10-06 14:13:39,116 [22] INFO  FocusInVstsService CreatePullRequestFocusJobHandler.SetSmokeSuccessfulStatus - Updated PR (1579373)  status with state: "Pending", description: "Focus job [200000028](https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000028) successfully created." from focus job: https://exfocusa.redmond.corp.microsoft.com/FocusWeb/Job.aspx?FocusId=200000028
+2021-10-06 14:13:39,131 [31] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:13:39,194 [31] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <CreateOrUpdateIterationPropertiesAsync>b__0
+2021-10-06 14:13:44,276 [22] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 14:13:44,448 [14] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:13:44,479 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:13:44,479 [22] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000028.
+2021-10-06 14:13:44,495 [22] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 14:18:44,189 [30] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 14:18:44,361 [31] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:18:44,408 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:18:44,408 [30] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000028.
+2021-10-06 14:18:44,408 [30] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 14:23:44,149 [21] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 14:23:44,352 [22] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:23:44,384 [22] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:23:44,384 [21] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000028.
+2021-10-06 14:23:44,384 [21] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 14:28:44,144 [19] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 14:28:44,363 [13] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:28:44,394 [27] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:28:44,410 [19] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000028.
+2021-10-06 14:28:44,410 [19] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
+2021-10-06 14:33:44,154 [33] INFO  FocusInVstsService AssociatePrToFocusHandler.Handle - Processing message 
+2021-10-06 14:33:44,342 [23] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetPullRequestByIdAsync>b__0
+2021-10-06 14:33:44,373 [14] DEBUG VSTSRequestLogger VstsRequestExecutor+<Execute>d__8`1.MoveNext - The Request succeeded: <GetIterationsAsync>b__0
+2021-10-06 14:33:44,373 [33] INFO  FocusInVstsService AssociatePrToFocusHandler+<>c__DisplayClass39_0.<AssociatePullRequest>g__FocusApiOperation|1 - Searching for Focus job 200000028.
+2021-10-06 14:33:44,373 [33] ERROR FocusInVstsService AssociatePrToFocusHandler.Handle - Unexpected exception
+Internal.Focus.WorkflowEngine.Server.Client.SystemOfflineException: The Focus System is offline and may be under maintainence.  Please check for system status mail. ---> System.Net.WebException: The remote name could not be resolved: 'exfocusa.redmond.corp.microsoft.com'
+   at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at System.Web.Services.Protocols.SoapHttpClientProtocol.Invoke(String methodName, Object[] parameters)
+   at Internal.Focus.WorkflowEngine.Server.Client.WorkflowEngineWebService.FocusWorkflowWebService.GetJobs(wsPropertyDefinition[] selectProperties, WebPropertyFilter[] filters, Int32 startIndex, Int32 count) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\Web References\WorkflowEngineWebService\Reference.cs:line 331
+   at Internal.Focus.WorkflowEngine.Server.Client.FocusWorkflowClient.GetJobs(IPropertyKey[] selectProperties, PropertyFilterCollection filters, Int32 startObjectIndex, Int32 objectCount) in d:\dbs\sh\8a01\1006_073550_0\cmd\1\sources\dev\workflows\src\workflowengine\infrastructure\server\uiclientlibrary\FocusWorkflowClient.cs:line 237
+   --- End of inner exception stack trace ---
+   at FocusInVsts.AssociatePrToFocusHandler.ExecuteFocusApiCallWithRetry[T](Func`1 focusApiOperation, String operationName, IBrokeredMessageWrapper message, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 0
+   at FocusInVsts.AssociatePrToFocusHandler.AssociatePullRequest(IBrokeredMessageWrapper message, IGitAccessor gitAccessor, HandlerEvent traceEvent) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 250
+   at FocusInVsts.AssociatePrToFocusHandler.Handle(IBrokeredMessageWrapper message) in d:\dbs\sh\8a01\1006_081457_0\cmd\3\sources\dev\services\src\servicebushandlers\focus\focusinvsts\Handlers\AssociatePrToFocusHandler.cs:line 165
