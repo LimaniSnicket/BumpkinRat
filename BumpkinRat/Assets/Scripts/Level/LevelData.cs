@@ -1,62 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public struct LevelData
 {
-    static LevelData ActiveLevel;
-    static Dictionary<int, OverworldDialogue> genericLevelDialogueLookup;
+    public string LevelName { get; set; }
+    public int LevelId { get; set; }
+    public OverworldDialogueStorage[] GenericLevelDialogue { get; set; }
 
-    [SerializeField] string levelName;
-    [SerializeField] int levelId;
-    [SerializeField] OverworldDialogueStorage[] genericLevelDialogue;
+    // Drop format = {Id}x{Amount}
+    public string[] DropOnStart { get; set; }
 
-    public int LevelId => levelId;
-    public string LevelName => levelName;
-
-    public CustomerOrder[] ordersInLevel;
+    public OrderDetails[] OrdersInLevel { get; set; }
 
     //todo Customer Entities, Dialogue Paths, etc
 
-    public static LevelData GetFromPath(string path)
+    public static LevelData Default => new LevelData()
     {
-        if (!string.IsNullOrWhiteSpace(path))
-        {
-            try
-            {
-                LevelData data = path.InitializeFromJSON<LevelData>();
-                ActiveLevel = data;
-                genericLevelDialogueLookup = ActiveLevel.genericLevelDialogue.ToDictionary(k => k.npcId, k => k.genericDialogue);
-                return data;
-            }
-            catch (NullReferenceException) { }
-        }
-
-        return new LevelData();
-    }
-
-    public static bool TryGetNpcDialogueForNpc(int npcId, out OverworldDialogue dialogue)
-    {
-        if (genericLevelDialogueLookup.CollectionIsNotNullOrEmpty())
-        {
-            bool tryGet = genericLevelDialogueLookup.TryGetValue(npcId, out dialogue);
-            return tryGet;
-        }
-        dialogue = null;
-        return false;
-    }
-
-    public static bool IsActiveLevel(ILevel level)
-    {
-        return level.LevelData.levelId == ActiveLevel.levelId;
-    }
+        LevelName = "Default Level Name",
+        LevelId = -1
+    };
 }
 
 [Serializable]
 public struct OverworldDialogueStorage
 {
     [SerializeField] internal int npcId;
-    public OverworldDialogue genericDialogue;
+    public OverworldDialogue dialogue;
 }
+

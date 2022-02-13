@@ -1,8 +1,6 @@
 ﻿using UnityEngine.UI;
 using TMPro;
 using System;
-using UnityEngine;
-using System.Collections;
 
 public class InventoryButton : Button
 {

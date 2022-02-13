@@ -55,7 +55,7 @@ public class NpcBehavior : MonoBehaviour
 
     void OnDialogueIndicatorEvent(object source, IndicatorArgs args)
     {
-        Debug.Log(args.seperatedInfo.Length);
+        Debug.Log(args.SeperatedInfo.Length);
     }
 
     void BroadcastNpcDialogue()

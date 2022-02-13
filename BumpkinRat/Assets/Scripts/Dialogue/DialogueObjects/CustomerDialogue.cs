@@ -4,37 +4,40 @@
 public class CustomerDialogue : IDialogue
 {
     public int dialogueId;
-    public int levelId;
 
-    public string[] introLines;
-    public PlayerResponse[] introResponses;
-    public DialogueLayer[] promptedCustomerDialogue;
+    public string customerIntro;
 
-    public DialogueResponse[] outroDialogue;
+    public string playerIntro;
+
+    public ResponseLayer[] responses;
+
+    public string[] customerOutro;
     public int DialogueTypeId => 2;
-    public int IntroLineCount => IsValid() ? introLines.Length : 0;
 
-    public DialogueResponse[] DialogueResponses => throw new NotImplementedException();
-
-    public DialogueLayer GetCustomerResponseAtIndex(int index)
+    public ResponseLayer GetResponseAtLayer(int index)
     {
-        if (promptedCustomerDialogue.ValidArray())
-        {
-            int clampIndex = Math.Min(promptedCustomerDialogue.Length - 1, Math.Max(0, index));
-            return promptedCustomerDialogue[clampIndex];
-        }
-        return new DialogueLayer();
+        return responses[index];
+    }
+
+    public bool IsResponseDialogueComplete(int dialogueIndex)
+    {
+        return dialogueIndex >= responses.Length;
     }
 
     public bool IsValid()
     {
-        return introLines.CollectionIsNotNullOrEmpty()
-        && promptedCustomerDialogue.CollectionIsNotNullOrEmpty()
-        && introResponses.CollectionIsNotNullOrEmpty();
+        return !string.IsNullOrEmpty(customerIntro) && !string.IsNullOrEmpty(playerIntro) && (responses != null);
     }
 
     public override string ToString()
     {
-        return $"[{dialogueId}-{levelId}]: {introLines[0]}...";
+        return $"[{dialogueId}]: {customerIntro}...";
     }
+}
+
+[Serializable]
+public struct ResponseLayer
+{
+    public string[] npcDialogue;
+    public string[] playerDialogue;
 }

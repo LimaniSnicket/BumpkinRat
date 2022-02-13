@@ -7,17 +7,13 @@ public class OccupiablePosition : IOccupiablePosition
 
     private IOccupyPositions currentOccupant;
 
-    private bool isOccupied;
-
     private Vector3 position;
 
     private Vector3 eulers;
 
     private readonly int positionIndex;
 
-    public bool Available => !isOccupied;
-
-    public int PositionIndex => positionIndex;
+    public bool Available => currentOccupant == null;
 
     public OccupiablePosition(Vector3 position, Vector3 eulers, int positionIndex)
     {
@@ -35,39 +31,53 @@ public class OccupiablePosition : IOccupiablePosition
 
     public bool IsOccupiedBy(IOccupyPositions occupier)
     {
-        return occupier.Occupied != null && occupier.Occupied == this;
+        return currentOccupant != null && currentOccupant == occupier;
     }
 
     public void Occupy(IOccupyPositions occupier)
     {
-        isOccupied = true;
-
         occupier.OccupierTransform.localPosition = position + occupier.PositionOffset;
 
         occupier.OccupierTransform.rotation = Quaternion.Euler(eulers);
 
         currentOccupant = occupier;
 
-        occupier.Occupied = this;
+        occupier.ReleaseOccupier += OnReleaseOccupierSetThatShitFree;
     }
 
-    public void ReleasePosition()
+    public void ReleasePosition(Action<GameObject> destructionMethod = null)
     {
-        isOccupied = false;
+        this.ReleaseOccupier(currentOccupant, destructionMethod);
     }
 
-    internal void ReleaseOccupier(IOccupyPositions occupier, Action<GameObject> destructionMethod = null) 
+    private void ReleaseOccupier(IOccupyPositions occupier, Action<GameObject> destructionMethod = null) 
     {
         if (this.IsOccupiedBy(occupier))
         {
-            isOccupied = false;
-
-            occupier.Occupied = null;
+            currentOccupant = null;
         }
 
-        if(destructionMethod != null)
+        if (destructionMethod != null)
         {
             destructionMethod(occupier.OccupierTransform.gameObject);
+        } 
+        else
+        {
+            occupier.ReleaseOccupier -= OnReleaseOccupierSetThatShitFree;
+        }
+    }
+
+    private void OnReleaseOccupierSetThatShitFree(object source, ReleaseOccupierEventArgs args)
+    {
+        if (this.IsOccupiedBy(args.Occupier))
+        {
+            if (args.DestroyOnRelease)
+            {
+                this.ReleasePosition(GameObject.Destroy);
+            } else
+            {
+                this.ReleasePosition();
+            }
         }
     }
 
@@ -79,32 +89,22 @@ public class OccupiablePosition : IOccupiablePosition
 
 public interface IOccupyPositions 
 {
-    Transform OccupierTransform { get; }
-    // OccupiablePosition Occupied { get; set; }
+    Transform OccupierTransform { get; }    
     Vector3 PositionOffset { get; }
-    void ForceDestroy();
+
+    event EventHandler<ReleaseOccupierEventArgs> ReleaseOccupier;
 }
 
 public interface IOccupiablePosition
 {
     bool IsOccupiedBy(IOccupyPositions occupier);
 
-    void ReleasePosition();
+    void ReleasePosition(Action<GameObject> destructionMethod = null);
 }
 
-public struct OccupierReleaser
+public class ReleaseOccupierEventArgs : EventArgs
 {
-    public static void Release(IOccupyPositions occupier, IOccupiablePosition position, Action<GameObject> destructionMethod = null)
-    {
-        if (occupier.Occupied != null && occupier.Occupied == position)
-        {
-            occupier.Occupied = null;
-            position.ReleasePosition();
-        }
+    public IOccupyPositions Occupier { get; set; }
 
-        if (destructionMethod != null)
-        {
-            destructionMethod(occupier.OccupierTransform.gameObject);
-        }
-    }
+    public bool DestroyOnRelease { get; set; }
 }

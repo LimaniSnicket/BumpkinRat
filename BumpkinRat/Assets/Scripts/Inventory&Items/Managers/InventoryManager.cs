@@ -58,6 +58,5 @@ public class InventoryManager : MonoBehaviour
         InventoryButton.FinalPossiblePress -= OnInventoryButtonPressed;
 
         ItemObjectBehaviour.PlaceItemBackInInventory -= OnPlaceItemObjectBack;
-
     }
 }

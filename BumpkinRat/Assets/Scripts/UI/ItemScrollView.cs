@@ -51,10 +51,12 @@ public class ItemScrollView : MonoBehaviour, IUiFunctionality<InventoryMenu>
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            UiMenu.ToggleMenu();
-        }
+
+    }
+
+    public void OnClickToggleInventoryMenu()
+    {
+        UiMenu.ToggleMenu();
     }
 
     void OnInventoryAdjustment(object source, InventoryAdjustmentEventArgs args)

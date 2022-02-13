@@ -42,12 +42,12 @@ public class ItemCrafter
         progressTracker.DecrementItemAmount(e.ItemToPass.itemId);
     }
 
-    void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
+    private void OnInteractedWithItemObject(object source, ItemObjectEventArgs args)
     {
         activeSequence.AddToCraftingSequence(args.AtFocusArea, args.InteractedWith);
     }
 
-    void OnInventoryButtonPressed(object source, ItemEventArgs args)
+    private void OnInventoryButtonPressed(object source, ItemEventArgs args)
     {
         progressTracker.IncrementItemAmount(args.ItemToPass.itemId);
     }
@@ -102,9 +102,8 @@ public class ItemCrafter
         activeSequence.ClearSequence();
     }
 
-    void PrintRecipe(Recipe r)
+    private void PrintRecipe(Recipe r)
     {
-        // CustomerOrder.EvaluateAgainstRecipe(r);
         CustomerOrderManager.EvaluateRecipeBasedOnCustomerOrder(r);
         string itemName = ItemDataManager.GetItemById(r.outputId).DisplayName;
         Debug.Log($"{itemName}:{r.recipeDescription}");
@@ -179,9 +178,8 @@ public class CraftingEventArgs : EventArgs
 public enum CraftingAction
 {
     NONE = 0,
-    PLACE = 1,
-    ATTACH = 2,
-    HAMMER = 3,
-    THREAD = 4,
-    GLUE = 5
+    ATTACH = 1,
+    HAMMER = 2,
+    THREAD = 3,
+    GLUE = 4
 }

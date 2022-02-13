@@ -47,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>4.11.3.0</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>4.11.4.0</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2019.4.10f1</UnityVersion>
@@ -101,8 +101,6 @@
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\ConversationResponseDisplayManager.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\CustomerDialogue.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\CustomerDialogueTracker.cs" />
-    <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\DialogueLayer.cs" />
-    <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\DialogueStructs.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\KeyCodeToResponseMap.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\NpcDialogue.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueObjects\OverworldDialogue.cs" />
@@ -119,7 +117,6 @@
     <Compile Include="Assets\Scripts\God\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\God\Interfaces\ObjectIdMap.cs" />
     <Compile Include="Assets\Scripts\God\ItemDataManager.cs" />
-    <Compile Include="Assets\Scripts\God\LevelManager.cs" />
     <Compile Include="Assets\Scripts\God\MouseManager.cs" />
     <Compile Include="Assets\Scripts\Helper\ColorExtensions.cs" />
     <Compile Include="Assets\Scripts\Helper\CustomEvents.cs" />
@@ -130,7 +127,6 @@
     <Compile Include="Assets\Scripts\Interfaces\ICacheAssetDB.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IContainFocusArea.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ILevel.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IRealTimeDependent.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Collectable.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\CraftingSequence.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Crafting\CustomerCraftingOrder.cs" />
@@ -156,7 +152,9 @@
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Placement\Occupiable Positions\OccupiablePositionContainer.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Recipe.cs" />
     <Compile Include="Assets\Scripts\Inventory&amp;Items\Trackers\RecipeProgressTracker.cs" />
+    <Compile Include="Assets\Scripts\Level\LevelBase.cs" />
     <Compile Include="Assets\Scripts\Level\LevelData.cs" />
+    <Compile Include="Assets\Scripts\Level\LevelDataHelper.cs" />
     <Compile Include="Assets\Scripts\Minigames\ColorCellBehaviour.cs" />
     <Compile Include="Assets\Scripts\Minigames\PBNColorCell.cs" />
     <Compile Include="Assets\Scripts\Minigames\PBNPaintableCell.cs" />
@@ -175,6 +173,7 @@
     <Compile Include="Assets\Scripts\Player\NormalWalker.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBehavior.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\UI\CharacterMenu.cs" />
     <Compile Include="Assets\Scripts\UI\ConversationSnippet.cs" />
     <Compile Include="Assets\Scripts\UI\ConversationUi.cs" />
     <Compile Include="Assets\Scripts\UI\CraftingActionWidget.cs" />
@@ -199,6 +198,8 @@
     <Compile Include="Assets\Scripts\UI\OverworldDialogueSnippet.cs" />
     <Compile Include="Assets\Scripts\UI\OverworldDialogueUI.cs" />
     <Compile Include="Assets\Scripts\UI\PrologueHUD.cs" />
+    <Compile Include="Assets\Scripts\UI\ToolSelectorButton.cs" />
+    <Compile Include="Assets\Scripts\UI\ToolkitMenu.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\UiDraggableFoldout.cs" />
     <Compile Include="Assets\Scripts\UI\UiElementContainer.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Assets\Scripts\World\Interactable.cs" />
     <Compile Include="Assets\Scripts\World\Placer.cs" />
     <Compile Include="Assets\Scripts\World\PopUpObject.cs" />
+    <Compile Include="Assets\Scripts\World\RealTimeCounter.cs" />
     <Compile Include="Assets\Scripts\World\WarpBehavior.cs" />
     <Compile Include="Assets\Scripts\World\Workbench.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -231,6 +233,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\BayatGames\SaveGameFree\Plugins\FullSerializer.xml" />
+    <None Include="Assets\Resources\TxtAssets\shutdowncmd.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
@@ -241,10 +244,12 @@
     <None Include="Assets\Demigiant\DOTween\readme.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Resources\TxtAssets\PPELog.txt" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\BayatGames\SaveGameFree\Readme.txt" />
     <None Include="Assets\Bumpkin Rat\Halftone.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\Resources\TxtAssets\i love mitu.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/2019.4.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

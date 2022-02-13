@@ -4,9 +4,12 @@ public class CraftingUiElementFactory
 {
     private readonly CraftingManager craftingManager;
 
-    public CraftingUiElementFactory(CraftingManager craftManager)
+    private readonly ToolkitMenu toolKitMenu;
+
+    public CraftingUiElementFactory(CraftingManager craftManager, ToolkitMenu toolkit)
     {
-        craftingManager = craftManager;
+        this.craftingManager = craftManager;
+        this.toolKitMenu = toolkit;
     }
 
     public CraftingMenu CreateCraftingMenu()
@@ -27,16 +30,57 @@ public class CraftingUiElementFactory
         return indicator;
     }
 
+    public void CreateDefaultCraftingActionWidget(GameObject prefab, UiElementContainer container, bool setContainerInactive = true)
+    {
+        this.CreateCraftingActionWidgetInternal(container, prefab, CraftingAction.ATTACH);
+        
+        if (setContainerInactive)
+        {
+            container.gameObject.SetActive(false);
+        }
+    }
+
     public void CreateCraftingActionWidgets(GameObject prefab, UiElementContainer container)
     {
-        for (int i = 1; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
-        {
-            container.SpawnAtAlternatingVerticalPositions(prefab, 100, 150);
-            CraftingActionWidget craftAction = container.GetLastChild().GetComponent<CraftingActionWidget>();
-            craftAction.SetCraftingActionButton(i, craftingManager);
-            craftAction.EnableFidgeting();
-        }
-
+        CraftingAction[] actions = (CraftingAction[])Enum.GetValues(typeof(CraftingAction));
+        this.CreateCraftingActionWidgetsInternal(container, prefab, 1, actions);
         container.gameObject.SetActive(false);
     }
-}
+
+    public void CreateCraftingActionWidgetsForToolkit(GameObject prefab, UiElementContainer container, bool withDefaultAction = false, bool clearAllChildren = false)
+    {
+        var actions = this.toolKitMenu.ActiveToolCraftingActions;
+
+        if (clearAllChildren)
+        {
+            container.DetachAndClearChildren();
+        }
+
+        if (withDefaultAction)
+        {
+            this.CreateDefaultCraftingActionWidget(prefab, container, setContainerInactive: false);
+        }
+
+        this.CreateCraftingActionWidgetsInternal(container, prefab, 0, actions);
+    }
+
+    private void CreateCraftingActionWidgetsInternal(UiElementContainer container, GameObject prefab, int start = 0, params CraftingAction[] actions)
+    {
+        for (int i = start; i < actions.Length; i++)
+        {
+            this.CreateCraftingActionWidgetInternal(container, prefab, actions[i]);
+        }
+    }
+
+    private void CreateCraftingActionWidgetInternal(UiElementContainer container, GameObject prefab, CraftingAction action, int? position = null)
+    {
+        Debug.LogFormat("Creating Crafting action button {0}", action);
+        container.SpawnAtAlternatingVerticalPositions(prefab, 100, 150, position: position);
+        CraftingActionWidget craftAction = container.GetLastChildComponent<CraftingActionWidget>();
+
+        craftAction.InitializeWidgetComponents();
+
+        craftAction.SetCraftingActionButton(action, craftingManager);
+        craftAction.EnableFidgeting();
+    }
+}  

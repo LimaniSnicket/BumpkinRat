@@ -209,7 +209,7 @@ public class DialogueRunner : MonoBehaviour
         relevantInfo.DebugTuple();
         if (DialogueEventIndicated != null)
         {
-            DialogueEventIndicated(this, new IndicatorArgs { indicatorType = relevantInfo.Item2, infoToParse = relevantInfo.Item1 }) ;
+            DialogueEventIndicated(this, new IndicatorArgs { indicatorType = relevantInfo.Item2, InfoToParse = relevantInfo.Item1 }) ;
         }
     }
 
@@ -218,7 +218,7 @@ public class DialogueRunner : MonoBehaviour
         if (DialogueEventIndicated != null)
         {
             DialogueEventIndicated(this, new IndicatorArgs { indicatorType = tuple.Item2,
-                infoToParse = tuple.Item1 });
+                InfoToParse = tuple.Item1 });
         }
     }
 

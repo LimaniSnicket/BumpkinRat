@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 public class DialogueTracker
 {
-    static List<string> CompletedDialogue { get; set; } = new List<string>();
+    private static List<string> CompletedDialogue { get; set; } = new List<string>();
 
-    public int QualityIndex { get; protected set; } = 0;
+    public int Quality { get; protected set; } = 0;
 
     public static void CacheCompletedDialogue(string entry)
     {
@@ -17,20 +16,61 @@ public class DialogueTracker
         return CompletedDialogue.CollectionIsNotNullOrEmpty() && CompletedDialogue.Contains(check);
     }
 
-    public void IncreaseQualityIndex(int add)
+    protected void QualityIncreaseBy(int add)
     {
-        QualityIndex += add;
+        Quality += add;
     }
 
-    internal DialogueResponse GetDialogueResponseOfQuality(DialogueResponse[] responses, int quality)
+    protected string GetDialogueOfQuality(string[] arr, int quality)
     {
-        var qualityResponses = responses.Where(r => r.qualityThreshold <= quality);
-
-        if (qualityResponses.CollectionIsNotNullOrEmpty())
+        foreach (var response in arr)
         {
-            return qualityResponses.OrderByDescending(r => r.qualityThreshold).First();
+            if (response.StartsWith(quality.ToString()))
+            {
+                return response;
+            }
         }
 
-        throw new ArgumentOutOfRangeException($"No Response of quality value {quality} found.");
+        return arr[0];
+    }
+}
+
+public static class DialogueUtility
+{
+    private const char  QualitySplitter = ':';
+
+    private const char LineSplitter = '_';
+
+    public static string[] SplitDialogueLines(this string line)
+    {
+        return line.Split(LineSplitter);
+    }
+
+    public static (string, ResponseTier) LineWithQuality(this string line)
+    {
+        if (!line.Contains(QualitySplitter))
+        {
+            return (line, 0);
+        }
+
+        var split = line.Split(QualitySplitter);
+        var quality = GetResponseTier(split[0]);
+
+        return (split[1], quality);
+    }
+
+    private static ResponseTier GetResponseTier(string str)
+    {
+        if (str.Contains("1"))
+        {
+            return ResponseTier.MID;
+        }
+
+        if (str.Contains("2"))
+        {
+            return ResponseTier.BEST;
+        }
+
+        return ResponseTier.LOW;
     }
 }

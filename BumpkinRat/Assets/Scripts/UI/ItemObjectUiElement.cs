@@ -11,9 +11,9 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
 
     public Transform OccupierTransform => rectTransform;
 
-    public OccupiablePosition Occupied { get; set; }
-
     public Vector3 PositionOffset { get; private set; } = Vector3.zero;
+
+    public event EventHandler<ReleaseOccupierEventArgs> ReleaseOccupier;
 
     void Awake()
     {
@@ -23,8 +23,6 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
 
     void Update()
     {
-        Debug.Log(Occupied == null);
-
         if (Input.GetMouseButton(0))
         {
             return;
@@ -65,15 +63,31 @@ public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccu
 
     public override void ForceDestroy()
     {
-        this.ForceDestroy(this);
+        this.BroadcastRelease(true);
     }
 
-    public void OnReleaseAllDestroyObject(object source, EventArgs args)
+    private void BroadcastRelease(bool destroyOnRelease)
     {
-        if (Occupied != null)
+        var args = new ReleaseOccupierEventArgs
         {
-            Occupied.ReleaseOccupier(this);
-            Destroy(gameObject);
-        }
+            DestroyOnRelease = destroyOnRelease,
+            Occupier = this
+        };
+
+        this.ReleaseOccupier.BroadcastEvent(this, args);
     }
+
+    /*    public override void ForceDestroy()
+        {
+            this.ForceDestroy(this);
+        }*/
+    /*
+        public void OnReleaseAllDestroyObject(object source, EventArgs args)
+        {
+            if (Occupied != null)
+            {
+                Occupied.ReleaseOccupier(this);
+                Destroy(gameObject);
+            }
+        }*/
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public struct RangeChangeTracker
+public class RangeChangeTracker
 {
     public float maxRange;
 

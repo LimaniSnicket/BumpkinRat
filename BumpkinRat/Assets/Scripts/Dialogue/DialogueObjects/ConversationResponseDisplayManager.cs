@@ -25,16 +25,17 @@ public class ConversationResponseDisplayManager
         activeInConversation.AddOrReplaceKeyValue(priorityIndex, response);
     }
 
-    public void SetActiveInConversation(PlayerResponse[] responses)
+    public void SetActiveInConversation(string[] playerResponse)
     {
-        if (responses.CollectionIsNotNullOrEmpty())
+        if (playerResponse.ValidArray())
         {
-            foreach (var response in responses)
+            foreach (var response in playerResponse)
             {
-                ResponseTier t = (ResponseTier)response.responseLevel;
-                if (activeInConversation.ContainsKey(t))
+                var lineSplit = response.LineWithQuality();
+
+                if (activeInConversation.ContainsKey(lineSplit.Item2))
                 {
-                    activeInConversation[t].ActivateResponseWithMessage(response.displayDialogue);
+                    activeInConversation[lineSplit.Item2].ActivateResponseWithMessage(lineSplit.Item1);
                 }
             }
         }

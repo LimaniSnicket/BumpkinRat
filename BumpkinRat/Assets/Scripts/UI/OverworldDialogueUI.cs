@@ -38,6 +38,31 @@ public class OverworldDialogueUI : MonoBehaviour, IComparer<OverworldNpc>
         InitializeDialogueSnippet();
     }
 
+    public static bool ValidateOverworldNpcRange(RangeChangeTracker npc)
+    {
+        if (activeOverworldNpc != null)
+        {
+            var distanceToBeat = activeOverworldNpc.GetDistanceFromPlayer();
+            return Mathf.Abs(npc.DistanceFromPlayer) < distanceToBeat;
+        }
+
+        return npc.PlayerInRange;
+    }
+
+    public static void ActivateDialogueUIForNpc(OverworldNpc npc)
+    {
+        activeOverworldNpc = npc;
+        ActivateSnippetComponentsForNpc(npc);
+    }
+
+    public static void RemoveAsActiveNpc(OverworldNpc npc)
+    {
+        if (IsActive(npc))
+        {
+            activeOverworldNpc = null;
+        }
+    }
+
     private void OnOverworldNpcEvent(object sender, EvaluateEventArgs<(bool, OverworldNpc)> e)
     {
         HandleNpcRanges(e.Evaluate.Item2, e.Evaluate.Item1);
@@ -64,6 +89,13 @@ public class OverworldDialogueUI : MonoBehaviour, IComparer<OverworldNpc>
             SetActiveNpc();
             MoveSnippetIntoPosition(false);
         }
+    }
+
+    private static void ActivateSnippetComponentsForNpc(OverworldNpc npc)
+    {
+        SetActiveNpc(npc);
+        SetSnippetText(npc);
+        MoveSnippetIntoPosition(true);
     }
 
     static void InitializeDialogueSnippet()

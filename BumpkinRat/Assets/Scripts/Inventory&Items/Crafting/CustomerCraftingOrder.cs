@@ -10,31 +10,28 @@ public class CustomerOrder : IComparable<Recipe>
 
     private CustomerDialogue orderDialogueCache;
 
-    [SerializeField] private int npcId;
-
-    private NpcDatabaseEntry customerData;
+    public NpcDatabaseEntry CustomerData { get; private set; }
 
     public OrderDetails OrderDetails => orderDetails;
 
-    public int NpcId => npcId;
+    public int NpcId => orderDetails.npc;
     public string CustomerName { get; private set; }
 
-    public string DialogueDetails => $"{npcId}-{orderDialogueCache.levelId}-{orderDialogueCache.dialogueId}";
+    public string DialogueDetails => $"{NpcId}-{orderDialogueCache.dialogueId}";
 
-    public CustomerOrder(int npcId, OrderDetails details)
+    public CustomerOrder(OrderDetails details)
     {
-        this.npcId = npcId;
         this.orderDetails = details;
     }
 
-    public void InitializeCustomerData(ILevel level)
+    public void InitializeCustomerData(LevelBase level)
     {
-        level.LevelBehavior.StartCoroutine(this.GetCustomerDataFromNpcDatabase(level));
+        level.StartCoroutine(this.GetCustomerDataFromNpcDatabase(level));
     }
 
     public int CompareTo(Recipe other)
     {
-        return orderDetails.orderType.Equals(OrderType.CRAFTING) ? orderDetails.orderLookupId.CompareTo(other.id) : -2;
+        return orderDetails.orderType.Equals(OrderType.CRAFTING) ? orderDetails.id.CompareTo(other.id) : -2;
     }
 
     public void CacheCustomerDialogue()
@@ -47,23 +44,23 @@ public class CustomerOrder : IComparable<Recipe>
         return orderDialogueCache;
     }
 
-    private IEnumerator GetCustomerDataFromNpcDatabase(ILevel level)
+    private IEnumerator GetCustomerDataFromNpcDatabase(LevelBase level)
     {
         yield return new WaitUntil(() => NpcData.CanRead);
 
-        this.customerData = NpcData.GetDatabaseEntry(npcId);
-        orderDialogueCache = this.customerData.GetCustomerDialogue(level.LevelData.LevelId, 0);
+        this.CustomerData = NpcData.GetDatabaseEntry(NpcId);
+        orderDialogueCache = this.CustomerData.GetCustomerDialogue(level.Id, 0);
     }
 
     public override string ToString()
     {
-        return $"{CustomerName}: [{orderDetails.orderType}, {orderDetails.orderLookupId}]";
+        return $"{CustomerName}: [{orderDetails.orderType}, {orderDetails.id}]";
     }
 }
 
 class RewardProvisioner 
 {
-    private IItemDistribution itemProvisioner;
+    private readonly IItemDistribution itemProvisioner;
 
     public RewardProvisioner()
     {
@@ -72,35 +69,32 @@ class RewardProvisioner
 
     public void DropItemRewards(OrderDetails order)
     {
-        GetRewardsToDrop(order);
+        this.GetRewardsToDrop(order);
         itemProvisioner.Distribute();
     }
 
     private void GetRewardsToDrop(OrderDetails order)
     {
-        itemProvisioner.AddItemsToDrop(order.rewardItemIds);
+        itemProvisioner.AddItemsToDrop(order.rewards);
     }
 }
 
 [Serializable]
 public struct OrderDetails
 {
+    public int npc;
     public OrderType orderType;
-    public int orderLookupId;
+    public int id;
 
-    public string orderTitle;
-    public string orderPrompt;
+    public string infoDisplay;
 
-    public int[] rewardItemIds;
+    public int[] rewards;
     public float cashReward;
 
-    public override string ToString()
+    public string GetPromptDisplay()
     {
-        return $"Order Details {orderLookupId}: TYPE = {orderType}; \n{DetailsToString()}";
-    }
-    public string DetailsToString()
-    {
-        return $"<b>{orderTitle}</b>\n{orderPrompt}";
+        var split = infoDisplay.Split('_');
+        return $"<b>{split[0]}</b>\n{split[1]}";
     }
 }
 

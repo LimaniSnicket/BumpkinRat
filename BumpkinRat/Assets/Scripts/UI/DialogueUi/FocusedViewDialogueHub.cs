@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,6 +16,8 @@ public class FocusedViewDialogueHub : MonoBehaviour, IDropHandler
 
     private Vector2 viewPosition;
 
+    private readonly Vector2 offsetPosBy = new Vector2(600, 0);
+
     private ConversationSnippet mostRecentPlayerResponse;
 
     private RectTransform responseRectTransform;
@@ -34,7 +34,7 @@ public class FocusedViewDialogueHub : MonoBehaviour, IDropHandler
         {
             if (value != responseOverlappingView)
             {
-                Debug.Log("Change in overlap status");
+                Debug.Log("Change in overlap status. New Value: " + value);
             }
             responseOverlappingView = value;
         }
@@ -43,24 +43,17 @@ public class FocusedViewDialogueHub : MonoBehaviour, IDropHandler
 
     private void Start()
     {
-        InitializeFocusedPortrait();
-        SetDragContainerFromChildren();
-
-        SetFocusedHubActive(false);
+        this.InitializeFocusedPortrait();
+        this.SetDragContainerFromChildren();
+       this. SetFocusedHubActive(false);
 
         rectTransform = GetComponent<RectTransform>();
         viewPosition = rectTransform.localPosition;
 
-        rectTransform.localPosition = viewPosition - (600 * Vector2.right);
+        rectTransform.localPosition = viewPosition - offsetPosBy;
     }
     private void Update()
     {
-/*        if (FocusedHubActive != CraftingManager.FocusedOnCrafting)
-        {
-            StartCoroutine(MoveFocusedDialogueHubIntoView());
-            // SetFocusedHubActive(CraftingManager.FocusedOnCrafting);
-        }    */  
-
         if(responseRectTransform != null)
         {
             ResponseOverlapsFocusedView = IsOverlappingFocusedHub(responseRectTransform);

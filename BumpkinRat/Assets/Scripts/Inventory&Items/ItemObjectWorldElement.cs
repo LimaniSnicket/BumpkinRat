@@ -8,9 +8,9 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions
 
     public Transform OccupierTransform => transform;
 
-    public OccupiablePosition Occupied { get; set; }
-
     public Vector3 PositionOffset { get; private set; }
+
+    public event EventHandler<ReleaseOccupierEventArgs> ReleaseOccupier;
 
     public string description;
 
@@ -32,8 +32,13 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions
             {
                 Debug.Log("Put item back into inventory!");
                 this.BroadcastPlaceBack();
-                Occupied.ReleaseOccupier(this);
-                Destroy(gameObject);
+
+                this.BroadcastRelease(destroyOnRelease: true);
+
+                // TODO: Broadcast Release
+
+                // Occupied.ReleaseOccupier(this);
+                // Destroy(gameObject);
             }
         }
     }
@@ -59,6 +64,22 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions
 
             MouseHoveringOnItemObject = false;
         }
+    }
+
+    public override void ForceDestroy()
+    {
+        this.BroadcastRelease(true);
+    }
+
+    private void BroadcastRelease(bool destroyOnRelease)
+    {
+        var args = new ReleaseOccupierEventArgs
+        {
+            DestroyOnRelease = destroyOnRelease,
+            Occupier = this
+        };
+
+        this.ReleaseOccupier.BroadcastEvent(this, args);
     }
 
     bool rotating = false;
@@ -96,10 +117,10 @@ public class ItemObjectWorldElement : ItemObjectBehaviour, IOccupyPositions
         this.BroadcastInteractedWith(focus);
     }
 
-    public override void ForceDestroy()
+/*    public override void ForceDestroy()
     {
         this.ForceDestroy(this);
-    }
+    }*/
 }
 
 public class ItemObjectEventArgs: EventArgs

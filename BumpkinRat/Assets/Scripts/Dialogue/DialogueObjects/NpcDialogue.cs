@@ -9,10 +9,8 @@ public class NpcDialogue : IDialogue
 
     public int DialogueTypeId => 1;
 
-    public DialogueResponse[] DialogueResponses => npcDialogue ?? Array.Empty<DialogueResponse>();
-
     [SerializeField]
-    private DialogueResponse[] npcDialogue;
+    private ResponseLayer[] npcDialogue;
 
     public bool IsValid()
     {

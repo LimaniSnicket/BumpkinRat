@@ -11,8 +11,6 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
 
     public static event EventHandler<EvaluateEventArgs<(bool, OverworldNpc)>> OverworldNpcEvent; 
 
-    public DialogueResponse[] testResponses;
-
     public OverworldDialogueTracker tracker;
 
     bool interactable;
@@ -21,7 +19,7 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
         private set { 
             if(value != interactable)
             {
-                OnRangeChange(value);
+                this.OnRangeChange(value);
             }
             interactable = value;
         } 
@@ -86,13 +84,29 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
 
     public string GetDialogueToDisplay()
     {
-        string[] strs = testResponses[0].displayDialogue; //tracker.GetDisplayDialogue();
+        string[] strs = { "This is some test dialogue" };
         return $"{npcName} says: \n {string.Join(" ", strs)}";
     }
 
     public void UpdateOverworldDialogueTrackerForNpc()
     {
         tracker.Advance();
+    }
+
+    private bool TrySetActiveForOverworldDialogue()
+    {
+        if (OverworldDialogueUI.ValidateOverworldNpcRange(DistanceTracker))
+        {
+            OverworldDialogueUI.ActivateDialogueUIForNpc(this);
+            return true;
+        }
+
+        return false;
+    }
+
+    public float GetDistanceFromPlayer(bool abs = true)
+    {
+        return abs ? Mathf.Abs(DistanceTracker.DistanceFromPlayer) : DistanceTracker.DistanceFromPlayer;
     }
 
     public static int CloserNpc(OverworldNpc a, OverworldNpc b)
@@ -113,6 +127,18 @@ public class OverworldNpc : MonoBehaviour, ITrackDistanceToPlayer
         }
 
         return Mathf.Abs(a.DistanceTracker.DistanceFromPlayer) <= Mathf.Abs(b.DistanceTracker.DistanceFromPlayer) ? -1 : 1;
+    }
+
+    private void ToggleActivityInDialogueUI(bool inRange)
+    {
+        if (inRange)
+        {
+            this.TrySetActiveForOverworldDialogue();
+        } 
+        else
+        {
+            OverworldDialogueUI.RemoveAsActiveNpc(this);
+        }
     }
 
     private void OnRangeChange(bool withinRange)

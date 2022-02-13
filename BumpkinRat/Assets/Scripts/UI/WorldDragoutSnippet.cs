@@ -27,7 +27,7 @@ public class WorldDragoutSnippet : DraggableFoldout<Transform>, ITrackDistanceTo
     {
         draggerTransform = transform;
         foldoutTransform = transform.GetChild(0).transform;
-        DistanceTracker = new RangeChangeTracker { maxRange = 2f };
+        DistanceTracker = new RangeChangeTracker(foldoutTransform, 2f);
         SetOriginalPosition();
         textDisplay = GetComponentInChildren<TextMeshPro>();
 

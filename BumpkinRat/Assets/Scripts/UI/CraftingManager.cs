@@ -15,6 +15,8 @@ public class CraftingManager : MonoBehaviour
 
     private static ConversationUi craftingConversationBehavior;
 
+    private static ToolkitMenu toolkitMenu;
+
     private static Dictionary<FocusAreaObject, GameObject> focusAreaIndicators;
 
     public static float DistractionJitter = 0.25f;
@@ -62,15 +64,15 @@ public class CraftingManager : MonoBehaviour
             itemCrafter = new ItemCrafter();
         }
 
-        uiElementFactory = new CraftingUiElementFactory(this);
-        craftingConversationBehavior = GetComponent<ConversationUi>(); 
+        craftingConversationBehavior = GetComponent<ConversationUi>();
+        toolkitMenu = GetComponentInChildren<ToolkitMenu>();
+
+        uiElementFactory = new CraftingUiElementFactory(this, toolkitMenu);
     }
 
     void Start()
     {
         craftingUiMenu = uiElementFactory.CreateCraftingMenu();
-
-        uiElementFactory.CreateCraftingActionWidgets(craftingButton, craftingUiMenu.CraftingButtonContainer);
 
         orderSnippet = GetComponentInChildren<CraftingOrderSnippet>();
 
@@ -85,6 +87,11 @@ public class CraftingManager : MonoBehaviour
         InventoryButton.InventoryButtonPressed += OnInventoryButtonPressed;
 
         RecipeProgressTracker.onRecipeCompleted.AddListener(OnRecipeCompleted);
+
+        toolkitMenu.ToolRollout += OnToolRollout;
+        toolkitMenu.gameObject.SetActive(false);
+
+        uiElementFactory.CreateDefaultCraftingActionWidget(craftingButton, craftingUiMenu.CraftingButtonContainer);
     }
 
     void Update()
@@ -106,11 +113,11 @@ public class CraftingManager : MonoBehaviour
             return;
         }
 
-        CraftingUiBusy = !orderSnippet.IsMoving;
+        CraftingUiBusy = !orderSnippet.IsMoving || toolkitMenu.ToolkitOpen;
 
         craftingUiMenu.UpdateDisplayWithSequenceProgress();
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && !toolkitMenu.ToolkitOpen)
         {
             EndCraftingSequence();
         }
@@ -138,7 +145,7 @@ public class CraftingManager : MonoBehaviour
     private void OnInventoryButtonPressed(object source, ItemEventArgs args)
     {
         ItemObjectUiElement newItemUi = ItemDataManager.CreateItemObjectUiElement(transform, args.ItemToPass.itemId);
-
+        newItemUi.transform.SetAsFirstSibling();
         this.PlaceObjects(newItemUi);
     }
 
@@ -191,6 +198,17 @@ public class CraftingManager : MonoBehaviour
         CameraManager.CraftingFocusView();
 
         StartCoroutine(MoveOrderSnippetIntoFocusedOnCraftingView(orderMessage));
+    }
+
+    private void OnToolRollout(object source, EventArgs args)
+    {
+        if (!FocusedOnCrafting)
+        {
+            Debug.Log("Not ready to focus on crafting.");
+            return;
+        }
+
+        uiElementFactory.CreateCraftingActionWidgetsForToolkit(craftingButton, craftingUiMenu.CraftingButtonContainer, withDefaultAction: true, clearAllChildren: true);
     }
 
     private IEnumerator MoveOrderSnippetIntoFocusedOnCraftingView(string orderMessage)
@@ -299,5 +317,7 @@ public class CraftingManager : MonoBehaviour
 
         InventoryButton.InventoryButtonPressed -= OnInventoryButtonPressed;
         RecipeProgressTracker.onRecipeCompleted.RemoveListener(OnRecipeCompleted);
+
+        toolkitMenu.ToolRollout -= OnToolRollout;
     }
 }

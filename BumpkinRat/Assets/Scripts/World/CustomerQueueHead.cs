@@ -15,6 +15,8 @@ public class CustomerQueueHead : MonoBehaviour
 
     public string Key => string.IsNullOrEmpty(key) ? gameObject.name : key;
 
+    public const string WorkbenchQueueHead = "WorkbenchQueueHead";
+
     private void Awake()
     {
         CustomerQueueHeadManager.SetNameAndAdjustForDuplicates(this);

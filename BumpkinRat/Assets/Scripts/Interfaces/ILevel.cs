@@ -2,10 +2,9 @@
 
 public interface ILevel 
 {
-  string LevelDataPath { get; }
-  LevelData LevelData { get; }
-
-   MonoBehaviour LevelBehavior { get; }
+    int Id { get; }
+    LevelData LevelData { get; }
+    MonoBehaviour LevelBehavior { get; }
 }
 
 

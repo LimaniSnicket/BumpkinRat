@@ -1,76 +1,40 @@
 ﻿{
-	"associatedDialogue":[
-		{
-			"dialogueId": 0,
-			"levelId": 0,
-			"introLines":[
-				"Hey cuzz I...*sniff*",
-				"fell while trick or treatin' and...*sniff*",
-				"<b>B-b-broke my nunchuck!</b>", 
-				"|SET:PrologueManager (GeneralStorePrologue):setCustomerName:Froggert|I can't fight crime without it!",
-				"Can you fix it...?"
-			],
-
-			"introResponses":[
-				{
-					"responseLevel": 1,
-					"displayDialogue": "No worries buddy, I can fix that up"
-				}
-			],
-
-			"promptedCustomerDialogue":[
-				{
-					"npcBaseResponse":{
-						"displayDialogue": [
-							"Aw thanks cuzz,",
-							"you're the best!"
-						],
-						"qualityThreshold": 0
-					},
-
-					"playerResponses":[
-						{
-							"responseLevel": 0,
-							"displayDialogue": "Don't mention it bud"
-						},
-						{
-							"responseLevel": 1,
-							"displayDialogue": "Anytime sport, it's no problem!"
-						},
-						{
-							"responseLevel": 2,
-							"displayDialogue": "No problem buddy, I know you love Halloween!"
-						}
-					]
-				},
-				{
-					"npcBaseResponse":{
-						"displayDialogue": [
-							"Cowabunga binch"
-						],
-						"qualityThreshold": 0
-					},
-
-					"additionalNpcResponses": [
-						{
-							"displayDialogue": [
-								"YERRRR"
-							],
-							"qualityThreshold": 2
-						}
-					]
-				}
-			],
-
-			"outroDialogue":[
-				{
-					"displayDialogue":[
-					"You fixed it!",
-					"Aw man cuzz, thank you!"
-					],
-					"qualityThreshold": 0
-				}
-			]
-		}
-	]
+    "dialogue": [
+        {
+            "levelId": 0,
+            "data": [
+                        {
+                            "dialogueId": 0,
+                            "customerIntro": "Hey cuzz I...*sniff*_fell while trick or treatin' and...*sniff*_<b>B-b-broke my nunchuck!</b>_|SET:PrologueManager (GeneralStorePrologue):setCustomerName:Froggert|I can't fight crime without it!_Can you fix it...?",
+                            "playerIntro": "1:No worries buddy, I can fix that up",
+                            "responses": [
+                                {
+                                    "npcDialogue": [
+                                        "0:Aw thanks cuzz_you're the best!"
+                                    ],
+                                    "playerDialogue": [
+                                        "0:Don't mention it bud",
+                                        "1:Anytime sport, it's no problem!",
+                                        "2:No problem buddy, I know you love Halloween!"
+                                    ]
+                                },
+                                {
+                                    "npcDialogue": [
+                                        "0:Cowabunga binch",
+                                        "2: YERRRRR"
+                                    ],
+                                    "playerDialogue": [
+                                        "0:Don't mention it bud",
+                                        "1:Anytime sport, it's no problem!",
+                                        "2:No problem buddy, I know you love Halloween!"
+                                    ]
+                                }
+                            ],
+                            "customerOutro": [
+                                "0:You fixed it!_Aw man cuzz, thank you!"
+                            ]
+                        }
+            ]
+        }
+    ]
 }

@@ -34,7 +34,22 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
 
     private void Awake()
     {
-        if(craftingActionButtonActivated == null)
+        this.InitializeWidgetComponents();
+    }
+
+    private void Start()
+    {
+        StartCoroutine(MoveToNewLocationWithinUnitSphere(5));
+    }
+
+    public static void ResetAll()
+    {
+        craftingActionButtonActivated.Invoke(CraftingAction.NONE);
+    }
+
+    public void InitializeWidgetComponents()
+    {
+        if (craftingActionButtonActivated == null)
         {
             craftingActionButtonActivated = new CraftingActionWidgetActive();
         }
@@ -50,29 +65,19 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
         colorSet = new ActivityColorSet(Color.white, image.color);
     }
 
-    private void Start()
-    {
-        StartCoroutine(MoveToNewLocationWithinUnitSphere(5));
-    }
-
-    public static void ResetAll()
-    {
-        craftingActionButtonActivated.Invoke(CraftingAction.NONE);
-    }
-
     public void EnableFidgeting()
     {
         this.originalPosition = rect.localPosition;
         fidgetEnabled = true;
     }
 
-    public void SetCraftingActionButton(int craftAction, CraftingManager crafter)
+    public void SetCraftingActionButton(CraftingAction craftAction, CraftingManager crafter)
     {
-        craftingAction = (CraftingAction)craftAction;
+        craftingAction = craftAction;
 
         craftingMenuBehaviour = crafter;
 
-        widgetText.text = craftingAction.ToString();
+        this.SetWidgetText(craftingAction.ToString());
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -83,6 +88,16 @@ public class CraftingActionWidget: MonoBehaviour, IPointerEnterHandler
         }
 
         this.TakeWidgetSpecifiedCraftingAction();
+    }
+
+    private void SetWidgetText(string message)
+    {
+        if (widgetText == null)
+        {
+            widgetText = GetComponentInChildren<TextMeshProUGUI>();
+        }
+
+        widgetText.text = message;
     }
 
     private void TakeWidgetSpecifiedCraftingAction()

@@ -9,26 +9,16 @@ public class OverworldDialogueTracker : DialogueTracker
 
     public void GetDialogueFromLevelData(int npcId)
     {
-        OverworldDialogue d;
-        bool valid = LevelData.TryGetNpcDialogueForNpc(npcId, out d);
-        if (valid)
+        var npcDialogue = LevelDataHelper.GetOverworldDialogueForNpcInActiveLevel(npcId);
+
+        if(npcDialogue != null)
         {
-            dialogue = d;
+            dialogue = npcDialogue;
         }
     }
 
     internal void Advance()
     {
-        QualityIndex++;
-    }
-
-    internal string[] GetDisplayDialogue()
-    {
-        if (dialogue == null || QualityIndex < 0)
-        {
-            return Array.Empty<string>();
-        }
-
-        return GetDialogueResponseOfQuality(dialogue.DialogueResponses, QualityIndex).displayDialogue;
+        Quality++;
     }
 }

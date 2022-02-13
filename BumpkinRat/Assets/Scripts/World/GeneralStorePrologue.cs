@@ -3,37 +3,13 @@ using System.Collections;
 using BumpkinRat.Crafting;
 using UnityEngine;
 
-public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandReceiver
+public class GeneralStorePrologue : LevelBase, IDialogueCommandReceiver
 {
-    RealTimeCounter prologueCounter;
+    private bool timerComplete;
 
-    TimeSpan startTime;
+    private bool atWork;
 
-    bool timer;
-    public bool OnBreak
-    {
-        get
-        {
-            if (timer != prologueCounter.TimerComplete)
-            {
-                OnBreakChange(!timer);
-            }
-
-            timer = prologueCounter.TimerComplete;
-            return !timer;
-        }
-    }
-    public bool atWork;
-    public ItemProvisioner ItemProvisioner { get; private set; }
-    public string LevelDataPath => "Assets/Resources/Databases/GeneralStoreLevelData.json";
-
-    public LevelData LevelData => LevelData.GetFromPath(LevelDataPath);
-
-    public MonoBehaviour LevelBehavior => this;
-
-    public static CustomerOrder[] prologueCraftingOrders;
-
-    private CustomerOrderManager customerOrderManager;
+    private RealTimeCounter prologueCounter;
 
     public Transform queueHead;
 
@@ -41,25 +17,37 @@ public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandRecei
 
     public string setCustomerName;
 
+    public bool OnBreak
+    {
+        get
+        {
+            if (timerComplete != prologueCounter.TimerComplete)
+            {
+                OnBreakChange(!timerComplete);
+            }
+
+            timerComplete = prologueCounter.TimerComplete;
+            return !timerComplete;
+        }
+    }
+
     private void Start()
     {
-        LevelManager.SetActiveLevel(this);
+        this.ActivateLevel();
 
-        prologueCounter = new RealTimeCounter(1f, TimeUnitToTrack.Minute);
-        startTime = new TimeSpan(12, 22, 27);
-        StartCoroutine(IncrementTimeSpan(1));
+        TimeSpan startTime = new TimeSpan(12, 22, 27);
 
-        ItemProvisioner = new ItemProvisioner();
-        ItemProvisioner.AddItemsToDrop((4, 2));
+        prologueCounter = new RealTimeCounter(startTime).WithOneMinuteIncrement();
+        StartCoroutine(prologueCounter.IncrementTimeSpan(() => gameObject.activeSelf, 1));
 
-        ItemProvisioner.Distribute();
+        itemDistributer = new ItemProvisioner();
+        this.DistributeDropOnStartItems();
 
-        this.customerOrderManager = new CustomerOrderManager(this);
+        this.customerOrderManager = new CustomerOrderManager();
 
-        prologueCraftingOrders = customerOrderManager.CreateCustomerOrders((0, OrderType.CRAFTING, 0), (1, OrderType.CRAFTING, 0));
-        customerOrderManager.SpawnCustomersAtQueueHead("WorkbenchQueueHead", prologueCraftingOrders);
+        customerOrderManager.SpawnCustomersWithOrders(CustomerQueueHead.WorkbenchQueueHead, levelData);
 
-        //CraftingUI.SetDisableCraftingMenuEntry(true);
+        // CraftingUI.SetDisableCraftingMenuEntry(true);
 
         UiMenu.UiEvent += OnUiEvent;
         DialogueX.DialogueCommand += OnDialogueCommand;
@@ -68,8 +56,8 @@ public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandRecei
 
     private void Update()
     {
-        prologueCounter.DecrementTimerOverTime();
-        PrologueHUD.SetTimerDisplayMessage(startTime.ToString());//+ $"\n{BreakMessage}");
+        prologueCounter.DecrementTimer();
+        PrologueHUD.SetTimerDisplayMessage(prologueCounter.ToString());
 
         if (atWork && GlobalFader.IsClear)
         {
@@ -79,17 +67,7 @@ public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandRecei
         }
     }
 
-    private IEnumerator IncrementTimeSpan(int secondsToIncrement)
-    {
-        TimeSpan incrementer = new TimeSpan(0, 0, secondsToIncrement);
-        while (gameObject.activeSelf)
-        {
-            yield return new WaitForSeconds(secondsToIncrement);
-            startTime = startTime.Add(incrementer);
-        }
-    }
-
-    void OnBreakChange(bool value)
+    private void OnBreakChange(bool value)
     {
         atWork = value;
         PlayerBehavior.FreezePlayerMovementController(value);
@@ -100,7 +78,7 @@ public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandRecei
     {
         yield return new WaitForSeconds(1);
         //WarpBehavior.ForceWarpToLocation(PlayerBehavior.PlayerGameObject, "Workbench");
-        ItemProvisioner.Distribute();
+        itemDistributer.Distribute();
     }
 
     void OnUiEvent(object source, UiEventArgs args)
@@ -112,7 +90,7 @@ public class GeneralStorePrologue : MonoBehaviour, ILevel, IDialogueCommandRecei
         }
     }
 
-    IEnumerator IntroductionToCraftingAndCustomers()
+    private IEnumerator IntroductionToCraftingAndCustomers()
     {
         print("Crafting introduction!");
         yield return null;

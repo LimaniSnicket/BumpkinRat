@@ -8,7 +8,7 @@ public class GameDataManager : MonoBehaviour
     public string itemDataPath, plantDataPath, npcDataPath;
     private static GameDataManager database;
     public PlayerData playerData;
-    public static GameData gameData { get; private set; }
+    private static GameData gameData;
 
     public GameObject basicItemPrefab;
     static string placeholder = "Assets/Resources/PlayerData/data.json";
@@ -51,6 +51,8 @@ public class GameDataManager : MonoBehaviour
         string saveSession = JsonUtility.ToJson(playerData, true);
         Debug.Log(saveSession);
         File.WriteAllText(placeholder, saveSession);
+
+        LevelDataHelper.Test();
     }
 }
 

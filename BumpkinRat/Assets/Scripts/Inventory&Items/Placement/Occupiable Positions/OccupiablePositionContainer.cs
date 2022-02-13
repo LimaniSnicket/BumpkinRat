@@ -10,13 +10,10 @@ public class OccupiablePositionContainer
 
     private OccupiablePosition hasNextResult;
 
-    public List<IOccupyPositions> Occupiers { get; private set; }
-
     public OccupiablePositionContainer(params Vector3[] positions)
     {
         positionVectors = new List<Vector3>(positions);
         occupiablePositions = this.SetPlacementPositions(positions);
-        Occupiers = new List<IOccupyPositions>();
     }
 
     public OccupiablePositionContainer(params Vector2[] positions)
@@ -29,7 +26,6 @@ public class OccupiablePositionContainer
         }
 
         occupiablePositions =  this.SetPlacementPositions(positions);
-        Occupiers = new List<IOccupyPositions>();
     }
 
     public void ReleaseAll(MonoBehaviour coroutineStarter, float delayTime)
@@ -52,8 +48,6 @@ public class OccupiablePositionContainer
         if (nextPosition != null)
         {
            nextPosition.Occupy(occupier);
-
-            Occupiers.Add(occupier);
 
            return true;
         }
@@ -82,15 +76,13 @@ public class OccupiablePositionContainer
     {
         yield return new WaitForSeconds(waitFor);
 
-        foreach (var occupier in Occupiers)
+        foreach (var occupiable in occupiablePositions)
         {
-            if (this.TryGetOccupiablePosition(occupier, out OccupiablePosition pos))
+            if (!occupiable.Available)
             {
-                OccupierReleaser.Release(occupier, pos, Object.Destroy);
+                occupiable.ReleasePosition(Object.Destroy);
             }
         }
-
-        Occupiers.Clear();
     }
 
     public OccupiablePosition GetNext()
@@ -112,13 +104,6 @@ public class OccupiablePositionContainer
         }
 
         return null;
-    }
-
-    private bool TryGetOccupiablePosition(IOccupyPositions occupier, out OccupiablePosition position)
-    {
-        position = occupier.Occupied;
-
-        return position != null;
     }
 
     private List<OccupiablePosition> SetPlacementPositions(params Vector3[] vects)

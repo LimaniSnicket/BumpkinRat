@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,8 +7,7 @@ using UnityEngine;
 public class NpcData 
 {
     public static NpcData npcData;
-    const string GenericConversationPath = "";
-
+    
     public static bool CanRead => npcEntryLookup.CollectionIsNotNullOrEmpty();
 
     [SerializeField] NpcDatabaseEntry[] npcEntries;
@@ -32,16 +30,6 @@ public class NpcData
         {
             npcEntryLookup = npcData.npcEntries.ToDictionary(n => n.NpcId.GetValueOrDefault(-1));
         }
-    }
-
-    public static Dictionary<int, NpcDatabaseEntry> GetNpcEntryLookup()
-    {
-        if(npcEntryLookup == null)
-        {
-            npcEntryLookup = npcData.npcEntries.ToDictionary(n => n.NpcId.GetValueOrDefault(-1));
-        }
-
-        return npcEntryLookup;
     }
 
     public static string GetTexturePath(int id)
@@ -86,7 +74,9 @@ public struct NpcDatabaseEntry
     [SerializeField] string conversationDataPath;
     [SerializeField] string texturePath;
 
-    NpcDialogueStorage dialogueStorage;
+    private NpcDialogueStorage dialogueStorage;
+
+    private const string GenericConversationPath = "Assets/Resources/{0}.json";
 
     public int? NpcId => npcId;
     public string NpcName => npcName;
@@ -97,7 +87,7 @@ public struct NpcDatabaseEntry
     {
         try
         {
-            return GetStoredDialogueStorage().GetCustomerDialogue(levelId, dialogueId);
+            return GetStoredDialogueStorage(levelId).GetCustomerDialogue(dialogueId);
 
         } catch (NullReferenceException)
         {
@@ -105,11 +95,13 @@ public struct NpcDatabaseEntry
         }
     }
 
-    public NpcDialogueStorage GetStoredDialogueStorage()
+    public NpcDialogueStorage GetStoredDialogueStorage(int activeLevel)
     {
         if (dialogueStorage == null && !string.IsNullOrWhiteSpace(conversationDataPath))
         {
+            // string path = string.Format(GenericConversationPath, conversationDataPath);
             dialogueStorage = conversationDataPath.InitializeFromJSON<NpcDialogueStorage>();
+            dialogueStorage.InitializeForLevel(activeLevel);
         }
         return dialogueStorage;
     }
@@ -129,43 +121,43 @@ public struct NpcDatabaseEntry
 [Serializable]
 public class NpcDialogueStorage
 {
-    [SerializeField] CustomerDialogue[] associatedDialogue;
+    [SerializeField] public CustomerDialogueForLevel[] dialogue;
 
-    Dictionary<int, Dictionary<int, CustomerDialogue>> DialogueToIds;
-    public CustomerDialogue GetCustomerDialogue(int level, int dialogueId)
+    private Dictionary<int, CustomerDialogue> activeLevelDialogue;
+
+    public void InitializeForLevel(int activeLevel)
     {
-        Dictionary<int, CustomerDialogue> levelLookup = GetCustomerDialogueForLevel(level);
-        if (levelLookup.CollectionIsNotNullOrEmpty())
+        var possibleDialogue = this.GetCustomerDialogueForLevelInternal(activeLevel);
+        activeLevelDialogue = possibleDialogue.ToDictionary(d => d.dialogueId, d => d);
+    }
+
+    public CustomerDialogue GetCustomerDialogue(int dialogueId)
+    {
+        if (activeLevelDialogue.ContainsKey(dialogueId))
         {
-            CustomerDialogue dialogue;
-            bool valid = levelLookup.TryGetValue(dialogueId, out dialogue);
-
-            if (valid) return dialogue;
-
+            return activeLevelDialogue[dialogueId];
         }
-        return new CustomerDialogue();
+
+        return null;
     }
 
-    public Dictionary<int, CustomerDialogue> GetCustomerDialogueForLevel(int levelId)
+    private CustomerDialogue[] GetCustomerDialogueForLevelInternal(int level)
     {
-        if (DialogueToIds == null) InitializeDialogueLookup();
-        return DialogueToIds.ContainsKey(levelId) ? DialogueToIds[levelId] : null;
-    }
-    
-    void InitializeDialogueLookup()
-    {
-        DialogueToIds = new Dictionary<int, Dictionary<int, CustomerDialogue>>();
-        if (associatedDialogue.CollectionIsNotNullOrEmpty())
+        foreach (var map in dialogue)
         {
-            foreach (var c in associatedDialogue)
+            if (map.levelId == level)
             {
-                if (!DialogueToIds.ContainsKey(c.levelId))
-                {
-                    DialogueToIds.Add(c.levelId, new Dictionary<int, CustomerDialogue>());
-                }
-
-                DialogueToIds[c.levelId].AddOrReplaceKeyValue(c.dialogueId, c);
+                return map.data;
             }
         }
+
+        return Array.Empty<CustomerDialogue>();
     }
+}
+
+[Serializable]
+public class CustomerDialogueForLevel
+{
+    public int levelId;
+    public CustomerDialogue[] data;
 }

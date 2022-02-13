@@ -17,10 +17,6 @@ public static class DialogueX
         { "<call>", Indication.Call }
     };
 
-    static Dictionary<string, Indication> IndicationLookup => new Dictionary<string, Indication>
-    {
-
-    };
     static List<Indication> broadcastable => new List<Indication> {
         Indication.Audio,
         Indication.Setter,
@@ -32,12 +28,15 @@ public static class DialogueX
         
     };
 
-    public static List<string> PriorityLevels => new List<string>
-    {
-        "low", "medium", "high"
-    };
-
     public static event EventHandler<DialogueCommandArgs> DialogueCommand;
+
+    private const char CommandBoundary = '|';
+
+    private const char CommandArgSeperator = '#';
+
+    private const char BeginHTMLFormatting = '<';
+
+    private const char EndHTMLFormatting = '>';
 
     static Dictionary<string, string> stringReplacementLookup => new Dictionary<string, string>
     {
@@ -46,11 +45,6 @@ public static class DialogueX
         { "INV_ADJUST", "Rat Man (InventoryManager):activeInventory:"}
     };
 
-    public static string nullTree => "NONE";
-
-
-    static Dictionary<string, string> cachedGetterLookup;
-
     public static string[] GetStringArray(this TextAsset txt)
     {
         return txt.text.Split("\n"[0]);
@@ -58,10 +52,10 @@ public static class DialogueX
 
     public static string StrippedIndicationLine(this string feed, out int remainderIndex)
     {
-        int indicationStart = feed.IndexOf('|');
+        int indicationStart = feed.IndexOf(CommandBoundary);
         if(indicationStart >= 0)
         {
-            int indicationEnd = feed.IndexOf('|', indicationStart + 1);
+            int indicationEnd = feed.IndexOf(CommandBoundary, indicationStart + 1);
             if(indicationEnd > 0)
             {
                 remainderIndex = indicationEnd;
@@ -73,10 +67,10 @@ public static class DialogueX
         return string.Empty;
     }
 
-    static void BroadcastRun(this string strippedLine, out bool wait)
+    static void BroadcastDialogueCmd(this string strippedLine, out bool wait)
     {
         wait = false;
-        string[] segments = strippedLine.Split(':');
+        string[] segments = strippedLine.Split(CommandArgSeperator);
         if (segments.CollectionIsNotNullOrEmpty())
         {
             if (segments[0].Equals("GET"))
@@ -201,8 +195,8 @@ public static class DialogueX
         }
     }
 
-    static List<char> exclude = new List<char> {'|'};
-    static Stack<string> getters = new Stack<string>();
+    private static readonly List<char> exclude = new List<char> { CommandArgSeperator };
+    private static readonly Stack<string> getters = new Stack<string>();
     static bool successfullyStacked;
 
     public static void StackValue(object stacking)
@@ -229,17 +223,21 @@ public static class DialogueX
         {
             char c = line.ElementAt(index);
 
-            if (c.Equals('|'))
+            if (c.Equals(CommandBoundary))
             {
                 string strippedCommand = line.StrippedIndicationLine(out index);
-                bool wait;
-                strippedCommand.BroadcastRun(out wait);
+                strippedCommand.BroadcastDialogueCmd(out bool wait);
 
                 if (wait)
                 {
                     Debug.Log("to do: waiting for return broadcast from receiver");
-                    float timer = 0;
-                    while (!successfullyStacked)
+                    // float timer = 0;
+
+                    // yield return new WaitUntil(() => successfullyStacked);
+
+                    yield return new WaitUntilConditionOrTimer(0.5f, () => successfullyStacked);
+
+                   /* while (!successfullyStacked)
                     {
                         timer += Time.fixedDeltaTime;
                         if(timer >= 0.5f)
@@ -247,7 +245,7 @@ public static class DialogueX
                             break;
                         }
                         yield return null;
-                    }
+                    }*/
 
                     if (successfullyStacked)
                     {
@@ -259,9 +257,9 @@ public static class DialogueX
                 }
             }
 
-            if (c.Equals('<'))
+            if (c.Equals(BeginHTMLFormatting))
             {
-                int endCarrot = line.IndexOf('>', index + 1);
+                int endCarrot = line.IndexOf(EndHTMLFormatting, index + 1);
                 if (endCarrot < index)
                 {
                     endCarrot = line.Length;
@@ -275,7 +273,7 @@ public static class DialogueX
             {
                 builder.AppendIfNot(c, exclude);
 
-                if (c != ' ')
+                if (!char.IsWhiteSpace(c))
                 {
                     yield return new WaitForSeconds(delay);
                 }
@@ -286,9 +284,7 @@ public static class DialogueX
         }
     }
 
-  
-
-    public static IEnumerator ReadLine(string line, StringBuilder builder, float delay = 0.001f)
+   /* public static IEnumerator ReadLine(string line, StringBuilder builder, float delay = 0.001f)
     {
         if(line == null)
         {
@@ -304,14 +300,12 @@ public static class DialogueX
 
         while(index < line.Length)
         {
-            char c = line.ElementAt(index);
+            char c = line[index];
 
             if (c.Equals('|'))
             {
                 string strippedCommand = line.StrippedIndicationLine(out index);
-                bool wait;
-                strippedCommand.BroadcastRun(out wait);
-
+                strippedCommand.BroadcastDialogueCmd(out bool wait);
             }
 
             if (c.Equals('<'))
@@ -338,17 +332,35 @@ public static class DialogueX
             }
 
         }
+    }*/
+}
+
+public class WaitUntilConditionOrTimer : CustomYieldInstruction
+{
+    private readonly float waitThreshold;
+    private float currentThreshold;
+
+    private Func<bool> predicateCondition;
+    public override bool keepWaiting
+    {
+        get
+        {
+            currentThreshold += Time.fixedDeltaTime;
+            Debug.LogFormat("Checking Wait Time: {0}/{1}.", currentThreshold, waitThreshold);
+            return waitThreshold <= currentThreshold || predicateCondition();
+        }
+    }
+
+    public WaitUntilConditionOrTimer(float maxTime, Func<bool> predicate)
+    {
+        this.waitThreshold = maxTime;
+        this.predicateCondition = predicate;
     }
 }
 
 public enum Indication
 {
     None, Character, Tone, Audio, Condition, Setter, Call
-}
-
-public enum NodeType
-{
-    Default, Option, Branch, Still, Bark
 }
 
 public class DialogueCommandArgs: EventArgs
@@ -369,24 +381,29 @@ public interface IDialogueCommandReceiver
 
 public class IndicatorArgs: EventArgs
 {
-    public Indication indicatorType;
-    public string infoToParse;
-    public char seperator = ':';
-    public char joiner = '+';
+    public Indication indicatorType { get; set; }
+    public string InfoToParse { get; set; }
 
-    public string[] seperatedInfo
+    private const char Seperator = ':';
+    private const char Joiner = '+';
+
+    public string[] SeperatedInfo
     {
         get
         {
-            if (infoToParse.IndexOf(seperator) < 0) { return new string[] {infoToParse }; }
-            return infoToParse.FormatMacros(seperator, joiner);
+            if (InfoToParse.IndexOf(Seperator) < 0) 
+            { 
+                return new string[] { InfoToParse }; 
+            }
+
+            return InfoToParse.FormatMacros(Seperator, Joiner);
         }
     }
 
     public bool TargetObject(object o)
     {
         Debug.Log(o.ToString());
-        if (!seperatedInfo.ValidArray()) { return false; }
-        return o.ToString() == seperatedInfo[0];
+        if (!SeperatedInfo.ValidArray()) { return false; }
+        return o.ToString() == SeperatedInfo[0];
     }
 }

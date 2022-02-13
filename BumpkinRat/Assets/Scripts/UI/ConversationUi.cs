@@ -27,7 +27,9 @@ public class ConversationUi : MonoBehaviour
 
     private ConversationResponseDisplayManager conversationResponseManager;
 
-    bool playerResponseDraggedSuccess;
+    private CharacterMenu characterMenu;
+
+    private bool playerResponseDraggedSuccess;
 
     private DialogueTrackerFactory trackerFactory;
     private ConversationUiElementFactory snippetFactory;
@@ -41,6 +43,8 @@ public class ConversationUi : MonoBehaviour
         trackerFactory = new DialogueTrackerFactory();
         conversationResponseManager = new ConversationResponseDisplayManager();
         snippetFactory = new ConversationUiElementFactory(this, conversationResponseManager);
+        characterMenu = GetComponentInChildren<CharacterMenu>();
+        characterMenu.gameObject.SetActive(false);
 
         keyMap = new KeyCodeToResponseMap(KeyCode.A, KeyCode.S, KeyCode.D);
     }
@@ -85,7 +89,7 @@ public class ConversationUi : MonoBehaviour
 
         if(!playerResponseDraggedSuccess)
         {
-            playerResponseDraggedSuccess = focusedViewDialogueHub.MostRecentResponseIsOverlappingDragToRect() && Input.GetMouseButtonUp(0); 
+            playerResponseDraggedSuccess = focusedViewDialogueHub.ResponseOverlapsFocusedView && Input.GetMouseButtonUp(0); 
         }
 
     }
@@ -99,6 +103,7 @@ public class ConversationUi : MonoBehaviour
     {
         CustomerDialogue active = activeOrder.GetCustomerDialogue();
         conversationTracker = trackerFactory.CreateCustomerDialogueTracker(active);
+        this.characterMenu.SetActiveCharacter(activeOrder.CustomerData);
         StartCoroutine(RunCustomerDialogueIntro(active));
     }
 
@@ -106,9 +111,9 @@ public class ConversationUi : MonoBehaviour
     {
         ConversationSnippet.DestroyAllSnippets(this);
 
-        DialogueResponse outro = conversationTracker.GetOutroDialogue();
+        var outro = conversationTracker.GetOutroDialogue();
 
-        if (!outro.IsNull)
+        if (!outro.ValidArray())
         {
             StartCoroutine(RunCustomerDialogueOutro(outro));
         }
@@ -124,7 +129,7 @@ public class ConversationUi : MonoBehaviour
 
         int levelIndex = (int)tier;
 
-        if (conversationResponseManager.IsActive(tier) && !this.conversationTracker.MainDialogueComplete)
+        if (conversationResponseManager.IsActive(tier) && !this.conversationTracker.ResponseDialogueComplete)
         {
 
             DestroyHangingResponse();
@@ -189,7 +194,7 @@ public class ConversationUi : MonoBehaviour
 
         CraftingManager.IncreaseDistraction(distraction);
 
-        int quality = this.conversationTracker.QualityIndex;
+        int quality = this.conversationTracker.Quality;
 
         yield return new WaitForSeconds(0.15f);
 
@@ -207,9 +212,9 @@ public class ConversationUi : MonoBehaviour
 
         yield return new WaitForSeconds(0.15f);
 
-        conversationResponseManager.SetActiveInConversation(this.conversationTracker.GetResponses());
+        conversationResponseManager.SetActiveInConversation(this.conversationTracker.GetPlayerDialogueChoices());
 
-        if (this.conversationTracker.MainDialogueComplete)
+        if (this.conversationTracker.ResponseDialogueComplete)
         {
             ConversationSnippet.DestroyAllSnippets(this);
         } 
@@ -217,7 +222,9 @@ public class ConversationUi : MonoBehaviour
 
     private IEnumerator RunCustomerDialogueIntro(CustomerDialogue dialogue)
     {
-        yield return StartCoroutine(ReadMultiLineConversationSnippet(dialogue.introLines));
+        var introLines = dialogue.customerIntro.SplitDialogueLines();
+
+        yield return StartCoroutine(ReadMultiLineConversationSnippet(introLines));
         yield return new WaitForSeconds(0.5f);
 
         //trigger crafting mode here!
@@ -228,14 +235,14 @@ public class ConversationUi : MonoBehaviour
 
         yield return new WaitWhile(() => !CraftingManager.FocusedOnCrafting && CraftingManager.CraftingUiBusy);
 
-        conversationResponseManager.SetActiveInConversation(dialogue.introResponses);
+        conversationResponseManager.SetActiveInConversation(dialogue.playerIntro.SplitDialogueLines());
     }
 
-    private IEnumerator RunCustomerDialogueOutro(DialogueResponse response)
+    private IEnumerator RunCustomerDialogueOutro(string[] outro)
     {
         conversationTracker.TriggerOutro();
 
-        yield return StartCoroutine(ReadMultiLineConversationSnippet(response.displayDialogue));
+        yield return StartCoroutine(ReadMultiLineConversationSnippet(outro));
         yield return new WaitForSeconds(0.15f);
 
         conversationTracker.AdvanceDialogue();
@@ -257,7 +264,9 @@ public class ConversationUi : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        Vector2 spawnPoint = CraftingManager.FocusedOnCrafting ? focusedViewDialogueHub.focusedConversationSnippetSpawnPoint : conversationSnippetSpawnPoint;
+        Vector2 spawnPoint = CraftingManager.FocusedOnCrafting 
+            ? focusedViewDialogueHub.focusedConversationSnippetSpawnPoint 
+            : conversationSnippetSpawnPoint;
 
         if (tracker < amount)
         {

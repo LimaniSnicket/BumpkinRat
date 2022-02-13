@@ -32,13 +32,12 @@ public class ItemObjectBehaviour : MonoBehaviour, IContainFocusArea
     }
 
     public virtual void ForceDestroy() { }
+/*
+    public virtual void ForceDestroy() { }
 
-    protected void ForceDestroy(IOccupyPositions occupier)
+    protected void ForceDestroy(IOccupiablePosition occupiable)
     {
-        if (occupier.Occupied != null)
-        {
-            occupier.Occupied.ReleaseOccupier(occupier);
-        }
+        occupiable.ReleasePosition();
         Destroy(gameObject);
-    }
+    }*/
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,7 +21,13 @@ public class UIManager : MonoBehaviour
         ActiveMenus = new List<MenuType>();
     }
 
-    void OnUiEvent(object source, UiEventArgs args)
+    public void OnClickToggleButtonEnable(Button btn)
+    {
+        bool toggleTo = !btn.interactable;
+        btn.interactable = toggleTo;
+    }
+
+    private void OnUiEvent(object source, UiEventArgs args)
     {
         ActiveMenus.HandleInstanceObjectInList(args.MenuTypeLoaded, args.Load);
     }

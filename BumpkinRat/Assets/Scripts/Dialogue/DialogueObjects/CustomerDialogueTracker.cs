@@ -1,85 +1,81 @@
 ﻿using System;
 public class CustomerDialogueTracker : DialogueTracker
 {
-    public CustomerDialogue Tracking { get; private set; }
-    public int DialogueIndex { get; private set; } = -1;
-
-    bool outroTriggered;
-
-    public bool MainDialogueComplete { get; private set; }
-
     public event EventHandler CustomerDialogueExpired;
 
     public static event EventHandler IntroDialogueEnded;
 
     public static event EventHandler OutroDialogueTriggered;
 
+    private CustomerDialogue tracking;
+
+    private int dialogueIndex = -1;
+
+    private bool mainDialogueComplete;
+
+    private bool outroTriggered;
+
+    public bool ResponseDialogueComplete => mainDialogueComplete;
+
     public CustomerDialogueTracker(CustomerDialogue dialogueToTrack)
     {
-        Tracking = dialogueToTrack;
-        DialogueIndex = -1;
+        tracking = dialogueToTrack;
+        dialogueIndex = -1;
     }
+
     public string[] GetDisplayLinesAtDialogueIndex(int quality)
     {
-        DialogueLayer response = Tracking.GetCustomerResponseAtIndex(DialogueIndex);
-        return GetDialogueResponseOfQuality(response, quality).displayDialogue;
+        var layer = tracking.GetResponseAtLayer(dialogueIndex);
+
+        return GetResponseFromLayer(layer, quality).SplitDialogueLines();
     }
 
-    public PlayerResponse[] GetResponses()
+    public string[] GetPlayerDialogueChoices()
     {
-        try
+        if (dialogueIndex >= 0)
         {
-
-            return DialogueIndex >= 0 
-                ? Tracking.promptedCustomerDialogue[DialogueIndex].playerResponses 
-                : Tracking.introResponses;
-
+            return tracking.responses[dialogueIndex].playerDialogue;
         }
-        catch (IndexOutOfRangeException)
-        {
-            return Array.Empty<PlayerResponse>();
-        }
+
+        return tracking.playerIntro.SplitDialogueLines();
     }
 
-    public DialogueResponse GetOutroDialogue()
+    public string[] GetOutroDialogue()
     {
-        if (Tracking.outroDialogue.CollectionIsNotNullOrEmpty())
+        if (tracking.customerOutro.CollectionIsNotNullOrEmpty())
         {
-            return GetDialogueResponseOfQuality(Tracking.outroDialogue, QualityIndex);
+            return GetOutroDialogueOfQuality(tracking.customerOutro, Quality);
         }
 
-        return DialogueResponse.Null;
+        return Array.Empty<string>();
     }
     public void TriggerOutro()
     {
         outroTriggered = true;
     }
 
-    DialogueResponse GetDialogueResponseOfQuality(DialogueLayer response, int quality)
+    private string GetResponseFromLayer(ResponseLayer responseLayer, int quality)
     {
-        if (response.additionalNpcResponses.CollectionIsNotNullOrEmpty())
-        {
-            if (quality >= response.additionalNpcResponses[0].qualityThreshold)
-            {
-                return GetDialogueResponseOfQuality(response.additionalNpcResponses, quality);
-            }
-        }
-
-        return response.npcBaseResponse;
+        return this.GetDialogueOfQuality(responseLayer.npcDialogue, quality);
     }
 
-    public void Reset(CustomerDialogue newTracking)
+    private string[] GetOutroDialogueOfQuality(string[] outro, int quality)
     {
-        Tracking = newTracking;
-        DialogueIndex = -1;
-        QualityIndex = 0;
-        MainDialogueComplete = false;
+        return this.GetDialogueOfQuality(outro, quality).SplitDialogueLines();
+    }
+
+    public void TrackNew(CustomerDialogue toTrack)
+    {
+        tracking = toTrack;
+        dialogueIndex = -1;
+        Quality = 0;
+        mainDialogueComplete = false;
         outroTriggered = false;
     }
 
     public void EndIntroDialogue()
     {
-        if (DialogueIndex == -1)
+        if (dialogueIndex == -1)
         {
             IntroDialogueEnded.BroadcastEvent(this);
         }
@@ -95,10 +91,10 @@ public class CustomerDialogueTracker : DialogueTracker
 
     public void AdvanceDialogue()
     {
-        DialogueIndex++;
-        MainDialogueComplete = Tracking.promptedCustomerDialogue.Length <= DialogueIndex;
+        dialogueIndex++;
+        mainDialogueComplete = tracking.IsResponseDialogueComplete(dialogueIndex);
 
-        if (MainDialogueComplete)
+        if (mainDialogueComplete)
         {
             CustomerDialogueExpired.BroadcastEvent(this);
         }
@@ -108,10 +104,10 @@ public class CustomerDialogueTracker : DialogueTracker
     {
         if (qualityIncrease > 0)
         {
-            IncreaseQualityIndex(qualityIncrease);
+            QualityIncreaseBy(qualityIncrease);
         }
 
-        AdvanceDialogue();
+        this.AdvanceDialogue();
     }
 }
 

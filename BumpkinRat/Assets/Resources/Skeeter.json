@@ -1,56 +1,42 @@
 ﻿{
-	"associatedDialogue":[
+	"dialogue": [
 		{
-			"dialogueId": 0,
 			"levelId": 0,
-			"introLines":[
-				"Hey cuzzo,",
-				"It's 'bout quittin' time",
-				"Lordy I'm beat...",
-				"Let's grab a cola out back, yeah?"
-			],
-
-			"introResponses":[
-				{
-					"responseLevel": 1,
-					"displayDialogue": "Sure man, I'm beat too"
-				}
-			],
-
-
-			"promptedCustomerDialogue":[
-				{					
-					"baseResponse":{
-						"displayDialogue": [
-							"Sweet, let's go", 
-							"I wanna run somethin' by ya"
-						],
-						"qualityIndex": 0
-					},
-
-					"possibleResponses":[
+			"data":[
 						{
-							"responseLevel": 0,
-							"displayDialogue": "Don't mention it bud"
-						},
-						{
-							"responseLevel": 1,
-							"displayDialogue": "Anytime sport, it's no problem!"
-						},
-						{
-							"responseLevel": 2,
-							"displayDialogue": "No problem buddy, I know you love Halloween!"
+							"dialogueId": 0,
+							"levelId": 0,
+							"customerIntro":"Hey cuzzo,_It's 'bout quittin' time_Lordy I'm beat..._Let's grab a cola out back, yeah?",
+							"playerIntro":"1:Sure man, I'm beat too",
+				
+							"responses":[
+								{
+									"npcDialogue":[
+										"0:Sweet, let's go_I wanna run somethin' by ya"
+									], 
+									"playerDialogue": [
+										"0:Don't mention it bud",
+										"1:Anytime sport, it's no problem!",
+										"2:No problem buddy, I know you love Halloween!"
+									]
+								},
+								{
+									"npcDialogue":[
+										"0:Cowabunga binch",
+										"2: YERRRRR"
+									], 
+									"playerDialogue": [
+										"0:Don't mention it bud",
+										"1:Anytime sport, it's no problem!",
+										"2:No problem buddy, I know you love Halloween!"
+									]
+								}
+							],
+				
+							"customerOutro":[
+								"0:You fixed it!_Aw man cuzz, thank you!"
+							]
 						}
-					]
-				},
-				{
-					"baseResponse":{
-						"displayDialogue": [
-							"fuck yeah dawg"
-						],
-						"qualityIndex": 0
-					}
-				}
 			]
 		}
 	]
