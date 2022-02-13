@@ -1,44 +1,42 @@
 ﻿{
-	"associatedDialogue":[
+	"dialogue": [
 		{
-			"dialogueId": 0,
 			"levelId": 0,
-			"introLines":[
-				"Hey cuzzo,",
-				"It's 'bout quittin' time",
-				"Lordy I'm beat...",
-				"Let's grab a cola out back, yeah?"
-			],
-
-			"introResponses":[
-				{
-					"responseLevel": "medium",
-					"displayDialogue": "Sure man, I'm beat too"
-				}
-			],
-
-			"promptedCustomerDialogue":[
-				{
-					"medium": "Aw thanks cuzzo! You're the greatest!",
-
-					"possibleResponses":[
+			"data":[
 						{
-							"responseLevel": "low",
-							"displayDialogue": "Don't mention it bud"
-						},
-						{
-							"responseLevel": "medium",
-							"displayDialogue": "Anytime sport, it's no problem!"
-						},
-						{
-							"responseLevel": "high",
-							"displayDialogue": "No problem buddy, I know you love Halloween!"
+							"dialogueId": 0,
+							"levelId": 0,
+							"customerIntro":"Hey cuzzo,_It's 'bout quittin' time_Lordy I'm beat..._Let's grab a cola out back, yeah?",
+							"playerIntro":"1:Sure man, I'm beat too",
+				
+							"responses":[
+								{
+									"npcDialogue":[
+										"0:Sweet, let's go_I wanna run somethin' by ya"
+									], 
+									"playerDialogue": [
+										"0:Don't mention it bud",
+										"1:Anytime sport, it's no problem!",
+										"2:No problem buddy, I know you love Halloween!"
+									]
+								},
+								{
+									"npcDialogue":[
+										"0:Cowabunga binch",
+										"2: YERRRRR"
+									], 
+									"playerDialogue": [
+										"0:Don't mention it bud",
+										"1:Anytime sport, it's no problem!",
+										"2:No problem buddy, I know you love Halloween!"
+									]
+								}
+							],
+				
+							"customerOutro":[
+								"0:You fixed it!_Aw man cuzz, thank you!"
+							]
 						}
-					]
-				},
-				{
-					"high": "some response idk"
-				}
 			]
 		}
 	]

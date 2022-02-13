@@ -1,4 +1,5 @@
 ﻿using System;
+using Items;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -9,7 +10,7 @@ public class Collectable : MonoBehaviour
 
     int itemId;
 
-    public static event EventHandler<CollectableEventArgs> Collected;
+    public static event EventHandler<ItemEventArgs> CollectItem;
 
     private void FixedUpdate()
     {
@@ -20,10 +21,16 @@ public class Collectable : MonoBehaviour
 
     public virtual void OnCollected(int amnt = 1)
     {
-        if(Collected != null) { Collected(this, new CollectableEventArgs() { 
-            CollectableName = itemName, 
-            AmountToPass = Math.Max(amnt, amount) 
-        }) ; }
+        if (CollectItem != null) 
+        {
+            ItemEventArgs args = new ItemEventArgs
+            {
+                ItemToPass = ItemDataManager.GetItemById(itemId),
+                AmountToPass = Math.Max(0, amnt)
+            };
+
+            CollectItem(this, args) ; 
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -41,7 +48,3 @@ public class Collectable : MonoBehaviour
     }
 }
 
-public class CollectableEventArgs : ItemEventArgs
-{
-    public string CollectableName { get; set; }
-}

@@ -93,7 +93,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 40.5
-  m_fontSizeBase: 45
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
@@ -162,7 +162,7 @@ RectTransform:
   m_GameObject: {fileID: 7670070489619492318}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 7670070489007773676}
   m_Father: {fileID: 0}
@@ -223,8 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708e09fe3d40c1d42b386c291d09b417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onLeftBubble: {fileID: -3921531043033354237, guid: ac8527343b0fcf541b9ce937ec307b6d,
+  leftBubble: {fileID: 5065569893582306817, guid: ac8527343b0fcf541b9ce937ec307b6d,
     type: 3}
-  onRightBubble: {fileID: 5065569893582306817, guid: ac8527343b0fcf541b9ce937ec307b6d,
+  rightBubble: {fileID: -3921531043033354237, guid: ac8527343b0fcf541b9ce937ec307b6d,
     type: 3}
-  isResponse: 0
+  centerBubble: {fileID: 2806329433455978578, guid: ac8527343b0fcf541b9ce937ec307b6d,
+    type: 3}

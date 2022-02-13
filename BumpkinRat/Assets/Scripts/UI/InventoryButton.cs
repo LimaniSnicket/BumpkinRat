@@ -4,16 +4,18 @@ using System;
 
 public class InventoryButton : Button
 {
-    public string ItemNameToDisplay => associatedItemListing == null ? string.Empty : associatedItemListing.item.DisplayName;
-    public string ItemAmountToDisplay { get; private set; }
+    private ItemListing associatedItemListing;
 
-    ItemListing associatedItemListing;
+    private TextMeshProUGUI textMesh;
 
-    public TextMeshProUGUI textMesh => gameObject.GetOrAddComponentInChildren<TextMeshProUGUI>();
+    public static event EventHandler<ItemEventArgs> InventoryButtonPressed, FinalPossiblePress;
 
-    public static event EventHandler<InventoryButtonArgs> InventoryButtonPressed, FinalPossiblePress;
+    public static bool CanSpawnItems { get; private set; }
 
-    public static bool CanSpawnItems { get; set; }
+    protected override void Awake()
+    {
+        textMesh = gameObject.GetOrAddComponentInChildren<TextMeshProUGUI>();
+    }
 
     protected override void Start()
     {
@@ -21,7 +23,7 @@ public class InventoryButton : Button
 
         transform.GetChild(0).gameObject.SetActive(true);
 
-        onClick.AddListener(() => OnClickBroadcastPressed());
+        onClick.AddListener(() => OnClickBroadcastButtonPress());
     }
 
     private void Update()
@@ -29,45 +31,65 @@ public class InventoryButton : Button
         interactable = CanSpawnItems;
     }
 
-    public void SetItemListing(ItemListing listing)
+    public static void EnableItemSpawning()
+    {
+        CanSpawnItems = true;
+    }
+
+    public static void DisableItemSpawning()
+    {
+        CanSpawnItems = false;
+    }
+
+    public void SetFromItemListing(ItemListing listing)
     {
         listing.ItemListingChanged += OnItemListingChange;
         associatedItemListing = listing;
-        UpdateDisplay();
+        this.UpdateDisplay();
     }
 
-    void OnItemListingChange(object source, EventArgs args)
+    private void OnItemListingChange(object source, EventArgs args)
     {
-        UpdateDisplay();
+        this.UpdateDisplay();
     }
 
-    void UpdateDisplay()
+    private void UpdateDisplay()
     {
+        try
+        {
+            if (textMesh == null)
+            {
+                textMesh = this.GetComponentInChildren<TextMeshProUGUI>();
+            }
+        }
+        catch (NullReferenceException)
+        {
+            return;
+        }
+
         textMesh.text = associatedItemListing.ToString();
     }
 
-    void OnClickBroadcastPressed()
+    private void OnClickBroadcastButtonPress()
     {
         associatedItemListing.Remove(1);
 
-        UpdateDisplay();
+        this.UpdateDisplay();
 
-
-        if (associatedItemListing.EmptyListing)
+        ItemEventArgs args = new ItemEventArgs
         {
-            FinalPossiblePress.BroadcastEvent(this,
-                new InventoryButtonArgs { ItemId = associatedItemListing.item.itemId });
+            ItemToPass = associatedItemListing.Item,
+            AmountToPass = 1
+        };
+
+        if (associatedItemListing.IsEmpty)
+        {
+            FinalPossiblePress.BroadcastEvent(this, args);
 
             Destroy(gameObject);
-        } 
-        
-            InventoryButtonPressed.BroadcastEvent(this,
-                new InventoryButtonArgs { 
-                    ItemToPass = associatedItemListing.item , 
-                    ItemId = associatedItemListing.item.itemId
-                });
-        
+        }
 
+        InventoryButtonPressed.BroadcastEvent(this, args);
     }
 
     protected override void OnDestroy()
@@ -76,11 +98,7 @@ public class InventoryButton : Button
         {
             associatedItemListing.ItemListingChanged -= OnItemListingChange;
         }
-    }
-}
 
-public class InventoryButtonArgs: ItemEventArgs
-{
-    public int ItemId { get; set; }
-    public bool PassByItemId => ItemToPass == null;
+        onClick.RemoveAllListeners();
+    }
 }

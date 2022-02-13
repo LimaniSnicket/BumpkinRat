@@ -12,6 +12,10 @@ public class FollowBehaviorBasic: MonoBehaviour
 
     Quaternion originalRotation;
 
+    public Quaternion OriginalRotation => originalRotation;
+
+    private bool canFollow = true;
+
     private void Start()
     {
         originalRotation = transform.rotation;
@@ -19,10 +23,25 @@ public class FollowBehaviorBasic: MonoBehaviour
 
     private void Update()
     {
-        transform.position = Position();
+        if (!canFollow)
+        {
+            return;
+        }
+        transform.position = GetFollowPositionWithInfluences();
     }
 
-    Vector3 Position()
+    public void SuspendFollow()
+    {
+        canFollow = false;
+    }
+
+    public void ResumeFollow()
+    {
+        canFollow = true;
+        SetRotationToOriginal();
+    }
+
+    public Vector3 GetFollowPositionWithInfluences()
     {
         if(toFollow == null)
         {

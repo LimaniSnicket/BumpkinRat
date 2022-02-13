@@ -1,8 +1,10 @@
-﻿
+﻿using UnityEngine;
+
 public interface ILevel 
 {
-  string LevelName { get; }
-
-  int LevelId { get;}
+    int Id { get; }
+    LevelData LevelData { get; }
+    MonoBehaviour LevelBehavior { get; }
 }
+
 

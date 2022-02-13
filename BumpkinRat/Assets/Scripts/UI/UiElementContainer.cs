@@ -1,47 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 public class UiElementContainer : MonoBehaviour
 {
-    public RectTransform RectTransform => GetComponent<RectTransform>();
-
     public Vector2 startPosition;
     public float spacing;
+    public int ElementsInContainer => transform.childCount;
 
-    public bool dynamicallySpace;
+    public bool HasElements => transform.childCount > 0;
 
-    private int elements;
-    public int ElementsInContainer
+    public void DetachAndClearChildren()
     {
-        get
+        if (transform.childCount <= 0)
         {
-            if(elements != transform.childCount)
-            {
-                OnElementCountChange();
-            }
-
-            elements = transform.childCount;
-            return elements;
+            return;
         }
-    }
 
-    void OnElementCountChange()
-    {
+        var children = transform.GetChildren();
 
-    }
-
-    RectTransform InstantiateAndGetRectTransform(GameObject prefab)
-    {
-        GameObject inst = Instantiate(prefab, transform);
-        RectTransform tr = inst.GetOrAddComponent<RectTransform>();
-        tr.localPosition = Vector2.zero;
-        return tr;
+        foreach (var child in children)
+        {
+            child.transform.SetParent(null);
+            Destroy(child);
+        }
     }
 
     public void SpawnAllHorizontally(GameObject spawning, float spacing)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
         float width = rect.rect.width;
 
@@ -51,27 +38,45 @@ public class UiElementContainer : MonoBehaviour
 
     public void SpawnAllVertically(GameObject spawning, float spacing)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
         float height = rect.rect.height;
 
         rect.localPosition = startPosition + Vector2.up * (height + spacing) * (ElementsInContainer - 1);
     }
 
-    public void SpawnAtAlternatingVerticalPositions(GameObject spawning, float spacing, float verticalOffset, int everyOther = 2)
+    public void SpawnAtAlternatingVerticalPositions(GameObject spawning, float spacing, float verticalOffset, int everyOther = 2, int? position = null)
     {
-        RectTransform rect = InstantiateAndGetRectTransform(spawning);
+        RectTransform rect = SpawnRectTransformObject(spawning);
 
-        Vector2 widthSpacing = Vector2.right * (rect.rect.width + spacing) * (ElementsInContainer - 1);
+        int pos = this.PositionInfluence(position);
 
-        Vector2 verticalSpacing = Vector2.up * -verticalOffset * ((ElementsInContainer + 1) % everyOther);
+        Vector2 widthSpacing = Vector2.right * (rect.rect.width + spacing) * (pos - 1);
+
+        Vector2 verticalSpacing = Vector2.up * -verticalOffset * ((pos + 1) % everyOther);
 
         rect.localPosition = startPosition + widthSpacing + verticalSpacing;
     }
 
-    public GameObject GetLastChild()
+    public T GetLastChildComponent<T>()
+    {
+        return this.GetLastChild().GetComponent<T>();
+    }
+
+    private GameObject GetLastChild()
     {
         return transform.GetChild(ElementsInContainer - 1).gameObject;
     }
+    private RectTransform SpawnRectTransformObject(GameObject prefab)
+    {
+        GameObject inst = Instantiate(prefab, transform);
+        RectTransform tr = inst.GetOrAddComponent<RectTransform>();
+        tr.localPosition = Vector2.zero;
+        return tr;
+    }
 
+    private int PositionInfluence(int? passedValue)
+    {
+        return passedValue ?? ElementsInContainer;
+    }
 }

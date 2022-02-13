@@ -1,45 +1,52 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 
-public class ItemProvisioner : ItemDistributor
+public class ItemProvisioner : ItemDistributionBase, IItemDistribution
 {
-    IDistributeItems<ItemProvisioner> Provisioner { get; set; }
+    public static event EventHandler<ItemEventArgs> ItemProvisioning;
 
-    public static event EventHandler<CollectableEventArgs> ItemProvisioning;
-
-    public ItemProvisioner(IDistributeItems<ItemProvisioner> prov)
+    public ItemProvisioner()
     {
-        Provisioner = prov;
+        this.itemDistributionSettings = new ItemDistributionSettings();
     }
-    public override void Distribute()
+
+    public void AddItemsToDrop(params (int, int)[] dropData)
     {
-        SetItemsToDrop(Provisioner.ItemDropData);
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
 
-        Debug.Log(string.Join("-", Provisioner.ItemDropData.Select(s => s.ItemToDropName)));
+    public void AddItemsToDrop(params int[] dropData)
+    {
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
 
+    public void AddItemToDrop(ItemDrop toDrop)
+    {
+        this.AddItemDropToItemDistributionSettings(toDrop);
+    }
 
-        if (!ItemsToDrop.ValidList())
+    public void Distribute()
+    {
+        if (!itemDistributionSettings.CanDistribute)
         {
             Debug.Log("Item Drops aren't valid.");
             return;
         }
 
-
-        foreach (ItemDrop drop in ItemsToDrop)
+        foreach (ItemDrop drop in itemDistributionSettings.ItemsToDrop)
         {
+            Debug.Log(drop.ItemToDropName);
             BroadcastItemProvisioning(drop);
         }
     }
 
-    void BroadcastItemProvisioning(ItemDrop collecting)
+    private void BroadcastItemProvisioning(ItemDrop collecting)
     {
         if(ItemProvisioning != null)
         {
             ItemProvisioning(this,
-                new CollectableEventArgs {
+                new ItemEventArgs {
                     ItemToPass = collecting.ToDrop,
-                    CollectableName = collecting.ItemToDropName,
                     AmountToPass = collecting.AmountToDrop
                 }) ;
         }

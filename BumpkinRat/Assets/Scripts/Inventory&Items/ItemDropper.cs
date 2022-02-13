@@ -1,158 +1,176 @@
-﻿using FullSerializer;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 [Serializable]
-public class ItemDropper : ItemDistributor
+public class ItemDropper : ItemDistributionBase, IItemDistribution
 {
-    IDistributeItems<ItemDropper> Dropper { get; set; }
-    Transform DropTransform { get; set; }
-    public ItemDropper(IDistributeItems<ItemDropper> dropper)
+    private readonly IDistributeItems dropper; 
+
+    private Transform dropTransform;
+
+    public ItemDropper(IDistributeItems dropper, Transform dropTransform = null)
     {
-        Dropper = dropper;
+        this.dropper = dropper;
+        this.dropTransform = dropTransform;
+
+        this.itemDistributionSettings = new ItemDistributionSettings();
     }
-    public override void Distribute()
+
+    public void Distribute()
     {
-        if (Dropper == null)
+        if (dropper == null)
         {
             return;
         }
 
-        SetItemsToDrop(Dropper.ItemDropData);
-
-        InstantiateItemsToDrop();
+        this.InstantiateItemsToDrop();
     }
 
-    public void DistributeAtTransform(Transform transform)
+    public void AddItemsToDrop(params (int, int)[] dropData)
     {
-        SetDropTransform(transform);
-        Distribute();
+        this.AddItemsToDropToItemDistributionSettings(dropData);
     }
 
-    void InstantiateItemsToDrop()
+    public void AddItemsToDrop(params int[] dropData)
     {
-        if (!ItemsToDrop.ValidList())
+        this.AddItemsToDropToItemDistributionSettings(dropData);
+    }
+
+    public void AddItemToDrop(ItemDrop toDrop)
+    {
+        this.AddItemDropToItemDistributionSettings(toDrop);
+    }
+
+    private void InstantiateItemsToDrop()
+    {
+        if (!this.itemDistributionSettings.CanDistribute)
         {
             return;
         }
 
-        foreach (ItemDrop drop in ItemsToDrop)
+        if (dropTransform == null)
         {
-            Vector3 randomPos = UnityEngine.Random.insideUnitSphere * 3;
-            UnityEngine.Debug.Log($"Dropping {drop.AmountToDrop} of item: {drop.ItemToDropName}");
-            ValidateDropTransform();
-            drop.ItemToDropName.InstantiateItemInWorld(new Vector3(randomPos.x, 0, randomPos.z) + DropTransform.position);
+            dropTransform = PlayerBehavior.PlayerGameObject.transform;
         }
+
+        this.IterateOverItemDropData(DropItem);
     }
 
-    void ValidateDropTransform()
+    private void DropItem(ItemDrop drop)
     {
-        if(DropTransform == null)
-        {
-            DropTransform = PlayerBehavior.PlayerGameObject.transform;
-        }
-    }
+        Vector3 randomPos = UnityEngine.Random.insideUnitSphere * 3;
 
-    public void SetDropTransform(Transform tran)
-    {
-        DropTransform = tran;
+        drop.ItemToDropName.InstantiateItemInWorld(new Vector3(randomPos.x, 0, randomPos.z) + dropTransform.position);
     }
 }
-[Serializable]
-public class ItemDrop {
 
-    public string itemName = string.Empty;
-
-    int itemId = -1;
-
-    public int amountToDrop;
-    public string ItemToDropName => ToDrop.itemName;
-    public int AmountToDrop => Math.Max(0, amountToDrop);
-
-    private Item toDrop;
-
-    public Item ToDrop
-    {
-        get
-        {
-            if(toDrop != null)
-            {
-                return toDrop;
-            }
-            try
-            {
-                toDrop = itemId.GetItem();
-                return toDrop;
-
-            } catch (KeyNotFoundException)
-            {
-                return DatabaseContainer.gameData.GetItem(itemId);
-
-            }
-        }
-    }
-
-    public static ItemDrop SetFromItem(Item i)
-    {
-        return new ItemDrop { toDrop = i, itemId = i.itemId };
-    }
-
-    public static List<ItemDrop> GetListOfItemsToDrop(params (string, int)[] drops)
-    {
-        return drops.Select(d => new ItemDrop { itemName = d.Item1, amountToDrop = d.Item2 }).ToList();
-    }
-
-    public static List<ItemDrop> GetListOfItemsToDrop(int[] drops)
-    {
-        return drops.Select(d => new ItemDrop { itemId = d, amountToDrop = 1 }).ToList();
-    }
-
-    public static List<ItemDrop> GetListOfItemsToDrop(params (int, int)[] drops)
-    {
-        return drops.Select(d => new ItemDrop { itemId = d.Item1, amountToDrop = d.Item2 }).ToList();
-    }
-
-}
-
-public interface IDistributeItems<T> where T: ItemDistributor
+public class ItemDistributionBase
 {
-    T ItemDistributor { get; set; }
-
-    List<ItemDrop> ItemDropData { get; set; }
-}
-
-public abstract class ItemDistributor
-{
-    public bool clearOnDistribute;
-
-    public List<ItemDrop> ItemsToDrop { get; set; }
-
-    public bool ValidItemDropData => ItemsToDrop.ValidList();
-
-    public void SetItemsToDrop((string, int)[] dropData)
+    protected ItemDistributionSettings itemDistributionSettings;
+    protected void AddItemDropToItemDistributionSettings(ItemDrop toDrop)
     {
-        ItemsToDrop = ItemDrop.GetListOfItemsToDrop(dropData);
+        itemDistributionSettings.AddItemToDrop(toDrop);
     }
 
-    public void SetItemsToDrop(List<ItemDrop> dropData)
+    protected void AddItemsToDropToItemDistributionSettings( params (int, int)[] dropData)
     {
-        try
+        itemDistributionSettings.AddItemsToDrop(dropData);
+    }
+
+    protected void AddItemsToDropToItemDistributionSettings(params int[] dropData)
+    {
+        itemDistributionSettings.AddItemsToDrop(dropData);
+    }
+
+    protected void IterateOverItemDropData(Action<ItemDrop> callOnItemDrop)
+    {
+        foreach(var itemDrop in itemDistributionSettings.ItemsToDrop)
         {
-            ItemsToDrop = new List<ItemDrop>(dropData);
-
-        } catch(ArgumentException){
-
+            callOnItemDrop(itemDrop);
         }
     }
 
-    public List<Item> GetItemsToDropFromGameData()
+    protected void IterateOverItemDropDataUntil(Action<ItemDrop> callOnItemDrop, Func<bool> breakCondition)
     {
-        return ItemsToDrop.Select(i => i.ToDrop).ToList();
+        foreach (var itemDrop in itemDistributionSettings.ItemsToDrop)
+        {
+            callOnItemDrop(itemDrop);
+
+            if (breakCondition())
+            {
+                break;
+            }
+        }
+    }
+}
+
+public interface IItemDistribution
+{
+    void AddItemToDrop(ItemDrop toDrop);
+
+    void AddItemsToDrop(params (int, int)[] dropData);
+
+    void AddItemsToDrop(params int[] dropData);
+
+    void Distribute();
+}
+
+public interface IDistributeItems
+{
+    IItemDistribution ItemDistributor { get; }
+}
+
+public class ItemDistributionSettings
+{
+    private readonly bool clearDataOnDistribute;
+
+    private static ItemDropFactory itemDropFactory;
+    public List<ItemDrop> ItemsToDrop { get; private set; }
+    public bool CanDistribute => ItemsToDrop.ValidList();
+
+    public ItemDistributionSettings(): this(false)
+    {
     }
 
-    public abstract void Distribute();
+    public ItemDistributionSettings(bool clearDataOnDistribute)
+    {
+        this.clearDataOnDistribute = clearDataOnDistribute;
+        this.InitializeDropFactoryIfNull();
+        ItemsToDrop = new List<ItemDrop>();
+    }
 
+    public void AddItemToDrop(ItemDrop toDrop)
+    {
+        ItemsToDrop.Add(toDrop);
+    }
+
+    public void AddItemsToDrop(params (int, int)[] dropData)
+    {
+        this.InitializeDropFactoryIfNull();
+        var itemDrops = itemDropFactory.GetItemsToDrop(dropData);
+        ItemsToDrop.AddRange(itemDrops);
+    }
+
+    public void AddItemsToDrop(params int[] dropData)
+    {
+        this.InitializeDropFactoryIfNull();
+        var itemDrops = itemDropFactory.GetItemsToDrop(dropData);
+        ItemsToDrop.AddRange(itemDrops);
+    }
+
+    public void Cleanup()
+    {
+        if (clearDataOnDistribute)
+        {
+            ItemsToDrop.Clear();
+        }
+    }
+    private void InitializeDropFactoryIfNull()
+    {
+        if(itemDropFactory == null)
+        {
+            itemDropFactory = new ItemDropFactory();
+        }
+    }
 }

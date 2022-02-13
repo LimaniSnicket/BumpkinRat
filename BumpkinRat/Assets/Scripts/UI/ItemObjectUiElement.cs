@@ -1,38 +1,93 @@
-﻿using TMPro;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-public class ItemObjectUiElement
+
+[RequireComponent(typeof(Image))]
+public class ItemObjectUiElement : ItemObjectBehaviour, IContainFocusArea, IOccupyPositions
 {
-    GameObject gameObject;
-    public Image ObjectImage { get; private set; }
-    public Button ObjectButton { get; private set; }
-    public TextMeshProUGUI LabelTMPro { get; private set; }
+    private Image itemObjectImage;
 
-    private ItemCrafter itemCrafter;
+    private  RectTransform rectTransform;
 
-    static int id;
+    public Transform OccupierTransform => rectTransform;
 
-    public ItemObjectUiElement(ItemCrafter crafter, Transform parent, Vector2 rectPosition)
+    public Vector3 PositionOffset { get; private set; } = Vector3.zero;
+
+    public event EventHandler<ReleaseOccupierEventArgs> ReleaseOccupier;
+
+    void Awake()
     {
-        itemCrafter = crafter;
-
-        gameObject = new GameObject($"ItemObjectUiElement_{id}", typeof(RectTransform), typeof(Image), typeof(Button));
-        ObjectImage = gameObject.GetComponent<Image>();
-        ObjectButton = gameObject.GetComponent<Button>();
-        gameObject.transform.SetParent(parent);
-        SetPositionAndUnitScale(rectPosition);
-
-        ObjectButton.onClick.AddListener(OnClickDebug);
-        id++;
+        itemObjectImage = gameObject.GetOrAddComponent<Image>();
+        rectTransform = GetComponent<RectTransform>();
     }
 
-    void SetPositionAndUnitScale(Vector2 rectPosition)
+    void Update()
     {
-        gameObject.GetComponent<RectTransform>().localPosition = rectPosition;
-        gameObject.GetComponent<RectTransform>().localScale = Vector2.one;
+        if (Input.GetMouseButton(0))
+        {
+            return;
+        }
+
+        Vector2 localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
+
+        if (!rectTransform.rect.Contains(localMousePosition))
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("To-do: Put item back in inventory, destroy Item Object Ui Element");
+        }
     }
 
-    void OnClickDebug()
+    public void SetItemObjectSprite(Sprite s)
     {
+        itemObjectImage.sprite = s;
     }
+
+    public void SetParent(Transform parent)
+    {
+        transform.SetParent(parent);
+    }
+
+    public void SetPositionAndUnitScale(Vector2 rectPosition)
+    {
+        rectTransform.localPosition = rectPosition;
+        rectTransform.localScale = Vector2.one;
+    }
+    public void RegisterFocusHandlerAreas()
+    {
+        FocusAreaHandler.RegisterFocusAreaUiInChildren(transform, this);
+    }
+
+    public override void ForceDestroy()
+    {
+        this.BroadcastRelease(true);
+    }
+
+    private void BroadcastRelease(bool destroyOnRelease)
+    {
+        var args = new ReleaseOccupierEventArgs
+        {
+            DestroyOnRelease = destroyOnRelease,
+            Occupier = this
+        };
+
+        this.ReleaseOccupier.BroadcastEvent(this, args);
+    }
+
+    /*    public override void ForceDestroy()
+        {
+            this.ForceDestroy(this);
+        }*/
+    /*
+        public void OnReleaseAllDestroyObject(object source, EventArgs args)
+        {
+            if (Occupied != null)
+            {
+                Occupied.ReleaseOccupier(this);
+                Destroy(gameObject);
+            }
+        }*/
 }

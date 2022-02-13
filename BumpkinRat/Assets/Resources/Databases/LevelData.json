@@ -1,0 +1,31 @@
+[
+    {
+        "LevelId": 0,
+        "LevelName": "...General Store",
+        "OrdersInLevel": [
+            {
+                "npc": 0,
+                "orderType": 0,
+                "id": 0,
+                "infoDisplay": "Nunchuck Nightmare!_<b><color=red>Attach</color></b> the <b><color=red>Broken Links</color></b> to fix it for your cuzzo!",
+                "rewards": []
+            }
+        ],
+        "GenericLevelDialogue": [
+            {
+                "npcId": 2,
+                "dialogue": {
+                    "dialogueId": 0,
+                    "npcLines": [
+                        "0:Oh I quite enjoy gardening. My grandson gets it from me y'know, many of his friends even buy some of his plants! They always look so happy and giggly, I love that they're so supportive of his hobby!",
+                        "1:Y'know I think you'd get along great with my grandson! He must stop by here sometimes for gardening supplies, maybe you've met him before?"
+                    ],
+                    "throwaways": []
+                }
+            }
+        ],
+        "DropOnStart": [
+            "4x2"
+        ]
+    }
+]

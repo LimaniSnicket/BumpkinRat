@@ -1,0 +1,8 @@
+BumpkinRat/Library/*
+BumpkinRat/Library/**/*
+BumpkinRat/Temp/*
+BumpkinRat/Temp/**/*
+BumpkinRat/.vs/*
+BumpkinRat/.vs/**/*
+BumpkinRat/obj/*
+BumpkinRat/obj/**/*

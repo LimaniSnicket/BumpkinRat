@@ -1,132 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 [Serializable]
-public class Item: Identifiable, IComparable<Item>
-{    
+public class Item: Identifiable
+{
     public int itemId;
+
     public string itemName;
-    public string DisplayName => itemName.ToDisplay();
+    public string DisplayName => itemName;
+
     public bool craftable;
     public int value;
 
-    public string prefabPath;
-    //public string texturePath;
+    public string prefabName;
+    //public string spritePath;
 
-    public string identifier => itemName;
+    public FocusAreaUiDetails[] focusAreaUiDetails;
+    public Recipe[] craftingRecipe;
 
-    public bool PrefabPathExists => prefabPath != null && prefabPath != string.Empty;
+    public bool IsCraftable => craftingRecipe.CollectionIsNotNullOrEmpty();
 
-    private static Dictionary<int, GameObject> ItemObjectCache { get; set; }
+    public int FocusAreaCount => focusAreaUiDetails.ValidArray() ? focusAreaUiDetails.Length : 0;
 
-    bool CheckCache()
+    public string IdentifiableName => itemName;
+
+    public FocusAreaUiDetails GetFocusAreaUiDetailsAtIndex(int index)
     {
-        if(ItemObjectCache == null)
-        {
-            return false;
-        }
-
-        return ItemObjectCache.ContainsKey(itemId);
-    }
-
-    public int CompareTo(Item other)
-    {
-        return itemId.CompareTo(other.itemId);
-    }
-
-    //try and make a cache!
-    public ItemObject SpawnFromPrefabPath()
-    {
-        if(ItemObjectCache == null)
-        {
-            ItemObjectCache = new Dictionary<int, GameObject>();
-        }
-        try
-        {
-
-            if (CheckCache())
-            {
-                Debug.Log("Spawning from cache!");
-                return GameObject.Instantiate(ItemObjectCache[itemId]).GetOrAddComponent<ItemObject>();
-            }
-
-            GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
-
-            ItemObject itemObj = GameObject.Instantiate(gameObject).GetOrAddComponent<ItemObject>();
-
-            ItemObjectCache.Add(itemId, gameObject);
-
-            return itemObj;
-
-        } catch (ArgumentException)
-        {
-            return new GameObject("Invalid_Item_Object", typeof(ItemObject)).GetComponent<ItemObject>();
-        }
-    }
-}
-
-[Serializable]
-public class Recipe: Identifiable
-{
-    public int recipeId;
-    public int outputId;
-    public string outputName = "fuck this variable";
-
-    public string recipeDescription;
-
-    public List<RecipeIngredient> ingredients;
-
-    public List<string> craftingSequences;
-    public string identifier => outputName;
-
-    public Dictionary<int, int> IngredientMap => ingredients.ToDictionary(k => k.id, k => k.amount);
-
-    public bool ValidateCraftingSequence(CraftingSequence sequence)
-    {
-        return craftingSequences.Contains(sequence.ToString());
-    }
-
-    public bool Craftable(Inventory inventory)
-    {
-       if (!ingredients.ValidList()) { 
-           return false; 
-       }
-
-       foreach(RecipeIngredient i in ingredients)
-        {
-            Item ingredient = i.id.GetItem();
-            if(!inventory.CheckQuantity(ingredient, i.amount)) { return false; }
-        }
-
-        return true;
-    }
-
-    public bool RenderedUncraftable(KeyValuePair<int, int> alteredValue)
-    {
-        if(!IngredientMap.CollectionIsNotNullOrEmpty() || !IngredientMap.ContainsKey(alteredValue.Key))
-        {
-            return false;
-        }
-        return IngredientMap[alteredValue.Key] > alteredValue.Value;
-    }
-
-    public bool Craftable(Dictionary<int, int> ingredientsAvailable)
-    {
-        if (!ingredientsAvailable.CollectionIsNotNullOrEmpty() || !ingredients.ValidList())
-        {
-            return false;
-        }
-
-        return !ingredientsAvailable.Except(IngredientMap).Any();
-
-    }
-
-    public Item GetOutputItem()
-    {
-        return DatabaseContainer.gameData.GetItem(outputId);
+        return focusAreaUiDetails[index];
     }
 }
 
@@ -137,23 +37,28 @@ public struct RecipeIngredient
     public int amount;
 
     public string[] tags;
-    public RecipeIngredient(int id, int amnt) {
-        this.id = id;
-        amount = amnt;
-        tags = Array.Empty<string>();
-    }
 
     public RecipeIngredient(string id, int amnt)
     {
-        this.id = amnt;
+        this.id = int.Parse(id);
         amount = amnt;
         tags = Array.Empty<string>();
     }
 }
 
+[Serializable]
+public struct FocusAreaUiDetails
+{
+    public int id;
+    public string name;
+    [SerializeField] int x, y;
+
+    public Vector2 PositionOnUi => new Vector2(x, y);
+}
+
 public interface Identifiable
 {
-    string identifier { get; }
+    string IdentifiableName { get; }
 }
 
 public class ItemEventArgs: EventArgs

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MovementController : MonoBehaviour
@@ -11,7 +7,8 @@ public class MovementController : MonoBehaviour
     public float forceMultiplier;
     public float rotationSpeed = 1;
     [Range(2,5)] public float forwardRayDistance = 2;
-    public Vector3 movementVector
+    public bool topDown;
+    public Vector3 MovementVector
     {
         get
         {
@@ -20,7 +17,7 @@ public class MovementController : MonoBehaviour
             return new Vector3(horizontal, 0, forward);
         }
     }
-    Rigidbody body => GetComponent<Rigidbody>();
+    private Rigidbody body => GetComponent<Rigidbody>();
     SphereCollider collisionSphere => GetComponent<SphereCollider>();
     public MovementInfluence moveInfluence;
     bool atRest => body.velocity == Vector3.zero;
@@ -59,19 +56,16 @@ public class MovementController : MonoBehaviour
         Ray r = new Ray(transform.position, transform.forward);
         RaycastHit hit;
         rayDown = new Ray(transform.position, transform.up * -1);
-        if (Physics.Raycast(rayDown, out downHit, 1f))
-        {
 
-        }
 
         Debug.DrawRay(rayDown.origin, rayDown.direction);
 
         if (Physics.Raycast(r, out hit, 2f))
         {
             forwardObjectLook = hit.transform.gameObject;
-            if (Input.GetKeyDown(KeyCode.W) && !climbing && forwardObjectLook.GetComponent<ClimbingSurface>() != null) {
+         /*   if (Input.GetKeyDown(KeyCode.W) && !climbing && forwardObjectLook.GetComponent<ClimbingSurface>() != null) {
                 BeginClimbing(forwardObjectLook.GetComponent<ClimbingSurface>(), hit.point, hit.triangleIndex);
-            }
+            }*/
         }
         else { forwardObjectLook = null; }
 
@@ -93,22 +87,13 @@ public class MovementController : MonoBehaviour
         ClearState();
     }
 
-    private void LateUpdate()
-    {
-        gravityAlignment =
-            Quaternion.FromToRotation(
-                gravityAlignment * Vector3.up, CustomGravity.GetUpAxis(transform.position)
-            ) * gravityAlignment;
-
-    }
-
     void OverworldMovement()
     {
        // if (UIManager.MenuActive) { return; }
-        if (movementVector != Vector3.zero)
+        if (MovementVector != Vector3.zero)
         {
-            body.AddForce(movementVector.normalized * forceMultiplier, ForceMode.Force);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementVector), Time.deltaTime * rotationSpeed);
+            body.AddForce(MovementVector.normalized * forceMultiplier, ForceMode.Force);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MovementVector), Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -117,17 +102,17 @@ public class MovementController : MonoBehaviour
        // if (UIManager.MenuActive || yieldPlayerControl) { return; }
         upAxis = -Physics.gravity.normalized;
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY);
+        Vector3 look = MouseManager.mousePosOffset.normalized.Swizzle(GridLayout.CellSwizzle.XZY) * (topDown ? 1 : -1);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), Time.deltaTime * rotationSpeed);
         if (Input.GetKey(KeyCode.W))
         {
             body.AddForce(look * forceMultiplier, ForceMode.Force);
             body.AddTorque(MouseManager.delta.Swizzle(GridLayout.CellSwizzle.XZY) * 0.025f, ForceMode.Impulse);
         }
-        if (Input.GetMouseButtonDown(0) && !inAir)
+    /*    if (Input.GetMouseButtonDown(0) && !inAir)
         {
             body.AddForce(upAxis * forceMultiplier / 2, ForceMode.Impulse);
-        }
+        }*/
 
         if (forwardObjectLook == null) { return; }
         if (!forwardObjectLook.CompareTag("ClimbingSurface")) { return; }

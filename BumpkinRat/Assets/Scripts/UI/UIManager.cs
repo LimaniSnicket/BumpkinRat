@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,134 +21,21 @@ public class UIManager : MonoBehaviour
         ActiveMenus = new List<MenuType>();
     }
 
-    void OnUiEvent(object source, UiEventArgs args)
+    public void OnClickToggleButtonEnable(Button btn)
     {
-        ActiveMenus.HandleInstanceObjectInList(args.menuLoaded, args.load);
+        bool toggleTo = !btn.interactable;
+        btn.interactable = toggleTo;
+    }
+
+    private void OnUiEvent(object source, UiEventArgs args)
+    {
+        ActiveMenus.HandleInstanceObjectInList(args.MenuTypeLoaded, args.Load);
     }
 
     private void OnDisable()
     {
         UiMenu.UiEvent -= OnUiEvent;   
     }
-}
-
-[Serializable]
-public abstract class UiMenu
-{
-    public MenuType menuType { get; protected set; }
-    protected GameObject gameObject;
-
-    public bool exitDisabled;
-
-    public bool entryDisabled;
-
-    public bool Active { get; private set; }
-    public abstract KeyCode ActivateKeyCode { get; }
-    public abstract void LoadMenu();
-    public abstract void CloseMenu();
-
-    public static event EventHandler<UiEventArgs> UiEvent;
-    public event EventHandler<UiEventArgs> TailoredUiEvent;
-
-    public void ChangeMenuStatus()
-    {
-        if (Active && !exitDisabled)
-        {
-            CloseMenu();
-        } 
-        else if(!Active && !entryDisabled)
-        {
-            LoadMenu();
-        }
-    }
-
-    public void BroadcastUiEvent(bool load)
-    {
-        UiEventArgs eventToSend = new UiEventArgs { load = load, menuLoaded = menuType };
-        if (UiEvent != null)
-        {
-            Debug.LogFormat("{0} a menu of type: " + menuType, load ? "Loading": "Closing");
-            UiEvent(this, eventToSend) ;
-        }
-
-        if(TailoredUiEvent != null)
-        {
-            TailoredUiEvent(this, eventToSend);
-        }
-
-        Active = load;
-    }
-
-}
-
-[Serializable]
-public class CraftingMenu : UiMenu
-{
-    public ItemCrafter itemCrafter;
-    public override KeyCode ActivateKeyCode => throw new NotImplementedException();
-
-    public UiElementContainer craftingButtonContainer;
-
-    public TextMeshProUGUI craftingSequenceDisplay;
-
-    public CraftingMenu(GameObject g)
-    {
-        gameObject = g;
-        menuType = MenuType.Crafting;
-        itemCrafter = new ItemCrafter();
-    }
-
-    public void SetCraftingSequenceDisplay(GameObject tmpro)
-    {
-        craftingSequenceDisplay = tmpro.GetOrAddComponent<TextMeshProUGUI>();
-    }
-
-    public void UpdateDisplay(string message)
-    {
-        if (craftingSequenceDisplay == null)
-        {
-            return;
-        }
-
-        craftingSequenceDisplay.text = message;
-    }
-
-    public void SetCraftingActionButtons(GameObject container, GameObject prefab, CraftingUI driver)
-    {
-        craftingButtonContainer = container.GetOrAddComponent<UiElementContainer>();
-        GenerateCraftingActionButtons(prefab, driver);
-    }
-
-    void GenerateCraftingActionButtons(GameObject prefab, CraftingUI driver)
-    {
-        for (int i = 1; i < Enum.GetValues(typeof(CraftingAction)).Length; i++)
-        {
-            craftingButtonContainer.SpawnAtAlternatingVerticalPositions(prefab, 100, 150);
-            CraftingActionButton craftAction = craftingButtonContainer.GetLastChild().GetComponent<CraftingActionButton>();//CraftingActionButton.GetCraftingButtonFromGameObject(newCraftingActionButton);
-            craftAction.SetCraftingActionButton(i, driver);
-
-        }
-
-        craftingButtonContainer.gameObject.SetActive(false);
-    }
-
-    public override void CloseMenu()
-    {
-        Cursor.visible = true;
-        InventoryButton.CanSpawnItems = false;
-        craftingButtonContainer.gameObject.SetActive(false);
-        itemCrafter.ClearCraftingHistory();
-        BroadcastUiEvent(false);
-    }
-
-    public override void LoadMenu()
-    {
-        Cursor.visible = false;
-        InventoryButton.CanSpawnItems = true;
-        craftingButtonContainer.gameObject.SetActive(true);
-        BroadcastUiEvent(true);
-    }
-
 }
 
 [Serializable]
@@ -158,34 +46,28 @@ public class InventoryMenu : UiMenu
     public InventoryMenu(GameObject g)
     {
         gameObject = g;
-        menuType = MenuType.Inventory;
+        MenuType = MenuType.Inventory;
         gameObject.SetActive(false);
     }
 
     public override void CloseMenu()
     {
-        BroadcastUiEvent(false);
+        this.SendClosingMenuEvent();
         gameObject.SetActive(false);
     }
 
     public override void LoadMenu()
     {
-        BroadcastUiEvent(true);
+        this.SendLoadingMenuEvent();
         gameObject.SetActive(true);
 
     }
-
-    public void LoadMenu(Inventory i)
-    {
-        LoadMenu();
-    }
-
 }
 
 [Serializable]
 public class DialogueMenu : UiMenu
 {
-    public TextMeshProUGUI dialogueDisplay { get; protected set; }
+    private readonly TextMeshProUGUI dialogueDisplay;
     bool acceptInputFromRunner;
 
     public override KeyCode ActivateKeyCode => KeyCode.None;
@@ -193,14 +75,14 @@ public class DialogueMenu : UiMenu
     public DialogueMenu(GameObject g)
     {
         gameObject = g;
-        menuType = MenuType.Dialogue;
+        MenuType = MenuType.Dialogue;
         dialogueDisplay = g.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
         dialogueDisplay.text = "";
     }
 
     public override void LoadMenu()
     {
-        BroadcastUiEvent(true);
+        this.SendLoadingMenuEvent();
         dialogueDisplay.text = "";
         acceptInputFromRunner = true;
         Debug.Log("Dialogue Menu ready for input");
@@ -208,7 +90,7 @@ public class DialogueMenu : UiMenu
 
     public override void CloseMenu()
     {
-        BroadcastUiEvent(false);
+        this.SendClosingMenuEvent();
         acceptInputFromRunner = false;
         dialogueDisplay.text = "";
     }
@@ -222,13 +104,12 @@ public class DialogueMenu : UiMenu
 
 public class UiEventArgs : EventArgs
 {
-    public bool load { get; set; }
-    public MenuType menuLoaded { get; set; }
-
-    public KeyCode EscapeKey { get; set; }
+    public string UiMenuName { get; set; }
+    public bool Load { get; set; }
+    public MenuType MenuTypeLoaded { get; set; }
 }
 
 public interface IUiFunctionality<T> where T: UiMenu
 {
-    T MenuFunctionObject { get; set; }
+    T UiMenu { get; }
 }

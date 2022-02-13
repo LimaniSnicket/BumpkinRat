@@ -1,27 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Interactable : MonoBehaviour, IDistributeItems<ItemDropper>
+public class Interactable : MonoBehaviour, IDistributeItems, ITrackDistanceToPlayer
 {
-    public ItemDropper ItemDistributor { get; set; }
-    public List<ItemDrop> ItemDropData { get; set; }
+    public IItemDistribution ItemDistributor { get; private set; }
+    public RangeChangeTracker DistanceTracker { get; private set; }
 
-    float DistanceFromPlayer => Vector3.Distance(transform.position, PlayerBehavior.playerPosition);
-
+    [SerializeField]
+    private float interactionRadius = 1;
     void Start()
     {
-        ItemDistributor = new ItemDropper(this);
-        ItemDropData = ItemDrop.GetListOfItemsToDrop(("item_a", 1), ("item_b", 2));
+        ItemDistributor = new ItemDropper(this, this.transform);
+        ItemDistributor.AddItemsToDrop((1, 1), (2, 1));
+
+        this.DistanceTracker = new RangeChangeTracker(this.transform, interactionRadius);
     }
 
     void Update()
     {
-        if(DistanceFromPlayer <= 1f && Input.GetKeyDown(KeyCode.Space))
+        if (DistanceTracker.PlayerInRange && Input.GetKeyDown(KeyCode.Space))
         {
-            ItemDistributor.DistributeAtTransform(transform);
+            ItemDistributor.Distribute();
         }
     }
-
-
 }

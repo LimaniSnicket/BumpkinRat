@@ -1,68 +1,70 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System;
 using System.Text;
 using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Image))]
-public class ConversationSnippet : MonoBehaviour, IDragHandler
+public class ConversationSnippet : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public Sprite onLeftBubble, onRightBubble;
+    public Sprite leftBubble, rightBubble, centerBubble;
 
-    public Image BackingImage => GetComponent<Image>();
-    public TextMeshProUGUI ConversationDisplayTMPro { get; private set; }
+    private static int childIndex = 2;
 
-    private RectTransform thisRect;
+    private readonly static float focusedScaleFactor = 0.6f;
+
+    private static EventHandler DestroySnippet;
+
+    private static EventHandler<ConversationSnippetEventArgs> DestroySpecifiedSnippets;
 
     private ConversationUi conversationUI;
 
-    StringBuilder builder;
+    private BubbleDisplay bubbleElements;
 
-    public bool isResponse;
+    private ConversationBubbleOrientation currentOrientation;
 
-    Vector2 originalPosition;
-    Vector2 defaultResponseTextPos = new Vector2(-55,7); 
+    private StringBuilder builder;
 
-    static EventHandler DestroySnippet;
+    private bool isResponse;
 
+    private bool newSnip = true;
+
+    private Vector2 originalPosition;
+
+    private float dragWeight = 10;
     public bool Typing { get; private set; } = false;
 
-    float dragWeight = 10;
+    public bool IsBeingDragged { get; private set; }
+
+    public int ChildIndex => childIndex;
 
     private void OnEnable()
     {
-        AssignOrCreateTMPro();
-        thisRect = GetComponent<RectTransform>();
+        ConversationBubbleOrientationManager.InitializeSprites(leftBubble, centerBubble, rightBubble);
+
+        bubbleElements = new BubbleDisplay(this.gameObject, isResponse);
+
         builder = new StringBuilder();
+
+        currentOrientation = ConversationBubbleOrientation.Center;
     }
 
     private void Start()
     {
         DestroySnippet += OnDestroySnippet;
-        BackingImage.raycastTarget = isResponse;
+        DestroySpecifiedSnippets += OnDestroySpecifiedSnippets;
     }
 
     private void Update()
     {
-        ConversationDisplayTMPro.text = builder.ToString();   
+        bubbleElements.SetDisplayString(builder.ToString());
     }
 
-    void AssignOrCreateTMPro()
+    public Sequence GetInactivitySequence()
     {
-        try
-        {
-            ConversationDisplayTMPro = GetComponentInChildren<TextMeshProUGUI>();
-        } catch (NullReferenceException)
-        {
-            GameObject tmpro = new GameObject("ConversationTMP", typeof(TextMeshProUGUI));
-            tmpro.transform.SetParent(transform);
-            ConversationDisplayTMPro = tmpro.GetComponent<TextMeshProUGUI>();
-        }
+        return bubbleElements.CreateNewInactivitySequence();
     }
 
     public void SetConversationUi(ConversationUi convoUi)
@@ -71,118 +73,178 @@ public class ConversationSnippet : MonoBehaviour, IDragHandler
         SubscribeToConversationUiEvents();
     }
 
-    void SubscribeToConversationUiEvents()
+    public void SetIsResponse(bool isResponse)
     {
-        if(conversationUI != null)
+        this.isResponse = isResponse;
+    }
+
+    public void InitializeSnippetFromBubbleDisplay(IBubbleDisplay bubble)
+    {
+        builder.Append(bubble.DisplayMessage);
+        bubbleElements.Copy(bubble.BubbleElements);
+    }
+
+    public void SetSnippetInactive()
+    {
+        bubbleElements.SetToInactiveState(0.45f, 0.5f);
+    }
+
+    public void MoveToFocusedPosition(Vector2 position, float time)
+    {
+        ShrinkToFocusedScale();
+        bubbleElements.MoveRectTransform(position, time);
+        MoveToFocusedPosition(time);
+    }
+
+    public void MoveToFocusedPosition(float time)
+    {
+        StartCoroutine(OrientSnippetToFocusedPosition(time));
+    }
+
+    public void InitializeSnippetTransform(Vector2 pos, bool focused)
+    {
+        float scale = 1;
+
+        if (focused)
+        {
+            currentOrientation = ConversationBubbleOrientation.Right;
+            scale = focusedScaleFactor;
+        }
+        else
+        {
+            bool useLeftSprite = pos.x >= 0;
+            currentOrientation = useLeftSprite ? ConversationBubbleOrientation.Left : ConversationBubbleOrientation.Right;
+        }
+
+        SetPositionAndScale(pos, scale);
+
+        bubbleElements.SetFromOrientation(currentOrientation);
+    }
+
+    public void ApplyLocalJumpAndJitter(Vector3 jump)
+    {
+        StartCoroutine(bubbleElements.DoJiggleJump(jump));
+    }
+
+    public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
+    {
+        bubbleElements.ApplyConversationAesthetic(aesthetic, isResponse, false);
+    }
+
+    public void ReadLine(string line, float delay)
+    {
+        StartCoroutine(TypeOut(line, delay));
+    }
+
+    private void SubscribeToConversationUiEvents()
+    {
+        if (conversationUI != null)
         {
             conversationUI.SpawningNewConversationSnippet += OnSnippetSpawnMoveConversationBubble;
         }
     }
 
-    void UnSubscribeToConversationUiEvents()
+    private void UnSubscribeToConversationUiEvents()
     {
-        if(conversationUI != null)
+        if (conversationUI != null)
         {
             conversationUI.SpawningNewConversationSnippet -= OnSnippetSpawnMoveConversationBubble;
         }
     }
-    public RectTransform GetRectTransform() => thisRect;
 
-    public void InitializeSnippet(Vector2 pos)
+    private IEnumerator OrientSnippetToFocusedPosition(float time)
     {
-        if (isResponse)
-        {
-            thisRect.localPosition = new Vector2(-pos.x, pos.y);
+        var orientations = isResponse
+            ? ConversationBubbleOrientationManager.MoveToRight(currentOrientation.BubbleOrientation) 
+            : ConversationBubbleOrientationManager.MoveToLeft(currentOrientation.BubbleOrientation);
 
-        } else
+        ConversationBubbleOrientation newOrientation = currentOrientation;
+
+        float timeInterval = time / (orientations.Length + 1);
+
+        foreach (var orientation in orientations)
         {
-            thisRect.localPosition = pos;
+            yield return new WaitForSeconds(timeInterval);
+
+            newOrientation = orientation;
+
+            bubbleElements.SetFromOrientation(newOrientation);
         }
 
-        originalPosition = thisRect.localPosition;
-        thisRect.DOScale(Vector3.one, 0.7f);
-
-
-        BackingImage.sprite = !isResponse ? onLeftBubble : onRightBubble;
-
-        if (isResponse)
-        {
-            ConversationDisplayTMPro.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, -17);
-            ConversationDisplayTMPro.GetComponent<RectTransform>().localPosition = defaultResponseTextPos;
-        }
- 
+        currentOrientation = newOrientation;        
     }
 
-    public void SetDragWeight(float weight)
+    private void SetPositionAndScale(Vector2 pos, float scale)
     {
-        dragWeight = weight;
+        bubbleElements.SetLocalBubblePosition(pos, isResponse);
+
+        originalPosition = bubbleElements.LocalPosition;
+
+        bubbleElements.ScaleRectTransform(Vector3.one * scale, 0.7f);
     }
 
-    public void MoveToNewPositionAndScale(Vector2 pos, Vector2 scale)
+    public void UpdateChildIndex()
     {
-        thisRect.DOLocalMove(pos, 1);
-        thisRect.DOScale(scale, 0.5f);
+        transform.SetSiblingIndex(childIndex);
+        childIndex++;
     }
-    
-    bool newSnip = true;
 
-    public void OnSnippetSpawnMoveConversationBubble(object source, EventArgs args)
+    public void SetDragWeight(float distraction)
+    {
+        double weight = 2 * (Math.Pow(8, distraction));
+        dragWeight = (float)weight;
+    }
+
+    public void ShrinkToFocusedScale(float toScale = 0.6f, float time = 0.3f)
+    {
+        bubbleElements.ScaleRectTransform(Vector3.one * toScale, time);
+    }
+
+    public void GrowToFullScale(float time)
+    {
+        bubbleElements.ScaleRectTransform(Vector3.one, time);
+    }
+
+    private void OnSnippetSpawnMoveConversationBubble(object source, ConversationSnippetEventArgs args)
     {
         if (!newSnip)
         {
+            int factor = isResponse ? -1 : 1;
 
-            float scaleFactor = thisRect.localScale.x * 1.2f;
+            Vector3 jump = bubbleElements.LocalPosition + (Vector3.up * 200) - 100 * factor * Vector3.right;
+            Vector3 rotation = 25f * -factor * Vector3.forward;
 
-            Vector2 setPos = thisRect.localPosition + ((Vector3.right * 100) + (Vector3.up * 200)) * scaleFactor;
-            Vector2 setScale = thisRect.localScale - Vector3.one * 0.4f;
-
-            if (setScale.x <= 0)
-            {
-                Destroy(gameObject); //destroy to avoid negative scaling!
-            }
-
-            MoveToNewPositionAndScale(setPos, setScale);
+            StartCoroutine(ShrinkAndDestroy(jump, rotation, isResponse));
         }
 
         newSnip = false;
     }
 
-    public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
-    {
-        BackingImage.color = aesthetic.GetBubbleColor(isResponse);
-        ConversationDisplayTMPro.color = aesthetic.GetTextColor(isResponse);
-    }
-
-    public void SetResponseFromCustomerDialogueIntro(CustomerDialogue dialogue, int index)
-    {
-        if (dialogue.isValid)
-        {
-            if (isResponse)
-            {
-                ConversationDisplayTMPro.text = dialogue.introResponses[index].displayDialogue;
-            }
-
-        } else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void ReadLine(string line, float delay)
-    {
-        StartCoroutine(ReadLineAndSetTyping(line, delay));
-    }
-
-    IEnumerator ReadLineAndSetTyping(string line, float delay)
+    private IEnumerator TypeOut(string line, float delay)
     {
         Typing = true;
-        yield return StartCoroutine(DialogueX.ReadLine(line, builder, delay));
+        yield return this.ReadLine(line, builder, delay);
         Typing = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.DOMove(Input.mousePosition, Time.fixedDeltaTime * dragWeight);
+        if (isResponse && eventData.hovered.Contains(gameObject))
+        {
+            IsBeingDragged = true;
+            transform.DOMove(Input.mousePosition, Time.fixedDeltaTime * dragWeight);
+        } else
+        {
+            IsBeingDragged = false;
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
     }
 
     public static void DestroyAllSnippets(object source)
@@ -190,8 +252,43 @@ public class ConversationSnippet : MonoBehaviour, IDragHandler
         DestroySnippet.BroadcastEvent(source);
     }
 
+    public static void DestroyAllCustomerResponseSnippets(object source)
+    {
+        ConversationSnippetEventArgs args = new ConversationSnippetEventArgs
+        {
+            DestroyCustomerSnippets = true,
+            DestroyResponseSnippets = false
+        };
+
+        DestroySpecifiedSnippets.BroadcastEvent(source, args);
+    }
+
     void OnDestroySnippet(object source, EventArgs args)
     {
+        StartCoroutine(ShrinkAndDestroy());
+    }
+
+    void OnDestroySpecifiedSnippets(object source, ConversationSnippetEventArgs args)
+    {
+        bool checkDestroy = isResponse ? args.DestroyResponseSnippets : args.DestroyCustomerSnippets;
+        if (checkDestroy)
+        {
+            IEnumerator destroyRoutine = ShrinkAndDestroy(); 
+            StartCoroutine(destroyRoutine);
+        }
+    }
+
+    private IEnumerator ShrinkAndDestroy()
+    {
+        Vector3 jump = bubbleElements.LocalPosition * 1.6f;
+        Vector3 rotate = Vector3.forward * -30;
+
+        yield return StartCoroutine(ShrinkAndDestroy(jump, rotate));
+    }
+
+    private IEnumerator ShrinkAndDestroy(Vector3 localJump, Vector3 localRotate, bool response = false)
+    {
+        yield return StartCoroutine(bubbleElements.ShrinkAndDestroy(localJump, localRotate, response));
         Destroy(gameObject);
     }
 
@@ -199,205 +296,48 @@ public class ConversationSnippet : MonoBehaviour, IDragHandler
     {
         UnSubscribeToConversationUiEvents();
         DestroySnippet -= OnDestroySnippet;
+        DestroySpecifiedSnippets -= OnDestroySpecifiedSnippets;
+        childIndex--;
     }
 
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        IsBeingDragged = false;
+    }
 }
 
-[Serializable]
-public struct ConversationResponseDisplay
+public struct FocusedPortrait
 {
-    static string[] priorities = { "low", "medium", "high" };
-    private int priority;
-
-    public int Priority => priority;
-
-    private string responseMessageDisplay;
-
-    private Image backing;
-    private TextMeshProUGUI textMesh;
-    private RectTransform rectTransform;
-
-    private Color activeColor, inactiveColor;
+    public Image backing, portrait;
 
     public bool Active { get; private set; }
 
-    public static Dictionary<string, ConversationResponseDisplay> ActiveInConversation { get; private set; }
-
-    ConversationResponseDisplay(int pri, GameObject prefab)
+    public RectTransform RectTransform { get; private set; }
+    public FocusedPortrait(GameObject obj)
     {
-        priority = SetPriority(pri);
-        responseMessageDisplay = string.Empty;
-
-        backing = prefab.GetOrAddComponent<Image>();
-        textMesh = backing.GetComponentInChildren<TextMeshProUGUI>();
-        rectTransform = backing.GetComponent<RectTransform>();
-        activeColor = Color.white;
-        inactiveColor = Color.clear;
-        Active = false;
-
-        if (ActiveInConversation == null)
-        {
-            ActiveInConversation = new Dictionary<string, ConversationResponseDisplay>();
-        }
+        backing = obj.GetOrAddComponent<Image>();
+        portrait = backing.GetComponentInChildren<Image>();
+        RectTransform = backing.GetComponent<RectTransform>();
+        Active = backing.gameObject.activeSelf;
     }
 
-    public static ConversationResponseDisplay[] GetResponseDisplays(GameObject[] uiElements, ConversationAesthetic aesthetics)
+    public void SetPortrait(Sprite sprite)
     {
-        ConversationResponseDisplay[] arr = new ConversationResponseDisplay[3];
-
-        for (int i = 0; i < arr.Length; i++)
-        {
-            arr[i] = new ConversationResponseDisplay(i, uiElements[i]);
-            arr[i].SetDisplayString(". . .");
-            arr[i].ApplyConversationAesthetic(aesthetics);
-
-            ActiveInConversation.AddOrReplaceKeyValue(priorities[i], arr[i]);
-
-            arr[i].SetActiveState(false);
-        }
-
-        return arr;
+        portrait.sprite = sprite;
     }
 
-    public static void SetFromConversationResponses(PlayerResponse[] responses)
+    public void SetActive(bool active)
     {
-        if (responses.CollectionIsNotNullOrEmpty())
-        {
-            Dictionary<string, string> mapResponses = responses.ToDictionary(r => r.responseLevel.ToLower(), r => r.displayDialogue);
-            for (int i = 0; i < priorities.Length; i++)
-            {
-                string level = priorities[i];
-
-                try
-                {
-                    ActiveInConversation[level].SetDisplayString(mapResponses[level]);
-                    ActiveInConversation[level].SetActiveState(true);
-
-                }
-                catch (KeyNotFoundException)
-                {
-
-                }
-            }
-        }
+        backing.gameObject.SetActive(active);
+        Active = backing.gameObject.activeSelf;
     }
-
-    public static void SetAllInactive()
-    {
-        for (int i = 0; i < ActiveInConversation.Values.Count; i++)
-        {
-            ActiveInConversation.ElementAt(i).Value.SetActiveState(false);
-        }
-    }
-
-    public string GetResponseLevel()
-    {
-        return priorities[priority];
-    }
-
-    public void SetDisplayString(string message)
-    {
-        responseMessageDisplay = message;
-        textMesh.text = responseMessageDisplay;
-    }
-
-    static int SetPriority(int i)
-    {
-        return Mathf.Clamp(i, 0, 2);
-    }
-
-    public void ApplyConversationAesthetic(ConversationAesthetic aesthetic)
-    {
-        activeColor = aesthetic.GetBubbleColor(true);
-        inactiveColor = new Color(activeColor.r, activeColor.g, activeColor.b, 0.5f);
-
-        backing.color = inactiveColor;
-        textMesh.color = aesthetic.GetTextColor(true);
-    }
-
-    void SetActiveState(bool active)
-    {
-        if (active)
-        {
-            backing.color = activeColor;
-            rectTransform.DOScale(Vector3.one, 0.5f);
-            //rectTransform.localScale = Vector3.one;
-
-        }
-        else
-        {
-            backing.color = inactiveColor;
-            rectTransform.DOScale(Vector3.one * 0.5f, 0.2f);
-            //rectTransform.localScale = Vector3.one * 0.5f;
-            SetDisplayString(". . .");
-        }
-
-        Active = active;
-    }
-
-    public override string ToString()
-    {
-        return responseMessageDisplay;
-    }
-
 }
 
-
-
-[Serializable]
-public struct ConversationAesthetic
+public class ConversationSnippetEventArgs : EventArgs
 {
-    public Color promptBubbleColor, repsonseBubbleColor;
-    public Color promptTextColor, responseTextColor;
+    public bool SpawningResponse { get; set; }
 
-    public Color GetBubbleColor(bool response)
-    {
-        return response ? repsonseBubbleColor : promptBubbleColor;
-    }
+    public bool DestroyCustomerSnippets { get; set; }
 
-    public Color GetTextColor(bool response)
-    {
-        return response ? responseTextColor : promptTextColor;
-    }
-
-    public static ConversationAesthetic BasicConversationAesthetic
-    {
-        get
-        {
-            return new ConversationAesthetic
-            {
-                promptBubbleColor = Color.white,
-                repsonseBubbleColor = Color.blue,
-                promptTextColor = Color.black,
-                responseTextColor = Color.white
-            };
-        }
-    }
-    public static ConversationAesthetic SpookyConversationAesthetic
-    {
-        get
-        {
-            return new ConversationAesthetic
-            {
-                promptBubbleColor = ColorX.Orange,
-                repsonseBubbleColor = Color.black,
-                promptTextColor = Color.black,
-                responseTextColor = ColorX.Orange
-            };
-        }
-    }
-
-    public static ConversationAesthetic RuralAesthetic
-    {
-        get
-        {
-            return new ConversationAesthetic
-            {
-                promptBubbleColor = ColorX.Auburn,
-                repsonseBubbleColor = new Color(0.3f, 0.3f, 0.3f, 1),
-                promptTextColor = Color.white,
-                responseTextColor = Color.white
-            };
-        }
-    }
+    public bool DestroyResponseSnippets { get; set; }
 }
